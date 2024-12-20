@@ -2,7 +2,7 @@
 
 ![image](https://github.com/user-attachments/assets/4d557c60-c1b6-46f8-a671-0cc0a6a15809)
 
-StarTube is a userscript that allows you to choose your YouTube layout, currently allowing you to use almost every layout from 2008-2024. It is the official succesor to CustomTube.
+StarTube is a userscript that allows you to choose your YouTube layout, currently allowing you to use almost every layout from 2008-2024. It is the official successor to CustomTube.
 
 StarTube is built to be used with Vorapis 2013 (V3), which is a YouTube client that faithfully restores the 2013-2014 YouTube layout, and is also faster than regular YouTube.
 
