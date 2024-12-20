@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0.2
+// @version      2.4.0.21
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -11,9 +11,9 @@
 // @grant        GM_setValue
 // @grant        GM_deleteValue
 // @grant        GM_registerMenuCommand
+// @downloadURL https://update.greasyfork.org/scripts/500060/StarTube%20Beta.user.js
+// @updateURL https://update.greasyfork.org/scripts/500060/StarTube%20Beta.meta.js
 // @license MIT
-// @downloadURL https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js
-// @updateURL https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js
 // ==/UserScript==
 var globalDataPoints = {
 "currWatchData":{}
@@ -128,9 +128,9 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer = "2.4.0 Beta 1 Patch 1";
+let currStarVer = "2.4.0 Beta 1 Patch 2";
 let currStarChan = "beta"
-let STUID="st2401b1";
+let STUID="st2401b2";
 let STDELAY=300;
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
@@ -207,7 +207,7 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 						"context": {
 							"client": {
 								"clientName": "TVHTML5",
-								"clientVersion": "2.20241113.07.00",
+								"clientVersion": "7.20241113.07.00",
 								"hl": "en",
 								"gl": "US"
 							}
@@ -26868,20 +26868,20 @@ line-height: 21px;
 [exp-big-search-thumbs][poly-styles] #page.search .yt-lockup-tile .yt-lockup-title a {
 font-size: 16px !important;
 }
-[exp-big-search-thumbs] .yt-thumb-104,
-[exp-big-search-thumbs] .yt-thumb-104 img {
+[exp-big-search-thumbs] #page.search .yt-thumb-104,
+[exp-big-search-thumbs] #page.search .yt-thumb-104 img {
 width: 138px;
 }
-[exp-bigger-search-thumbs] .yt-thumb-104,
-[exp-bigger-search-thumbs] .yt-thumb-104 img {
+[exp-bigger-search-thumbs] #page.search .yt-thumb-104,
+[exp-bigger-search-thumbs] #page.search .yt-thumb-104 img {
 width: 172px;
 }
-[exp-bigger-search-thumbs] .yt-thumb-104,
-[exp-big-search-thumbs] .yt-thumb-104 {
+[exp-bigger-search-thumbs] #page.search .yt-thumb-104,
+[exp-big-search-thumbs] #page.search .yt-thumb-104 {
 margin: 0 auto;
 display: block;
 }
-[exp-bigger-search-thumbs] .yt-lockup.yt-lockup-tile .yt-lockup-thumbnail {
+[exp-bigger-search-thumbs] #page.search .yt-lockup.yt-lockup-tile .yt-lockup-thumbnail {
 margin-right: 16px;
 }
 [exp-polymer-shell] .yt-thumb-104 {
