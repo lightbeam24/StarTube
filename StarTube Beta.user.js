@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0.31
+// @version      2.4.0.32
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,9 +128,9 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer = "2.4.0 Beta 2 Patch 1";
+let currStarVer = "2.4.0 Beta 2 Patch 2";
 let currStarChan = "beta"
-let STUID="st2402b1p";
+let STUID="st2402b2p";
 let STDELAY=300;
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
@@ -18076,7 +18076,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 html.setAttribute("exp-cosmic-feeds-v3","");
                 doCosmicFeedHeader();
             }
-            if($("[layout^='hhE2017']")||$("[layout^='hh2017']")||$("[layout^='hh2018']")||$("[layout^='hh2024']")){
+            if($("[layout^='hhE2017']")||$("[layout^='hh2017']")||$("[layout^='hh2018']")||$("[layout^='hh2024']")||$("[layout^='poly201']")){
                 html.setAttribute("exp-big-search-thumbs","");
             }
             if($("[layout^='epic2012_2']")){
