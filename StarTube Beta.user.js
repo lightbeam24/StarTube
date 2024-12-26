@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0.21
+// @version      2.4.0.3
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -11,9 +11,9 @@
 // @grant        GM_setValue
 // @grant        GM_deleteValue
 // @grant        GM_registerMenuCommand
+// @license MIT
 // @downloadURL https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js
 // @updateURL https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js
-// @license MIT
 // ==/UserScript==
 var globalDataPoints = {
 "currWatchData":{}
@@ -128,9 +128,9 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer = "2.4.0 Beta 1 Patch 2";
+let currStarVer = "2.4.0 Beta 2";
 let currStarChan = "beta"
-let STUID="st2401b2";
+let STUID="st2402b";
 let STDELAY=300;
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
@@ -146,6 +146,8 @@ let closedWelcomeBanner=false;
 let gdp=globalDataPoints;
 let CWD;
 let headers;
+let sets={};
+let layoutFactor=10;
 grabData();
 // EXfunct
 function TheEXFetch(condition, type, endpoint, avar, id, modifier, modContent, modifier2, mod2Content){
@@ -207,7 +209,7 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 						"context": {
 							"client": {
 								"clientName": "TVHTML5",
-								"clientVersion": "7.20241113.07.00",
+								"clientVersion": "2.20241113.07.00",
 								"hl": "en",
 								"gl": "US"
 							}
@@ -400,25 +402,42 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 		}
 	});
 }
-let usedLang="en";
+let usedLang="";
 var langEn={
 upload:"Upload",
 create:"Create",
-search:"Search"
+search:"Search",
+stsets:"StarTube Settings"
 }
 var lang={
 en:{
 upload:langEn.upload,
 create:langEn.create,
-search:langEn.search
+search:langEn.search,
+stsets:langEn.stsets
 },
 ja:{
 upload:"アップロード",
 create:"作成する",
-search:"検索"
+search:"検索",
+stsets:"StarTube設定"
+},
+pl:{
+upload:"Prześlij",
+create:"Utwórz",
+search:"Szukaj",
+stsets:"Ustawienia StarTube"
 }
 }
 var svgDefs={
+search:{
+    f:"M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z",
+    o:"M20.87,20.17l-5.59-5.59C16.35,13.35,17,11.75,17,10c0-3.87-3.13-7-7-7s-7,3.13-7,7s3.13,7,7,7c1.75,0,3.35-0.65,4.58-1.71 l5.59,5.59L20.87,20.17z M10,16c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S13.31,16,10,16z"
+},
+prominentSearch:{
+    c:"M17.5 11a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0Zm-1.594 6.32a8 8 0 111.414-1.414l3.887 3.887a1 1 0 01-1.414 1.414l-3.887-3.887Z",
+    o:"M16.296 16.996a8 8 0 11.707-.708l3.909 3.91-.707.707-3.909-3.909zM18 11a7 7 0 00-14 0 7 7 0 1014 0z"
+},
 upload:{
     f:"M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z",
     o:"M17,18v1H6V18ZM6.49,9l.71.71L11,5.91V16h1V5.91l3.8,3.81L16.51,9l-5-5Z"
@@ -528,8 +547,16 @@ ST_POLY_OWNER:`
                                 <a class="st-video-count-link st-video-count"></a>
                             </div>
                         </div>
-                         <div class="st-sub-button">
+                         <div class="st-sub-area st-sub-button">
                             </div>
+                         <div class="st-sub-area st-owner-buttons flex-bar">
+                             <a id="st-analytics" class="st-poly-btn flex-bar">
+                                 <span>Analytics</span>
+                             </a>
+                             <a id="st-edit-vid" class="st-poly-btn flex-bar">
+                                 <span>Edit video</span>
+                             </a>
+                         </div>
 `,
     SVG:`
 <div class="filled-icon">
@@ -579,6 +606,400 @@ SVG_TOG:`
 `,
 }
 var STH={
+astroSector:`
+													<div class="astro-sector-title">
+														<h5></h5>
+													</div>
+`,
+astroSetting:`
+												<div class="astro-setting-middle flex-bar">
+													<div class="astro-radio">
+													</div>
+													<div class="astro-setting-title">
+														<span></span>
+													</div>
+                                                    <div class="astro-minitext">
+														<span></span>
+													</div>
+												</div>
+`,
+astroSection:`
+											<div class="astro-title">
+												<h4></h4>
+											</div>
+                                            <div class="astro-description">
+												<span></span>
+											</div>
+                                            <div class="astro-cw-cont">
+											</div>
+`,
+astroPage:`
+<div class="multistate" state-id="misc">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3></h3>
+									</div>
+									<div class="astro-options flex-bar st-fade">
+										<button class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
+										</button>
+									</div>
+								</div>
+								<div class="astro-scroller">
+									<div class="astro-scroller-inner">
+										<div id="startube-layout-subtitle" class="hid">
+											<span>General site layout options.</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+`,
+astroSettings:`
+<div id="startube-settings-fence" class="st-fence">
+	</div>
+	<div id="startube-settings-window" loading-config="false" changes-made="false">
+		<div id="startube-settings-window-inner">
+			<div id="startube-settings-topbar" class="astro-topbar flex-bar">
+				<div class="astro-topbar-left">
+					<span>StarTube Settings</span>
+					<span class="astro-subtitle">Version ${currStarVer}</span>
+				</div>
+				<div class="astro-topbar-right flex-bar">
+					<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default none" id="refreshPage2">
+						<span>Refresh</span>
+					</button>
+					<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default none" id="exitSettings2">
+						<span>OK</span>
+					</button>
+					<div class="astro-moving-text" id="astro-saved-changes">
+						<div class="astro-moving-text-inner">
+							<span>Your changes were automatically saved. Refresh the page for them to apply.</span>
+						</div>
+					</div>
+					<button class="astro-refresh-button yt-uix-tooltip" id="refreshPage" title="Refresh page">
+					</button>
+					<button class="astro-x-button yt-uix-tooltip" id="exitSettings" title="Close">
+						<div class="astro-x-icon">
+						</div>
+					</button>
+				</div>
+			</div>
+			<div id="startube-settings-below" class="flex">
+				<div id="startube-settings-sidebar" class="astro-sidebear">
+					<div id="startube-settings-sidebar-inner">
+						<div class="astro-sidebar-text">
+							<h3>Misc</h3>
+						</div>
+						<div id="st-astro-config" class="astro-sidebar-item flex-bar" p="config">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>StarTube</span>
+							</div>
+						</div>
+						<div class="astro-sidebar-text">
+							<h3>Site</h3>
+						</div>
+						<div id="st-astro-layout" class="astro-sidebar-item flex-bar active" p="layout">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Layout</span>
+							</div>
+						</div>
+						<div id="st-astro-misc" class="astro-sidebar-item flex-bar" p="misc">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Misc</span>
+							</div>
+						</div>
+						<div id="st-astro-topbar" class="astro-sidebar-item flex-bar" p="topbar">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Topbar</span>
+							</div>
+						</div>
+						<div id="st-astro-guide" class="astro-sidebar-item flex-bar" p="guide">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Guide</span>
+							</div>
+						</div>
+						<div id="st-astro-player" class="astro-sidebar-item flex-bar" p="player">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Player</span>
+							</div>
+						</div>
+						<div id="st-astro-watch" class="astro-sidebar-item flex-bar" p="watch">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Watch page</span>
+							</div>
+						</div>
+						<div id="st-astro-channel" class="astro-sidebar-item flex-bar" p="channel">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Channel page</span>
+							</div>
+						</div>
+						<div id="st-astro-advanced" class="astro-sidebar-item flex-bar" p="advanced">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Advanced</span>
+							</div>
+						</div>
+					</div>
+                    <div id="startube-settings-sidebar-below">
+                        <a id="st-astro-update" class="astro-sidebar-item flex-bar astro-link" href="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>Update/Reinstall StarTube</span>
+							</div>
+						</a>
+                        <a id="st-astro-github" class="astro-sidebar-item flex-bar astro-link" href="https://www.github.com/lightbeam24/StarTube">
+							<div class="astro-sidebar-item-inner flex-bar">
+								<span>GitHub</span>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div id="startube-settings-content" class="astro-content">
+					<div class="multistate-handler" state="layout" multistate-id="">
+                    <div class="multistate" state-id="config">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>StarTube</h3>
+									</div>
+									<div class="astro-options flex-bar">
+										<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default" id="downloadJSON">
+											<span>Download StarTube Config JSON</span>
+										</button>
+										<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default" id="cancelJSON">
+											<span>Cancel</span>
+										</button>
+										<div id="st-load-file" class="astro-filter-button flex-bar">
+											<label id="st-file-upload" for="json-upload" class="astro-filter-button flex-bar yt-uix-button yt-uix-button-size-default yt-uix-button-default">Upload StarTube Config JSON</label>
+											<input type="file" id="json-upload" accept="application/json"></input>
+											<button id="useJSON" class="astro-filter-button flex-bar yt-uix-button yt-uix-button-size-default yt-uix-button-default">Use this JSON</button>
+										</div>
+									</div>
+								</div>
+								<div class="astro-scroller">
+									<div class="astro-scroller-inner">
+										<div id="startube-layout-subtitle" class="hid">
+											<span>General site layout options.</span>
+										</div>
+										<!--div id="startube-save-files" class="astro-section">
+											<div class="astro-title">
+												<h4>StarTube save files</h4>
+											</div>
+											<div class="astro-save-files flex-bar">
+												<div id="astro-file-1" class="astro-save-file astro-file astro-file-in-use">
+													<div class="astro-file-inner">
+														<div class="astro-file-top">
+															<div class="astro-file-title">
+																<span>File 1</span>
+															</div>
+														</div>
+														<div class="astro-file-bottom">
+															<div class="astro-file-info">
+																<div class="astro-file-fact">
+																	<span></span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div-->
+										<div id="startube-config-overview" class="astro-section">
+											<div class="astro-title">
+												<h4>Config overview</h4>
+											</div>
+											<div class="astro-info">
+												<span>Config is from StarTube version </span>
+											</div>
+											<div class="astro-info">
+												<span>Config is from the channel</span>
+											</div>
+										</div>
+										<div id="startube-reset-config" class="astro-section">
+											<div class="astro-title">
+												<h4>Reset config</h4>
+											</div>
+											<button id="RTD" class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
+												<span>Reset config</span>
+											</button>
+										</div>
+										<div id="startube-disable-options" class="astro-section">
+											<div class="astro-title">
+												<h4>Turn off all StarTube options (will not affect locked settings)</h4>
+											</div>
+											<button id="DAO" class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
+												<span>Turn off all StarTube options</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                        <div class="multistate" state-id="layout">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>Layout</h3>
+									</div>
+									<div class="astro-options flex-bar">
+										<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default" id="astro-v3-settings-access-btn">
+											<span>Open V3 Settings</span>
+										</button>
+									</div>
+								</div>
+                                <div class="astro-scroller">
+									<div class="astro-scroller-inner">
+									</div>
+								</div>
+                            </div>
+                        </div>
+                        <div class="multistate" state-id="misc">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>Misc</h3>
+									</div>
+									<div class="astro-options flex-bar astro-fade">
+									</div>
+								</div>
+                                <div class="astro-scroller">
+									<div class="astro-scroller-inner">
+									</div>
+								</div>
+                            </div>
+                        </div>
+                        <div class="multistate" state-id="topbar">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>Topbar</h3>
+									</div>
+									<div class="astro-options flex-bar astro-fade">
+									</div>
+								</div>
+                                <div class="astro-scroller">
+									<div class="astro-scroller-inner">
+									</div>
+								</div>
+                            </div>
+                        </div>
+                        <div class="multistate" state-id="guide">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>Guide (left sidebar)</h3>
+									</div>
+									<div class="astro-options flex-bar astro-fade">
+									</div>
+								</div>
+                                <div class="astro-scroller">
+									<div class="astro-scroller-inner">
+									</div>
+								</div>
+                            </div>
+                        </div>
+                        <div class="multistate" state-id="player">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>Player</h3>
+									</div>
+									<div class="astro-options flex-bar astro-fade">
+									</div>
+								</div>
+                                <div class="astro-scroller">
+									<div class="astro-scroller-inner">
+									</div>
+								</div>
+                            </div>
+                        </div>
+                        <div class="multistate" state-id="watch">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>Watch page</h3>
+									</div>
+									<div class="astro-options flex-bar astro-fade">
+									</div>
+								</div>
+                                <div class="astro-scroller">
+									<div class="astro-scroller-inner">
+									</div>
+								</div>
+                            </div>
+                        </div>
+                        <div class="multistate" state-id="channel">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>Channel page</h3>
+									</div>
+									<div class="astro-options flex-bar astro-fade">
+									</div>
+								</div>
+                                <div class="astro-scroller">
+									<div class="astro-scroller-inner">
+									</div>
+								</div>
+                            </div>
+                        </div>
+                    <div class="multistate" state-id="advanced">
+							<div class="astro-content-area">
+								<div class="astro-title-bar flex-bar">
+									<div class="astro-supertitle">
+										<h3>Advanced</h3>
+									</div>
+									<div class="astro-options flex-bar">
+										<div id="astro-searchbar" class="astro-filter flex-bar">
+											<span class=" yt-uix-form-input-container yt-uix-form-input-text-container ">
+											<input class="yt-uix-form-input-text search-field"id="channels-search-field" type="text" placeholder="Filter by Setting Name" maxlength="100" autocomplete="off">
+</span><!--button class="yt-uix-button yt-uix-button-size-default end search-button yt-uix-button-c4-search  yt-uix-button-empty" style="NONE"><span class="yt-uix-button-icon-wrapper">
+<img src="https://s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif" class="yt-uix-button-icon yt-uix-button-icon-search"></span><span class="yt-uix-button-content"></span></button-->
+										</div>
+										<div id="astro-micro-filter" class="astro-filter flex-bar">
+											<div class="astro-filter-text">
+											</div>
+											<button id="astro-micro-filter-button" class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default multistate-handler" state="all">
+												<span class="multistate" state-id="all">Show all settings</span>
+												<span class="multistate" state-id="locked">Locked settings</span>
+												<span class="multistate" state-id="unlocked">Unlocked settings</span>
+												<img class="yt-uix-button-arrow" src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif">
+											</button>
+											<ul id="astro-micro-filter-menu" class="yt-uix-button-menu yt-uix-button-menu-default goog-scrollbar hid rev-multistate-handler" state="all" role="menu" aria-haspopup="true">
+												<li id="astro-mc-all" role="menuitem" class="multistate" state-id="all">
+													<span class="yt-uix-button-menu-item">Show all settings</span>
+												</li>
+												<li id="astro-mc-locked" role="menuitem" class="multistate" state-id="locked">
+													<span class="yt-uix-button-menu-item">Locked settings</span>
+												</li>
+												<li id="astro-mc-unlocked" role="menuitem" class="multistate" state-id="unlocked">
+													<span class="yt-uix-button-menu-item">Unlocked settings</span>
+												</li>
+											</ul>
+											<div id="astro-micro-filter-fence" class="hid st-fence">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="astro-scroller">
+									<div class="astro-scroller-inner">
+										<div id="startube-result-count" class="">
+											<span>Advanced settings. If you change a setting here, you will most likely need to lock it, or else the setting will be overwritten.</span>
+										</div>
+                                        <div id="st-adv-dep-warn" class="">
+											<span>Note that Advanced options are deprecated and in the process of being removed.</span>
+										</div>
+										<div id="startube-microconfigs-dump">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+`,
 aboveTitleRow:`
 <div id="st-above-title-row" class="st-watch-row">
                     <div class="st-title st-title">
@@ -623,7 +1044,7 @@ aboveVideosRow:`
 <div id="watch5-videos-dd" page="1" max-pages="5" class="hid">
 			<div id="watch5-videos-dd-inner" class="flex-bar">
 				<div id="videos-dd-left" class="videos-dd-arrow">
-					<button id="videos-dd-prev" class="yt-uix-button yt-uix-button-default yt-uix-slider-prev" rel="prev">
+					<button id="videos-dd-prev" class="yt-uix-button yt-uix-button-default yt-uix-slider-prev" disabled rel="prev">
 						<img class="yt-uix-slider-prev-arrow" src="">
 					</button>
 				</div>
@@ -1332,6 +1753,12 @@ belowTabsRow:`
     </div>
 </div>
 `,
+belowRelatedRow:`
+<div id="st-below-related-row" class="flex-bar st-watch-row">
+    <div id="below-related-holder">
+    </div>
+</div>
+`,
 sideBannerRow:`
 <div id="st-side-banner-row" class="st-watch-row flex-bar">
     <div class="related-channel">
@@ -1347,7 +1774,26 @@ sideBannerRow:`
 </div>
 `,
 sideTitleRow:`
-<div id="st-side-title-row" class="st-watch-row flex-bar">
+<div id="st-side-title-row" class="st-watch-row">
+    <div class="st-title">
+    </div>
+    <div class="st-desc">
+                        <div class="st-desc-views-info st-views-info flex-bar">
+                            <span class="st-view-count"></span>
+                            <span class="st-short-view-count"></span>
+                            <span class="st-dot">•</span>
+                            <span class="st-pub-date"></span>
+                            <span class="st-upload-date"></span>
+                            <span class="st-relative-date"></span>
+                        </div>
+                        <div class="st-desc-content">
+                        </div>
+                    </div>
+</div>
+`,
+sidePolyOwnerRow:`
+<div id="st-side-poly-owner-row" class="st-watch-row flex-bar">
+    <div class="st-owner st-polymer-owner flex-bar">${STH0.ST_POLY_OWNER}</div>
 </div>
 `,
 sideOwnerRow:`
@@ -1370,6 +1816,28 @@ sideDescRow:`
 			</form>
         </div>
     </div>
+</div>
+`,
+sideActionsRow:`
+<div id="st-side-actions-row" class="st-watch-row flex-bar">
+    <div class="st-actions flex-bar">
+                        <div class="st-ltod">
+                            <div class="st-ltod-buttons">
+                            </div>
+                            <div class="st-ltod-bar">
+                            </div>
+                        </div>
+                        <div class="st-action-buttons st-polymer-actions flex-bar">
+                            <div class="st-addto-button-holder st-contents">
+                            </div>
+                            <div class="st-share-button-holder st-contents">
+                            </div>
+                            <div class="st-save-button-holder st-contents">
+                            </div>
+                            <div class="st-more-button-holder st-contents">
+                            </div>
+                        </div>
+                    </div>
 </div>
 `,
 sideTabsRow:`
@@ -1616,23 +2084,15 @@ var defaultConfigs = {
 	"expAdaptiveLayout2024HH": false,
 	"polymerWarningBanner": true,
 	"showWelcomeBanner": true,
-	"expAlwaysShowCompactDate": true,
-	"expNeverShowCompactDate": false,
 	"expMoveGuideMainSectionToTop": false,
 	"expMoreTooltips": true,
 	"expWatch9NoOwner": true,
 	"expWatch9TrueExpander": false,
-	"expWatch9SidebarBus": false,
-	"expWatch9StickyColumns": false,
-	"expRelatedGrid": false,
 	"expWatch8NoMore": false,
 	"expMoveCountsToButtons": false,
 	"expSharrow": false,
-	"expGuideAlwaysPinned": false,
 	"expWatch7AboutTabRename": false,
 	"expWatch7AboutTabRename2": false,
-	"expTwoColumnSearchResults": false,
-	"configWatch7SidebarCardShadow": true,
 	"expFlatLogo": false,
 	"expInvertLogo": false,
 	"expGlossyLogo": false,
@@ -1640,65 +2100,25 @@ var defaultConfigs = {
 	"expClassicTitle": false,
 	"expClassicGuide": false,
 	"expClassicSubscribe": false,
-	"expClassicStyles": false,
 	"expClassicLtod": false,
-	"expClassicButtons": false,
 
-	"expBigSearchThumbs": false,
-	"expBiggerSearchThumbs": false,
+
 
 	"expNoVideosLink": false,
-	"expSkinnySubscribe": true,
-	"expModernStyles": false,
-	"modernCards": false,
-    "sbStyles":false,
-    "sbCardPhysics":false,
-	"expLightChannelBar": false,
-	"expModernNotifIcon": false,
-	"expModernTopbar": false,
-	"expModernUpload": false,
-	"expModernGuideButton": false,
-	"expModernSearchIcon": false,
-	"expModernTitle": false,
 	"expModernGuide": false,
-	"expModernHome": false,
-	"expModernPlaylists": false,
-	"expModernPlaylistThumbnails": false,
 	"expPlaylistRedBorder": false,
 	"expPlaylistTimestamps": true,
 	"expTrueScrollableGuide": false,
-	"materialSpinner": false,
 	"expViewsString": true,
-	"expGoogleApps": false,
-	"expCommentsFullWidth": true,
 	"expNoByText": false,
-	"expAccountMenu": false,
 
 	"expStaticSite": false,
 	"expStaticSiteForcesSmallPlayer": true,
-	"expHideAppbar": false,
 
-	"expEpicWatch7Flat": false,
-	"expEpicHeader": false,
-	"expEpicStyling": false,
-	"expEpicFeeds": false,
-
-	"expCosmicHeader": false,
-	"expCosmicBG": false,
-	"expCosmicButtons": false,
-	"expCosmicStyles": false,
-	"expCosmicBanners": false,
-	"expCosmicBannersV2": false,
 	"expCosmicComments": false,
-	"expCosmicGuideStyle": false,
 	"expCosmicGuideLayout": false,
-	"expCosmicFeedsV1": false,
-	"expCosmicFeedsV2": false,
-	"expCosmicFeedsV3": false,
-	"expCosmicFeedsThirdColumn": false,
 	"expNotifSquare": false,
 
-	"expChannels3": false,
 	"expChannels3BGVerticalRepeat": false,
 	"expChannels3BGHorizontalRepeat": false,
 	"expChannels3TimeVisible": false,
@@ -1708,86 +2128,32 @@ var defaultConfigs = {
 	"expNoGuide": false,
 	"expGuideOnFeedsOnly": false,
 
-	"expAozoraHome": false,
-	"expAozoraHeader": false,
-	"expAozoraBG": false,
-	"expAozoraStyles": false,
 	"expAozoraComments": false,
-	"expAozoraSubscribe": false,
-	"expAozoraTopbarLinks": false,
 	"expAozoraSearch":false,
-
-	"expStargazerTabbedHeader": false,
-	"expStargazerBarHeader": false,
-	"expStargazerSimpleHeader": false,
-	"expStargazerSubscribe": false,
-
-	"expHomeTab": false,
-
-	"expRoboto": false,
 
 	"expCenteredSearch": false,
 	"expBigSearch": false,
-	"expSecondarySearchIcon": false,
 	"expMaterialSearch": false,
-	"expPolymerAccountMenu": false,
-	"expPolymerShell": false,
-	"expEarlyPolymerShell": false,
-	"expEarlyPolymerGuide": false,
-	"expPolymerGen2Colors": false,
-	"polymerGen2Comments": false,
-	"simpleReply": false,
-	"typographySpacing": false,
-	"expPolymerSubscribe": false,
-	"expPolymerGen2Subscribe": false,
-	"expPolymerStyles": false,
-	"expBetaPolymerStyles": false,
-	"expPolymerChannels": false,
-	"expColorfulChannels": false,
-	"expPolymerComments": false,
-	"expPolymerTooltips": false,
 	"expTopbarShadow": false,
-	"expMaterialSignIn": false,
-	"expCommentsTeaser": false,
 	"expSegmentedLtod": false,
 	"expRoundedSubscribe": false,
 	"expBlackSubscribe": false,
-	"expRoundedThumbs": false,
-	"expRoundedPlayer": false,
 	"expRoundedSearch": false,
-	"expRoundedGuide": false,
-	"expRoundedStyles": false,
-	"expFrostedGlass": false,
-	"expPolymerGen3Colors": false,
-	"expYTSansTitle": false,
 	"expWMRButtonsLowercase": false,
 	"expWMRAddTo": false,
 	"expWMRNoSaveText": false,
 	"expWMRNoShareText": false,
-	"expOutlineIcons": false,
 	"expRichGridHome": false,
 	"expRoundedTopbarPfp": false,
-	"expUploadIcon": false,
-	"expCreateIcon": false,
-	"expYouTubeApps": false,
 	"expRingo2": true,
 	"expRingo2Gradients": true,
-	"favi24": false,
-	"favi24O": false,
-	"favi17": false,
-	"favi15": false,
-	"favi12": false,
-	"favi10": false,
-	"favi05": false,
 
 	"STPresetsAlsoSetV3Settings": true,
 
 	"show2point4": true,
 
 	"expHideYoodles": false,
-	"expFixedShareIcons": true,
 	"expFixedXIcon": true,
-	"expMaterialGbar": false,
 	"ironSettings": {},
     "inputSettings":{
         favsPlaylist:{
@@ -1797,6 +2163,11 @@ var defaultConfigs = {
         }
     },
 	"radioSettings":{
+        cfgWinDen:{
+            name:"cfgWinDen",
+            tValue:"0",
+            visValue:"0"
+        },
 		layoutMode:{
             name:"layoutMode",
             tValue:"manual",
@@ -1812,6 +2183,16 @@ var defaultConfigs = {
             tValue:"2024",
             visValue:"auto"
         },
+        rndThumbs:{
+            name:"rndThumbs",
+            tValue:"off",
+            visValue:"auto"
+        },
+        siteFont:{
+            name:"siteFont",
+            tValue:"roboto",
+            visValue:"auto"
+        },
         gbarVersion:{
             name:"gbarVersion",
             tValue:"off",
@@ -1825,6 +2206,26 @@ var defaultConfigs = {
         accountMenu:{
             name:"accountMenu",
             tValue:"mhh",
+            visValue:"auto"
+        },
+        frostedGlass:{
+            name:"frostedGlass",
+            tValue:"off",
+            visValue:"auto"
+        },
+        uploadBtn:{
+            name:"uploadBtn",
+            tValue:"modern",
+            visValue:"auto"
+        },
+        appsBtn:{
+            name:"appsBtn",
+            tValue:"off",
+            visValue:"auto"
+        },
+        rndPlayer:{
+            name:"rndPlayer",
+            tValue:"off",
             visValue:"auto"
         },
         playerVersion:{
@@ -1874,6 +2275,11 @@ var defaultConfigs = {
         },
         compactDate:{
             name:"compactDate",
+            tValue:"on",
+            visValue:"on"
+        },
+        compactName:{
+            name:"compactName",
             tValue:"on",
             visValue:"on"
         },
@@ -2104,6 +2510,62 @@ function applyNewSettings(){
             visValue:"auto"
         }
 	}
+    if(STS.radioSettings.compactName==null){
+        STS.radioSettings.compactName={
+            name:"compactName",
+            tValue:"on",
+            visValue:"on"
+        }
+	}
+    if(STS.radioSettings.frostedGlass==null){
+        STS.radioSettings.frostedGlass={
+            name:"frostedGlass",
+            tValue:"off",
+            visValue:"auto"
+        }
+	}
+    if(STS.radioSettings.cfgWinDen==null){
+        STS.radioSettings.cfgWinDen={
+            name:"cfgWinDen",
+            tValue:"0",
+            visValue:"0"
+        }
+	}
+    if(STS.radioSettings.rndPlayer==null){
+        STS.radioSettings.rndPlayer={
+            name:"rndPlayer",
+            tValue:"off",
+            visValue:"auto"
+        }
+    }
+    if(STS.radioSettings.rndThumbs==null){
+        STS.radioSettings.rndThumbs={
+            name:"rndThumbs",
+            tValue:"off",
+            visValue:"auto"
+        }
+    }
+    if(STS.radioSettings.uploadBtn==null){
+        STS.radioSettings.uploadBtn={
+            name:"uploadBtn",
+            tValue:"modern",
+            visValue:"auto"
+        }
+    }
+    if(STS.radioSettings.appsBtn==null){
+        STS.radioSettings.appsBtn={
+            name:"appsBtn",
+            tValue:"off",
+            visValue:"auto"
+        }
+    }
+    if(STS.radioSettings.siteFont==null){
+        STS.radioSettings.siteFont={
+            name:"siteFont",
+            tValue:"roboto",
+            visValue:"auto"
+        }
+    }
 }
 getIronSettings();
 function getIronSettings(){
@@ -2171,14 +2633,6 @@ let ScFa={
 		name:"polymerWarningBanner",
 		desc:"If V3 is disabled or not installed, StarTube will display a banner urging the user to install it."
 	},
-	"expAlwaysShowCompactDate":{
-		name:"expAlwaysShowCompactDate",
-		desc:"Display dates on related videos without having to hover over them."
-	},
-	"expNeverShowCompactDate":{
-		name:"expNeverShowCompactDate",
-		desc:"Never display dates on related videos, even when hovering over them."
-	},
 	"expMoveGuideMainSectionToTop":{
 		name:"expMoveGuideMainSectionToTop",
 		desc:"Only meant to be used with v3's regular 2013 guide."
@@ -2195,18 +2649,6 @@ let ScFa={
 		name:"expWatch9TrueExpander",
 		desc:"Makes the description work more like it does in watch7, and removes the Description tab."
 	},
-	"expWatch9SidebarBus":{
-		name:"expWatch9SidebarBus",
-		desc:"Makes alt-watch9's sidebar item selection move. Glitchy on some zoom levels."
-	},
-	"expWatch9StickyColumns":{
-		name:"expWatch9StickyColumns",
-		desc:"When on the description tab, the sidebar and owner column will stay on screen while you scroll."
-	},
-	"expRelatedGrid":{
-		name:"expRelatedGrid",
-		desc:"Use grid view for related videos."
-	},
 	"expWatch8NoMore":{
 		name:"expWatch8NoMore",
 		desc:"Remove the 'More' button in favor of showing all buttons at once. NOTE: V3's built-in Watch8 option would best be disabled."
@@ -2219,10 +2661,6 @@ let ScFa={
 		name:"expSharrow",
 		desc:"Use Late 2015-Onwards share icon in watch8"
 	},
-	"expGuideAlwaysPinned":{
-		name:"expGuideAlwaysPinned",
-		desc:"Always have guide pinned. Untested with 2013 guide."
-	},
 	"expWatch7AboutTabRename":{
 		name:"expWatch7AboutTabRename",
 		desc:'Change "About" to "Video info" on regular watch7.'
@@ -2230,14 +2668,6 @@ let ScFa={
 	"expWatch7AboutTabRename2":{
 		name:"expWatch7AboutTabRename2",
 		desc:'Change "About" to "Details" on regular watch7.'
-	},
-	"expTwoColumnSearchResults":{
-		name:"expTwoColumnSearchResults",
-		desc:"*Currently does not work with the centered layout.* Makes search results 2 columns, instead of 1. Works best on 1920x1080 screens or better."
-	},
-	"configWatch7SidebarCardShadow":{
-		name:"configWatch7SidebarCardShadow",
-		desc:"Add a box shadow to the related videos section if indiviual cards watch is on"
 	},
 	"expFlatLogo":{
 		name:"expFlatLogo",
@@ -2263,93 +2693,17 @@ let ScFa={
 		name:"expClassicSubscribe",
 		desc:"Early 2013 subscribe button"
 	},
-	"expClassicStyles":{
-		name:"expClassicStyles",
-		desc:"General early 2013 styling"
-	},
 	"expClassicLtod":{
 		name:"expClassicLtod",
 		desc:"Early 2013 like to dislike bar and icons"
-	},
-	"expClassicButtons":{
-		name:"expClassicButtons",
-		desc:"Early 2013 uix button styling"
-	},
-	"expBigSearchThumbs":{
-		name:"expBigSearchThumbs",
-		desc:"Use the slightly bigger search thumbnails from around 2017-2019. Pfps also become centered if this is enabled."
-	},
-	"expBiggerSearchThumbs":{
-		name:"expBiggerSearchThumbs",
-		desc:"Use the much bigger search thumbnails from around 2020-2022. Pfps also become centered if this is enabled."
 	},
 	"expNoVideosLink":{
 		name:"expNoVideosLink",
 		desc:"Removes the videos link on watch7, watch8, and the related tabs."
 	},
-	"expSkinnySubscribe":{
-		name:"expSkinnySubscribe",
-		desc:"Use the skinnier subscribe button. (V3 by default uses a wider variant)"
-	},
-	"expModernStyles":{
-		name:"expModernStyles",
-		desc:"Enable ~2015 styling"
-	},
-	"modernCards":{
-		name:"modernCards",
-		desc:"Enable modern cardification padding and margins used from 2014 onwards. expModernStyles overrides some of this."
-	},
-    "sbStyles":{
-		name:"sbStyles",
-		desc:"Enable most Skybird styling."
-	},
-    "sbCardPhysics":{
-		name:"sbCardPhysics",
-		desc:"Use Skybird card rules."
-	},
-	"expLightChannelBar":{
-		name:"expLightChannelBar",
-		desc:"Enable the modern light bar that appears on your own channel"
-	},
-	"expModernNotifIcon":{
-		name:"expModernNotifIcon",
-		desc:"Change notification preference icon to a bell"
-	},
-	"expModernTopbar":{
-		name:"expModernTopbar",
-		desc:"Makes the topbar in general look more like 2015 onwards"
-	},
-	"expModernUpload":{
-		name:"expModernUpload",
-		desc:"Remove the icon on the upload button (intended to be used without promintent upload button)"
-	},
-	"expModernGuideButton":{
-		name:"expModernGuideButton",
-		desc:"Enable late 2015-Present guide button"
-	},
-	"expModernSearchIcon":{
-		name:"expModernSearchIcon",
-		desc:"Enable late 2015-Present search icon"
-	},
-	"expModernTitle":{
-		name:"expModernTitle",
-		desc:"Enable smaller title text from 2016-onwards"
-	},
 	"expModernGuide":{
 		name:"expModernGuide",
 		desc:"Make the guide look like it did in late 2015 onwards, also changes stuff like What to Watch to Home"
-	},
-	"expModernHome":{
-		name:"expModernHome",
-		desc:"Removes recommended channels and fixes thumbnail sizes on home"
-	},
-	"expModernPlaylists":{
-		name:"expModernPlaylists",
-		desc:"Modern Hitchhiker playlist styling"
-	},
-	"expModernPlaylistThumbnails":{
-		name:"expModernPlaylistThumbnails",
-		desc:"Modern Hitchhiker playlist thumbnail styling"
 	},
 	"expPlaylistRedBorder":{
 		name:"expPlaylistRedBorder",
@@ -2363,29 +2717,13 @@ let ScFa={
 		name:"expTrueScrollableGuide",
 		desc:"Make the guide act like it did in 2015 onwards, removing the flyouts. Requires APPBAR_GUIDE_SCROLL to be disabled."
 	},
-	"materialSpinner":{
-		name:"materialSpinner",
-		desc:"Make the player use the material loading icon added in late 2017."
-	},
 	"expViewsString":{
 		name:"expViewsString",
 		desc:'Always show the "views" text on the view count.'
 	},
-	"expGoogleApps":{
-		name:"expGoogleApps",
-		desc:"Use apps button from 2015 Google. Was briefly tested on YouTube around 2013-2014."
-	},
-	"expCommentsFullWidth":{
-		name:"expCommentsFullWidth",
-		desc:"Make comments take up the full width of the section, rather than being limited 640px"
-	},
 	"expNoByText":{
 		name:"expNoByText",
 		desc:'Removes the "by" text on video elements.'
-	},
-	"expAccountMenu":{
-		name:"expAccountMenu",
-		desc:"Use Hitchhiker account menu from 2015 onwards."
 	},
 	"expStaticSite":{
 		name:"expStaticSite",
@@ -2395,85 +2733,17 @@ let ScFa={
 		name:"expStaticSiteForcesSmallPlayer",
 		desc:"If expStaticSite is enabled, the non-flexwatch (360p) player will be forced on."
 	},
-	"expHideAppbar":{
-		name:"expHideAppbar",
-		desc:"Hide appbar without disabling appbar guide"
-	},
-	"expEpicWatch7Flat":{
-		name:"expEpicWatch7Flat",
-		desc:"Removes the shadow on epic watch7."
-	},
-	"expEpicHeader":{
-		name:"expEpicHeader",
-		desc:"Use the scrapped Epic Panda topbar"
-	},
-	"expEpicStyling":{
-		name:"expEpicStyling",
-		desc:"Recommended for Epic Panda layout"
-	},
-	"expEpicFeeds":{
-		name:"expEpicFeeds",
-		desc:"Epic Panda feed header"
-	},
-	"expCosmicHeader":{
-		name:"expCosmicHeader",
-		desc:"Use the Cosmic Panda topbar"
-	},
-	"expCosmicBG":{
-		name:"expCosmicBG",
-		desc:"Makes the site use the Cosmic Panda background image"
-	},
-	"expCosmicButtons":{
-		name:"expCosmicButtons",
-		desc:"Makes the site use Cosmic Panda styled buttons"
-	},
-	"expCosmicStyles":{
-		name:"expCosmicStyles",
-		desc:"Makes the site use Cosmic Panda styling in general."
-	},
-	"expCosmicBanners":{
-		name:"expCosmicBanners",
-		desc:"Makes the site use the early 2012 alert banner styling."
-	},
-	"expCosmicBannersV2":{
-		name:"expCosmicBannersV2",
-		desc:"Makes the site use the mid-late 2012 alert banner styling."
-	},
 	"expCosmicComments":{
 		name:"expCosmicComments",
 		desc:"Use Cosmic Panda comments."
-	},
-	"expCosmicGuideStyle":{
-		name:"expCosmicGuideStyle",
-		desc:"Makes the site use the Cosmic Panda black guide."
 	},
 	"expCosmicGuideLayout":{
 		name:"expCosmicGuideLayout",
 		desc:"Makes the guide's structure similar to the Cosmic Panda one, with the browse channels button being on top for example."
 	},
-	"expCosmicFeedsV1":{
-		name:"expCosmicFeedsV1",
-		desc:"Makes feed video renderers use the late 2011-early 2012 style."
-	},
-	"expCosmicFeedsV2":{
-		name:"expCosmicFeedsV2",
-		desc:"Makes feed video renderers use the mid 2012 style."
-	},
-	"expCosmicFeedsV3":{
-		name:"expCosmicFeedsV3",
-		desc:"Makes feed video renderers use the late 2012 style."
-	},
-	"expCosmicFeedsThirdColumn":{
-		name:"expCosmicFeedsThirdColumn",
-		desc:"Adds a trending column to the feed pages."
-	},
 	"expNotifSquare":{
 		name:"expNotifSquare",
 		desc:"Use the old Google+ notification square instead of the bell."
-	},
-	"expChannels3":{
-		name:"expChannels3",
-		desc:"Use Channels3, the Cosmic Panda channel page."
 	},
 	"expChannels3BGVerticalRepeat":{
 		name:"expChannels3BGVerticalRepeat",
@@ -2503,61 +2773,13 @@ let ScFa={
 		name:"expGuideOnFeedsOnly",
 		desc:"Makes the guide only appear on feeds (such as subscriptions page) (center alignment required)"
 	},
-	"expAozoraHome":{
-		name:"expAozoraHome",
-		desc:"Arranges the homepage like the 2011 layout."
-	},
-	"expAozoraHeader":{
-		name:"expAozoraHeader",
-		desc:"Makes the topbar look like the 2011 layout."
-	},
-	"expAozoraBG":{
-		name:"expAozoraBG",
-		desc:"Pure white site background."
-	},
-	"expAozoraStyles":{
-		name:"expAozoraStyles",
-		desc:"Styles many things to look like the Aozora (2010-2011) layout."
-	},
 	"expAozoraComments":{
 		name:"expAozoraComments",
 		desc:"Use Aozora comments."
 	},
-	"expAozoraSubscribe":{
-		name:"expAozoraSubscribe",
-		desc:"White subscribe button"
-	},
-	"expAozoraTopbarLinks":{
-		name:"expAozoraTopbarLinks",
-		desc:"Adds the browse, movies, and upload links to the topbar. Hides the default upload button."
-	},
 	"expAozoraSearch":{
 		name:"expAozoraSearch",
 		desc:"Use the Aozora search layout, used from 2010-Early 2012."
-	},
-	"expStargazerTabbedHeader":{
-		name:"expStargazerTabbedHeader",
-		desc:"Use the 2008 header/topbar. Will overwrite any other topbar settings."
-	},
-	"expStargazerBarHeader":{
-		name:"expStargazerBarHeader",
-		desc:"Use the Early/Mid 2009 header/topbar. Will overwrite any other topbar settings."
-	},
-	"expStargazerSimpleHeader":{
-		name:"expStargazerSimpleHeader",
-		desc:"Use the Late 2009 header/topbar. Will overwrite any other topbar settings."
-	},
-	"expStargazerSubscribe":{
-		name:"expStargazerSubscribe",
-		desc:"Use the old yellow subscribe button from 2008-2009."
-	},
-	"expHomeTab":{
-		name:"expHomeTab",
-		desc:"Gives the channel page a regular home tab, instead of the icon tab."
-	},
-	"expRoboto":{
-		name:"expRoboto",
-		desc:"Makes the site use the Roboto font."
 	},
 	"expCenteredSearch":{
 		name:"expCenteredSearch",
@@ -2567,93 +2789,17 @@ let ScFa={
 		name:"expBigSearch",
 		desc:"Taller search bar from certain eras of Polymer."
 	},
-	"expSecondarySearchIcon":{
-		name:"expSecondarySearchIcon",
-		desc:"Adds that weird redundant search icon that appears on the left side of the search bar when it is focused, which was added in 2022 and still exists today."
-	},
 	"expMaterialSearch":{
 		name:"expMaterialSearch",
 		desc:"Material search bar from 2016 Polymer, and some Hitchhiker experiements."
-	},
-	"expPolymerAccountMenu":{
-		name:"expPolymerAccountMenu",
-		desc:"Use the account menu from Polymer."
-	},
-	"expPolymerShell":{
-		name:"expPolymerShell",
-		desc:"Changes the topbar, guide, and some other things to look like they did in Polymer Gen 1 (2017-2019)."
-	},
-	"expEarlyPolymerShell":{
-		name:"expEarlyPolymerShell",
-		desc:"Changes the topbar, guide, and some other things to look like they did in the Polymer Beta/Polymer Gen 0 (2016-2017)."
-	},
-	"expEarlyPolymerGuide":{
-		name:"expEarlyPolymerGuide",
-		desc:"Makes the guide items 48px tall."
-	},
-	"expPolymerGen2Colors":{
-		name:"expPolymerGen2Colors",
-		desc:"Makes the site use the colors it did in Polymer Gen 2 (2020-2022)."
-	},
-	"polymerGen2Comments":{
-		name:"polymerGen2Comments",
-		desc:"Makes the site use 2019-present comments."
-	},
-	"simpleReply":{
-		name:"simpleReply",
-		desc:"'3 REPLIES' instead of 'View all 3 replies'. Lowercase when using Amsterdam."
-	},
-	"typographySpacing":{
-		name:"typographySpacing",
-		desc:"Very subtle letter spacing effect used in 2021-2022."
-	},
-	"expPolymerSubscribe":{
-		name:"expPolymerSubscribe",
-		desc:"Makes the subscribe button use the Polymer Gen 1 style (sub count inside the button)"
-	},
-	"expPolymerGen2Subscribe":{
-		name:"expPolymerGen2Subscribe",
-		desc:"Makes the subscribe button use the Polymer Gen 2 style (sub count not inside the button)"
-	},
-	"expPolymerStyles":{
-		name:"expPolymerStyles",
-		desc:"Makes video renderers and other things look like Polymer."
-	},
-	"expBetaPolymerStyles":{
-		name:"expBetaPolymerStyles",
-		desc:"Styles some things to look like 2016 Polymer."
-	},
-	"expPolymerChannels":{
-		name:"expPolymerChannels",
-		desc:"2017 onwards channels."
-	},
-	"expColorfulChannels":{
-		name:"expColorfulChannels",
-		desc:"Colorful material channels from the 2016 polymer beta. Requires MATERIAL_C4 to be enabled."
-	},
-	"expPolymerComments":{
-		name:"expPolymerComments",
-		desc:"Polymer comments."
-	},
-	"expPolymerTooltips":{
-		name:"expPolymerTooltips",
-		desc:"Polymer tooltips."
 	},
 	"expTopbarShadow":{
 		name:"expTopbarShadow",
 		desc:"Use the topbar shadow, which was used from 2016-2019 in Polymer."
 	},
-	"expMaterialSignIn":{
-		name:"expMaterialSignIn",
-		desc:"Red Material sign in button."
-	},
 	"expRichGridHome":{
 		name:"expRichGridHome",
 		desc:"Makes the homepage videos really big."
-	},
-	"expCommentsTeaser":{
-		name:"expCommentsTeaser",
-		desc:"Watch10 comments button."
 	},
 	"expSegmentedLtod":{
 		name:"expSegmentedLtod",
@@ -2667,37 +2813,9 @@ let ScFa={
 		name:"expBlackSubscribe",
 		desc:"Use the black (or white in dark mode) subscribe button from Late 2022 onwards."
 	},
-	"expRoundedThumbs":{
-		name:"expRoundedThumbs",
-		desc:"Use rounded thumbnails from Late 2022 onwards."
-	},
-	"expRoundedPlayer":{
-		name:"expRoundedPlayer",
-		desc:"Use rounded player from Mid 2023 onwards."
-	},
 	"expRoundedSearch":{
 		name:"expRoundedSearch",
 		desc:"Use the rounded searchbar from Late 2022 onwards."
-	},
-	"expRoundedGuide":{
-		name:"expRoundedGuide",
-		desc:"Use the Amsterdam Guide from Late 2022 onwards."
-	},
-	"expRoundedStyles":{
-		name:"expRoundedStyles",
-		desc:"Rounded (Amsterdam) styles in general."
-	},
-	"expFrostedGlass":{
-		name:"expFrostedGlass",
-		desc:"Use the semi-transparent frosted glass topbar that was being tested in late 2024."
-	},
-	"expPolymerGen3Colors":{
-		name:"expPolymerGen3Colors",
-		desc:"Use the all-white color scheme of Amsterdam."
-	},
-	"expYTSansTitle":{
-		name:"expYTSansTitle",
-		desc:"The video title will use the YouTube Sans font, like it did in watch10 beta, and final watch10 until late 2023."
 	},
 	"expWMRButtonsLowercase":{
 		name:"expWMRButtonsLowercase",
@@ -2715,25 +2833,9 @@ let ScFa={
 		name:"expWMRNoShareText",
 		desc:"Makes the Polymer watch layouts' share button show the icon only."
 	},
-	"expOutlineIcons":{
-		name:"expOutlineIcons",
-		desc:"Use the outline icons from 2021"
-	},
 	"expRoundedTopbarPfp":{
 		name:"expRoundedTopbarPfp",
 		desc:"Makes the topbar pfp round like it was in 2016 onwards"
-	},
-	"expUploadIcon":{
-		name:"expUploadIcon",
-		desc:"Replace the upload button with the upload icon from 2016-2018"
-	},
-	"expCreateIcon":{
-		name:"expCreateIcon",
-		desc:"Replace the upload button with the create icon from 2018-present."
-	},
-	"expYouTubeApps":{
-		name:"expYouTubeApps",
-		desc:"Add the YouTube apps button, used in Polymer until it was removed in 2022."
 	},
 	"expRingo2":{
 		name:"expRingo2",
@@ -2747,22 +2849,1202 @@ let ScFa={
 		name:"expHideYoodles",
 		desc:"Hide YouTube Doodles because they break the styling of the logo on some layouts."
 	},
-	"expFixedShareIcons":{
-		name:"expFixedShareIcons",
-		desc:"Some share options incorrectly appear as Facebook. This option fixes some of them."
-	},
 	"expFixedXIcon":{
 		name:"expFixedXIcon",
 		desc:"Makes the X share option use the modern icon, as opposed to the pre-2023 icon."
-	},
-	"expMaterialGbar":{
-		name:"expMaterialGbar",
-		desc:"Gives the modern gbar a Material-ish skin. Requires V3's MODERN_GBAR_DELEGATION to be enabled."
 	}
 };
+let radioSets={
+usedPages:[
+    {"a":"layout"},
+    {"a":"misc"},
+    {"a":"topbar"},
+    {"a":"guide"},
+    {"a":"player"},
+    {"a":"watch"},
+    {"a":"channel"}
+],
+pages:[
+{page:{
+	tab:"config",
+	titlebar:{
+		text:"StarTube"
+	},
+	sections:[
+        {section:{
+			id:"cfgWinDen",
+            new:true,
+			title:{
+				text:"Config Window UI Density"
+			},
+			desc:{
+				text:"Choose the size of buttons and text in this menu. (This setting will apply without refreshing the page)"
+			},
+			opts:[
+				{opt:{
+					name:"Normal",
+					value:"0"
+				}},
+				{opt:{
+					name:"Compact",
+					value:"1"
+				}}
+			]
+		}}
+	]
+}},
+{page:{
+	tab:"layout",
+	titlebar:{
+		text:"Layout"
+	},
+	sections:[
+		{section:{
+			id:"layoutMode",
+			title:{
+				text:"Layout Mode"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Manual",
+					value:"manual",
+                    mText:{
+                        text:"<span>Choose your layout normally.</span>",
+                        color:"normal"
+                    }
+				}},
+                {opt:{
+					name:"Adaptive",
+					value:"adaptive",
+                    mText:{
+                        text:"<span>Example: if you watch a video from 2020, the layout will automatically switch to the 2020 layout.</span>",
+                        color:"normal"
+                    }
+				}}
+			]
+		}},
+        {section:{
+			id:"layoutSelect",
+			title:{
+				text:"Layout Select"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Custom (don't enforce any specific layout, ideal for making use of V3's config options)",
+					value:"passive",
+                    mText:{
+                        text:"<span>For advanced users</span>",
+                        color:"normal"
+                    }
+				}},
+                {sector:{
+                    sectorTitle:{
+                        text:"Amsterdam"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"2024 (Custom ver)",
+                            value:"amst2024c"
+                        }},
+                        {opt:{
+                            name:"2023",
+                            value:"amst2023_1"
+                        }}
+                    ]
+                }},
+                {sector:{
+                    sectorTitle:{
+                        text:"Polymer"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"2022",
+                            value:"poly2022"
+                        }},
+                        {opt:{
+                            name:"2021",
+                            value:"poly2021"
+                        }},
+                        {opt:{
+                            name:"2020",
+                            value:"poly2020"
+                        }},
+                        {opt:{
+                            name:"2019",
+                            value:"poly2019"
+                        }},
+                        {opt:{
+                            name:"2018",
+                            value:"poly2018"
+                        }},
+                        {opt:{
+                            name:"2017",
+                            value:"poly2017"
+                        }},
+                        {opt:{
+                            name:"Early 2017",
+                            value:"polyE2017"
+                        }},
+                        {opt:{
+                            name:"2016 (Prototype layout)",
+                            value:"poly2016"
+                        }}
+                    ]
+                }},
+                {sector:{
+                    sectorTitle:{
+                        text:"Skybird (Custom layout)"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"2024 (alternate universe version)",
+                            value:"sb2024"
+                        }},
+                        {opt:{
+                            name:"2017-2018 (alternate universe version)",
+                            value:"sb2017"
+                        }},
+                        {opt:{
+                            name:"2016 (alternate universe version)",
+                            value:"sb2016"
+                        }}
+                    ]
+                }},
+                {sector:{
+                    sectorTitle:{
+                        text:"Hitchhiker"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"2024 (unofficial legacy layout, uses the pinkish Ringo2 rebrand)",
+                            value:"hh2024"
+                        }},
+                        {opt:{
+                            name:"2018-2020 (legacy layout)",
+                            value:"hh2018"
+                        }},
+                        {opt:{
+                            name:"2017 (legacy layout)",
+                            value:"hh2017"
+                        }},
+                        {opt:{
+                            name:"Early 2017",
+                            value:"hhE2017"
+                        }},
+                        {opt:{
+                            name:"Late 2016",
+                            value:"hh2016"
+                        }},
+                        {opt:{
+                            name:"Mid 2016",
+                            value:"hhM2016"
+                        }},
+                        {opt:{
+                            name:"Early 2016",
+                            value:"hhE2016"
+                        }},
+                        {opt:{
+                            name:"2015",
+                            value:"hh2015"
+                        }},
+                        {opt:{
+                            name:"Early 2015",
+                            value:"hhE2015"
+                        }},
+                        {opt:{
+                            name:"2014",
+                            value:"hh2014"
+                        }},
+                        {opt:{
+                            name:"Early 2014 (Prototype centered layout)",
+                            value:"hh2014alt_1"
+                        }},
+                        {opt:{
+                            name:"Late 2013 (Prototype centered layout)",
+                            value:"hh2013alt_3"
+                        }},
+                        {opt:{
+                            name:"Late 2013",
+                            value:"hh2013_3"
+                        }},
+                        {opt:{
+                            name:"Mid 2013",
+                            value:"hh2013_2"
+                        }},
+                        {opt:{
+                            name:"Early 2013",
+                            value:"hh2013_1"
+                        }}
+                    ]
+                }},
+                {sector:{
+                    sectorTitle:{
+                        text:"Epic Panda"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"Mid-Late 2012 (prototype layout)",
+                            value:"epic2012_2"
+                        }},
+                        {opt:{
+                            name:"Mid-Late 2012 (prototype layout, custom ver)",
+                            value:"epic2012_1"
+                        }}
+                    ]
+                }},
+                {sector:{
+                    sectorTitle:{
+                        text:"Cosmic Panda"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"Late 2012",
+                            value:"cosmic2012_3"
+                        }},
+                        {opt:{
+                            name:"Mid 2012",
+                            value:"cosmic2012_2"
+                        }},
+                        {opt:{
+                            name:"Early 2012",
+                            value:"cosmic2012_1"
+                        }}
+                    ]
+                }},
+                {sector:{
+                    sectorTitle:{
+                        text:"Aozora"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"2011",
+                            value:"aozora2011_2"
+                        }}
+                    ]
+                }},
+                {sector:{
+                    sectorTitle:{
+                        text:"Stargazer"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"Late 2009",
+                            value:"stargazer2009_3"
+                        }},
+                        {opt:{
+                            name:"Early 2009",
+                            value:"stargazer2009_1"
+                        }},
+                        {opt:{
+                            name:"2008",
+                            value:"stargazer2008_1"
+                        }}
+                    ]
+                }},
+			]
+		}}
+	]
+}},
+{page:{
+	tab:"misc",
+	titlebar:{
+		text:"Misc"
+	},
+	sections:[
+		{section:{
+			id:"faviconSelect",
+			title:{
+				text:"Favicon select"
+			},
+			desc:{
+				text:"Choose which little icon appears on the tabs. Note that these don't work 100% of the time."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"2024",
+					value:"2024"
+				}},
+				{opt:{
+					name:"2024 (Old)",
+					value:"2024_old"
+				}},
+				{opt:{
+					name:"2017-2024",
+					value:"2017"
+				}},
+				{opt:{
+					name:"2015-2017",
+					value:"2015"
+				}},
+				{opt:{
+					name:"2012-2015 [V3 Default]",
+					value:"2012"
+				}},
+				{opt:{
+					name:"2010-2012",
+					value:"2010"
+				}},
+				{opt:{
+					name:"2005-2010",
+					value:"2005"
+				}}
+			]
+		}},
+		{section:{
+			id:"outlineIcons",
+			title:{
+				text:"Outline icons"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto",
+					mText:{
+						text:"On for 2021 and later layouts",
+						color:"normal"
+					}
+				}},
+				{opt:{
+					name:"On for Polymer and Amsterdam layouts",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+		{section:{
+			id:"homeRedir",
+			title:{
+				text:"Homepage (https://www.youtube.com/) Redirect"
+			},
+			desc:{
+				text:`Choose which page the YouTube homepage redirects to. That is to say, this lets you select which version of the homepage to see on YouTube's <b>first load.</b>`
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Off (Do not redirect)",
+					value:"off"
+				}},
+				{opt:{
+					name:"Grid Feed (used for 2020-present)",
+					value:"feedGrid"
+				}},
+				{opt:{
+					name:"List Feed (used for 2012)",
+					value:"feedList"
+				}}
+			]
+		}},
+        {section:{
+			id:"rndThumbs",
+			title:{
+				text:"Rounded Thumbnails"
+			},
+			desc:{
+				text:"Choose whether or not video thumbnails are given rounded corners."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
+			id:"siteFont",
+			title:{
+				text:"Site Font"
+			},
+			desc:{
+				text:"Choose what font is used on the page. Note that certain elements will be unaffected, such as the YouTube Sans elements on the Amsterdam layouts."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Roboto (2015-Present)",
+					value:"roboto"
+				}},
+				{opt:{
+					name:"Arial (Until 2015)",
+					value:"arial"
+				}}
+			]
+		}}
+	]
+}},
+{page:{
+	tab:"topbar",
+	titlebar:{
+		text:"Topbar"
+	},
+	sections:[
+		{section:{
+			id:"gbarVersion",
+			title:{
+				text:"Gbar Version"
+			},
+			desc:{
+				text:"The black bar that used to appear at the top of Google pages before 2014-ish."
+			},
+			opts:[
+				{opt:{
+					name:"Modern",
+					value:"modern"
+				}},
+				{opt:{
+					name:"Classic",
+					value:"classic"
+				}},
+				{opt:{
+					name:"Material (custom)",
+					value:"material"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+		{section:{
+			id:"logoLink",
+			title:{
+				text:"Logo Link"
+			},
+			desc:{
+				text:"Choose which page the YouTube logo links to."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Normal home [V3 Default]",
+					value:"home"
+				}},
+				{opt:{
+					name:"Grid Feed (used for 2020-present)",
+					value:"feedGrid"
+				}},
+                {opt:{
+					name:"List Feed (used for 2012)",
+					value:"feedList"
+				}},
+                {opt:{
+					name:"Subscriptions",
+					value:"subs"
+				}}
+			]
+		}},
+		{section:{
+			id:"searchText",
+			title:{
+				text:'"Search" text on searchbar'
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"On (Mid 2016-Present)",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off (Until 2016)",
+					value:"off"
+				}},
+				{opt:{
+					name:"List Feed (used for 2012)",
+					value:"feedList"
+				}}
+			]
+		}},
+        {section:{
+			id:"accountMenu",
+			title:{
+				text:'Account Menu'
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Masthead Expanded (2014 and earlier)",
+					value:"me"
+				}},
+				{opt:{
+					name:"Hitchhiker Menu (2015 onwards Hitchhiker layouts)",
+					value:"mhh"
+				}},
+				{opt:{
+					name:"Polymer Menu (2017-present)",
+					value:"poly"
+				}}
+			]
+		}},
+        {section:{
+			id:"frostedGlass",
+			title:{
+				text:'Frosted Glass'
+			},
+			desc:{
+				text:"Give the topbar this cool blurred transparency effect. Works on layouts from 2014 and later."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"On (2024 custom ver)",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
+			id:"uploadBtn",
+			title:{
+				text:"Upload Button"
+			},
+			desc:{
+				text:"Choose what kind of upload button appears on the topbar. Only works with 2014 and later."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Upload Button",
+					value:"modern"
+				}},
+				{opt:{
+					name:"Upload Icon",
+					value:"icon"
+				}},
+                {opt:{
+					name:"Create Icon",
+					value:"create"
+				}},
+                {opt:{
+					name:"Create Button",
+					value:"createBtn"
+				}}
+			]
+		}},
+        {section:{
+			id:"appsBtn",
+			title:{
+				text:"Apps Button"
+			},
+			desc:{
+				text:"Choose what kind of apps button appears on the topbar. Only works with 2014 and later."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"YouTube Apps",
+					value:"yt"
+				}},
+				{opt:{
+					name:"Google apps",
+					value:"goog"
+				}},
+                {opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}}
+	]
+}},
+{page:{
+	tab:"guide",
+	titlebar:{
+		text:"Guide"
+	},
+	sections:[
+        {section:{
+			id:"guideNavToFeed",
+			title:{
+				text:"Guide item link"
+			},
+			desc:{
+				text:"Choose whether channel links on the guide (left sidebar) take you to their channel, or their feed. [This setting just changes the existing V3 setting GUIDE_NAVIGATE_TO_CHANNEL_FEED.]"
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Channel",
+					value:"off"
+				}},
+				{opt:{
+					name:"Feed [V3 default]",
+					value:"on"
+				}},
+                {opt:{
+					name:"None of the above",
+					value:"passive"
+				}}
+			]
+		}},
+		{section:{
+			id:"guideAlwaysPinned",
+			title:{
+				text:"Guide Always Pinned"
+			},
+			desc:{
+				text:"Keep the guide visible on all pages, including the watch page. Only affects layouts from 2014 and later."
+			},
+			opts:[
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+                {opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
+			id:"subsGrid",
+			title:{
+				text:"Subscriptions page"
+			},
+			desc:{
+				text:"Choose whether to use List or Grid view for subscriptions by default."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+                {opt:{
+					name:"Grid",
+					value:"grid"
+				}},
+                {opt:{
+					name:"List",
+					value:"list"
+				}}
+			]
+		}}
+	]
+}},
+{page:{
+	tab:"player",
+	titlebar:{
+		text:"Player"
+	},
+	sections:[
+        {section:{
+			id:"playerVersion",
+			title:{
+				text:"Player Version"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"2021-Present",
+					value:"modernV4"
+				}},
+				{opt:{
+					name:"2020-2021",
+					value:"modernV3"
+				}},
+                {opt:{
+					name:"2016-2020",
+					value:"modernV2"
+				}},
+                {opt:{
+					name:"2015-2016",
+					value:"modernV1"
+				}},
+                {opt:{
+					name:"2013-2015 [V3 Default]",
+					value:"default2014"
+				}},
+                {opt:{
+					name:"Flash7",
+					value:"flash7"
+				}},
+                {opt:{
+					name:"Embed Player (use this if the player isn't working)",
+					value:"embed"
+				}},
+                {opt:{
+					name:"None of the above; do not allow StarTube to change V3's player settings (will not undo previous changes made by StarTube)",
+					value:"passive"
+				}}
+			]
+		}},
+		{section:{
+			id:"playerSpinner",
+			title:{
+				text:"Player loading icon"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto",
+                    mText:{
+                        text:"Classic will be used on layouts from before 2018.",
+                        color:"normal"
+                    }
+				}},
+				{opt:{
+					name:"Classic (Pre-2018)",
+					value:"classic"
+				}},
+				{opt:{
+					name:"Material (2018-Present)",
+					value:"material"
+				}}
+			]
+		}},
+        {section:{
+			id:"playerSizerules",
+			title:{
+				text:"Player Size"
+			},
+			desc:{
+				text:"Choose the set of player sizes to use across different resolutions."
+			},
+			opts:[
+				{opt:{
+					name:"Standard",
+					value:"passive",
+                    mText:{
+                        text:"Sticks to the basic V3 player sizes. If you don't want bugs, use this",
+                        color:"green"
+                    }
+				}},
+				{opt:{
+					name:"Auto",
+					value:"auto",
+                    mText:{
+                        text:`<span>More accurate, but uses the custom player sizes, and therefore <span class="astro-red">breaks theater mode</span> on most layouts</span>`,
+                        color:"normal"
+                    }
+				}},
+				{opt:{
+					name:"Non-flexwatch [always 640x360]",
+					value:"noFlexwatch"
+				}},
+                {opt:{
+					name:"Flexwatch Mini (V3 default)",
+					value:"flexwatchMini"
+				}},
+                {opt:{
+					name:"Flexwatch Mini Version 2 (~2015 onwards) [Same player sizes, but they happen at different resoltions]",
+					value:"flexwatchMiniV2",
+                    mText:{
+                        text:"Breaks theater mode",
+                        color:"red"
+                    }
+				}},
+                {opt:{
+					name:"Flexwatch Medium (Custom, bigger sizes) [640x360, 1024x576, 1600x900]",
+					value:"flexwatchMedium",
+                    mText:{
+                        text:"Breaks theater mode",
+                        color:"red"
+                    }
+				}},
+                {opt:{
+					name:"Flexwatch Large (Custom, even bigger sizes, closer to modern YouTube) [854x480, 1280x720, 1920x1080]",
+					value:"flexwatchLarge",
+                    mText:{
+                        text:"Breaks theater mode",
+                        color:"red"
+                    }
+				}}
+			]
+		}},
+        {section:{
+			id:"rndPlayer",
+			title:{
+				text:"Rounded Player"
+			},
+			desc:{
+				text:"Choose whether the non-fullscreen player has rounded corners."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}}
+	]
+}},
+{page:{
+	tab:"watch",
+	titlebar:{
+		text:"Watch Page"
+	},
+	sections:[
+        {section:{
+			id:"watchLayout",
+			title:{
+				text:"Watch Layout"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+                {opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+                {opt:{
+					name:"Auto (use alt-watch9 for Hitchhiker layouts)",
+					value:"autoPreferAltW9"
+				}},
+                {opt:{
+					name:"Watch4B (Early 2009)",
+					value:"watch4b",
+                    mText:{
+                        text:"<span>Star ratings, title on top, description on right</span>",
+                        color:"normal"
+                    }
+				}},
+                {opt:{
+					name:"Watch5C (2011)",
+					value:"watch5c",
+                    mText:{
+                        text:"<span>Title on top</span>",
+                        color:"normal"
+                    }
+				}},
+                {opt:{
+					name:"Watch5D (2012)",
+					value:"watch5d",
+                    mText:{
+                        text:"<span>Title on top</span>",
+                        color:"normal"
+                    }
+				}},
+                {opt:{
+					name:"Watch7 Beta (2012, Epic Panda)",
+					value:"watch7beta"
+				}},
+                {opt:{
+					name:"Watch7 (2013-2014) [V3 default]",
+					value:"watch7"
+				}},
+                {opt:{
+					name:"Watch8 (2015-2017, 2017-2020 [Legacy layout])",
+					value:"watch8"
+				}},
+				{opt:{
+					name:"Watch9A (2016-2019)",
+					value:"watch9a"
+				}},
+                {opt:{
+					name:"Watch9B (2020-2022)",
+					value:"watch9b"
+				}},
+                {opt:{
+					name:"Watch10 Beta (2022)",
+					value:"watch10beta"
+				}},
+                {opt:{
+					name:"Watch10 (With comment teaser, late 2022 experiment)",
+					value:"watch10teaser"
+				}},
+                {opt:{
+					name:"Watch10 (Late 2022-Present)",
+					value:"watch10"
+				}},
+                {opt:{
+					name:"Alt-watch9 (works best on the hitchhiker layouts)",
+					value:"altWatch9",
+                    mText:{
+                        text:"<span>Alternate universe 2015-2017-ish layout</span>",
+                        color:"normal"
+                    }
+				}},
+                {opt:{
+					name:"Fancy Alt-watch9 (works best on the hitchhiker layouts)",
+					value:"altWatch9Fancy"
+				}}
+			],
+            cW:{
+                text:`<div id="astro-wl-cw" class="astro-compat-warning astro-red">
+												<span>Your current layout/watch layout combination may not work as intended.</span>
+											</div>`
+            }
+		}},
+        {section:{
+			id:"relatedTabs",
+			title:{
+				text:"Related Tabs"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+                {opt:{
+					name:"Auto (only enabled when alt-watch9 is enabled)",
+					value:"auto"
+				}},
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+                {opt:{
+					name:"On (don't move subscribe button)",
+					value:"onNoSub"
+				}},
+                {opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
+			id:"relatedGrid",
+			title:{
+				text:"Related Grid"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"On (only works with 2013 and later)",
+					value:"on"
+				}},
+                {opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
+			id:"relatedSize",
+			title:{
+				text:"Related video size"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Smaller (2011 and earlier)",
+					value:"smaller"
+				}},
+				{opt:{
+					name:"Small (2012-2016)",
+					value:"small"
+				}},
+                {opt:{
+					name:"Medium (Custom middleground)",
+					value:"medium"
+				}},
+                {opt:{
+					name:"Large (2016-present)",
+					value:"large"
+				}},
+                {opt:{
+					name:"Huge (based on a Polymer experiment)",
+					value:"stupid"
+				}}
+			]
+		}},
+        {section:{
+			id:"compactDate",
+			title:{
+				text:"Show dates on related videos"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Always show",
+					value:"on"
+				}},
+				{opt:{
+					name:"Show on hover (V3 default)",
+					value:"hover"
+				}},
+                {opt:{
+					name:"Never show",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
+			id:"compactName",
+			title:{
+				text:"Clickable channel names on related videos"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+                {opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}}
+	]
+}},
+{page:{
+	tab:"channel",
+	titlebar:{
+		text:"Channel"
+	},
+	sections:[
+        {section:{
+			id:"channelVersion",
+			title:{
+				text:"Channel Version"
+			},
+			desc:{
+				text:""
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Channels4 (2013-present)",
+					value:"c4"
+				}},
+				{opt:{
+					name:"Channels3 (Late 2011-Early 2013)",
+					value:"c3"
+				}}
+			]
+		}},
+		{section:{
+			id:"colorfulChannels",
+			title:{
+				text:"Colorful Channels"
+			},
+			desc:{
+				text:"Makes the rest of the page use the colors of the channel banner. Only works with Channels4."
+			},
+			opts:[
+				{opt:{
+					name:"Auto (on for 2016 Polymer)",
+					value:"auto"
+				}},
+				{opt:{
+					name:"Auto (on for all Polymer layouts)",
+					value:"polymer"
+				}},
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+                {opt:{
+					name:"On (V3 implementation, doesn't change the guide or topbar)",
+					value:"v3version"
+				}},
+                {opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}}
+	]
+}}
+]
+};
 function executeRadios(i, x, K){
+    if(x){
     if(K == true){
-        x = x.visValue;
+        if(x.visValue){
+            x = x.visValue;
+        }
     }
     if(x!=="auto"&&x!=="passive"&&x!=="autoPreferAltW9"){
         SRS[i].tValue=SRS[i].visValue;
@@ -2774,7 +4056,14 @@ function executeRadios(i, x, K){
 			SRS.layoutMode.tValue="adaptive";
 		}
 	}else if(i=="layoutSelect"){
-		if(x == "amst2024c"){
+		if(x == "amst2025p"){
+			ST2019Settings();
+			ST2020Settings();
+			ST2021Settings();
+			ST2022Settings();
+			STAmsterdamSettings();
+            ST2025Settings();
+		}else if(x == "amst2024c"){
 			ST2019Settings();
 			ST2020Settings();
 			ST2021Settings();
@@ -2928,105 +4217,31 @@ function executeRadios(i, x, K){
 			STEarly2015Settings();
 		}else if(x == "sb2016"){
 			STSkybirdSettings();
-		}
-	}else if(i == "faviconSelect"){
-		if(x == "2024"){
-			STS.favi24 = true;
-			STS.favi24O = false;
-			STS.favi17 = false;
-			STS.favi15 = false;
-			STS.favi12 = false;
-			STS.favi10 = false;
-			STS.favi05 = false;
-		}else if(x == "2024_old"){
-			STS.favi24 = false;
-			STS.favi24O = true;
-			STS.favi17 = false;
-			STS.favi15 = false;
-			STS.favi12 = false;
-			STS.favi10 = false;
-			STS.favi05 = false;
-		}else if(x == "2017"){
-			STS.favi24 = false;
-			STS.favi24O = false;
-			STS.favi17 = true;
-			STS.favi15 = false;
-			STS.favi12 = false;
-			STS.favi10 = false;
-			STS.favi05 = false;
-		}else if(x == "2015"){
-			STS.favi24 = false;
-			STS.favi24O = false;
-			STS.favi17 = false;
-			STS.favi15 = true;
-			STS.favi12 = false;
-			STS.favi10 = false;
-			STS.favi05 = false;
-		}else if(x == "2012"){
-			STS.favi24 = false;
-			STS.favi24O = false;
-			STS.favi17 = false;
-			STS.favi15 = false;
-			STS.favi12 = true;
-			STS.favi10 = false;
-			STS.favi05 = false;
-		}else if(x == "2010"){
-			STS.favi24 = false;
-			STS.favi24O = false;
-			STS.favi17 = false;
-			STS.favi15 = false;
-			STS.favi12 = false;
-			STS.favi10 = true;
-			STS.favi05 = false;
-		}else if(x == "2005"){
-			STS.favi24 = false;
-			STS.favi24O = false;
-			STS.favi17 = false;
-			STS.favi15 = false;
-			STS.favi12 = false;
-			STS.favi10 = false;
-			STS.favi05 = true;
+		}else if(x == "sb2017"){
+			STSkybirdSettings();
+            STSkybird2017Settings();
+		}else if(x == "sb2024"){
+			STSkybirdSettings();
+            STSkybird2017Settings();
+            STSkybird2024Settings();
 		}
 	}else if(i == "gbarVersion"){
 		if(x == "modern"){
 			setV3Settings("modernGbar");
-			STS.expMaterialGbar = false;
 		}else if(x == "classic"){
 			setV3Settings("classicGbar");
-			STS.expMaterialGbar = false;
 		}else if(x == "material"){
-			STS.expMaterialGbar = true;
 			setV3Settings("materialGbar");
 		}else if(x == "off"){
 			setV3Settings("noGbar");
-		}else if(x == "passive"){
-			STS.expMaterialGbar = false;
 		}
-	}else if(i == "accountMenu"){
-		if(x == "me"){
-			STS.expAccountMenu = false;
-			STS.expPolymerAccountMenu = false;
-		}else if(x == "mhh"){
-			STS.expAccountMenu = true;
-			STS.expPolymerAccountMenu = false;
-		}else if(x == "poly"){
-			STS.expAccountMenu = false;
-			STS.expPolymerAccountMenu = true;
-		}
-	}else if(i=="playerVersion"){
+    }else if(i=="playerVersion"){
 		if(x=="auto"||x=="modernV1"||x=="modernV2"||x=="modernV3"||x=="modernV4"||x=="default2014"){
 			setV3Settings("defaultPlayer");
         }else if(x=="flash7"){
 			setV3Settings("flash7Player");
 		}else if(x=="embed"){
 			setV3Settings("embedPlayer");
-		}
-	}else if(i=="playerSpinner"){
-		if(x=="auto"){
-		}else if(x=="classic"){
-			STS.materialSpinner=false;
-		}else if(x=="material"){
-			STS.materialSpinner=true;
 		}
 	}else if(i=="playerSizerules"){
 		if(STS.expStaticSite==true&&STS.expStaticSiteForcesSmallPlayer==true){
@@ -3063,11 +4278,14 @@ function executeRadios(i, x, K){
 					SRS.layoutSelect.visValue=="poly2021"||
 					SRS.layoutSelect.visValue=="poly2022"||
                     SRS.layoutSelect.visValue=="amst2023_1"||
-					SRS.layoutSelect.visValue=="amst2024c"
+					SRS.layoutSelect.visValue=="amst2024c"||
+                    SRS.layoutSelect.visValue=="amst2025p"
 				){
 					setV3Settings("flexwatchLarge");
 				}else if(
-					SRS.layoutSelect.visValue=="sb2016"
+					SRS.layoutSelect.visValue=="sb2016"||
+                    SRS.layoutSelect.visValue=="sb2017"||
+                    SRS.layoutSelect.visValue=="sb2024"
 				){
 					setV3Settings("flexwatchMedium");
 				}else{
@@ -3133,6 +4351,8 @@ function executeRadios(i, x, K){
         ){
 			STWatch10();
             SRS.watchLayout.tValue=x;
+		}else if(x=="watch11"){
+			STWatch11();
 		}else if(x=="watch8"){
 			STWatch8();
 		}else if(x=="watch7"){
@@ -3156,23 +4376,6 @@ function executeRadios(i, x, K){
             SRS.relatedTabs.tValue="off";
             STS.expWatch9NoOwner=false;
 		}
-	}else if(i == "relatedGrid"){
-		if(x == "on"){
-			STS.expRelatedGrid = true;
-		}else if(x == "off"){
-			STS.expRelatedGrid = false;
-		}
-	}else if(i == "compactDate"){
-		if(x == "on"){
-			STS.expAlwaysShowCompactDate = true;
-			STS.expNeverShowCompactDate =  false;
-		}else if(x == "off"){
-			STS.expAlwaysShowCompactDate = false;
-			STS.expNeverShowCompactDate =  true;
-		}else if(x == "hover"){
-			STS.expAlwaysShowCompactDate = false;
-			STS.expNeverShowCompactDate =  false;
-		}
 	}else if(i == "guideNavToFeed"){
 		if(x == "auto"){
 			if(
@@ -3189,27 +4392,21 @@ function executeRadios(i, x, K){
 		}else if(x == "off"){
 			setV3Settings("guideChannel");
 		}
-	}else if(i == "guideAlwaysPinned"){
-		if(x == "on"){
-			STS.expGuideAlwaysPinned = true;
-		}else if(x == "off"){
-			STS.expGuideAlwaysPinned = false;
-		}
-	}else if(i == "channelVersion"){
-		if(x == "c4"){
-			STS.expChannels3 = false;
-		}else if(x == "c3"){
-			STS.expChannels3 = true;
+	}else if(i=="channelVersion"){
+		if(x=="c4"){
+			SRS.channelVersion.tValue="c4";
+		}else if(x=="c3"){
+			SRS.channelVersion.tValue="c3";
 		}
 	}else if(i=="colorfulChannels"){
 		if(x=="auto"){
 			if(
 				SRS.layoutSelect.visValue=="poly2016"
 			){
-				STS.expColorfulChannels=true;
+                SRS.colorfulChannels.tValue="on";
 				setV3Settings("colorfulChannels");
 			}else{
-				STS.expColorfulChannels=false;
+                SRS.colorfulChannels.tValue="off";
 				setV3Settings("normalChannels");
 			}
 		}else if(x=="polymer"){
@@ -3223,26 +4420,30 @@ function executeRadios(i, x, K){
 				SRS.layoutSelect.visValue=="poly2021"||
 				SRS.layoutSelect.visValue=="poly2022"
 			){
-				STS.expColorfulChannels=true;
+                SRS.colorfulChannels.tValue="on";
 				setV3Settings("colorfulChannels");
 			}else{
-				STS.expColorfulChannels=false;
+                SRS.colorfulChannels.tValue="off";
 				setV3Settings("normalChannels");
 			}
 		}else if(x=="on"){
-			STS.expColorfulChannels=true;
+            SRS.colorfulChannels.tValue="on";
 			setV3Settings("colorfulChannels");
 		}else if(x=="v3version"){
-			STS.expColorfulChannels=false;
+            SRS.colorfulChannels.tValue="v3version";
 			setV3Settings("colorfulChannels");
 		}else if(x=="off"){
-			STS.expColorfulChannels=false;
+            SRS.colorfulChannels.tValue="off";
 			setV3Settings("normalChannels");
 		}
-	}else if(i == "outlineIcons"){
-        if(x == "poly"){
+	}else if(i=="outlineIcons"){
+        if(x=="poly"){
             if(
                 SRS.layoutSelect.visValue=="sb2016"||
+                SRS.layoutSelect.visValue=="sb2017"||
+                SRS.layoutSelect.visValue=="sb2024"||
+                SRS.layoutSelect.visValue=="sb2017"||
+                SRS.layoutSelect.visValue=="sb2024"||
 				SRS.layoutSelect.visValue=="poly2016"||
 				SRS.layoutSelect.visValue=="polyE2017"||
                 SRS.layoutSelect.visValue=="poly2017"||
@@ -3252,43 +4453,51 @@ function executeRadios(i, x, K){
 				SRS.layoutSelect.visValue=="poly2021"||
 				SRS.layoutSelect.visValue=="poly2022"||
                 SRS.layoutSelect.visValue=="amst2023_1"||
-                SRS.layoutSelect.visValue=="amst2024c"
+                SRS.layoutSelect.visValue=="amst2024c"||
+                SRS.layoutSelect.visValue=="amst2025p"
 			){
-				STS.expOutlineIcons=true;
+				SRS.outlineIcons.tValue="on";
 			}else{
-				STS.expOutlineIcons=false;
+				SRS.outlineIcons.tValue="off";
 			}
-		}else if(x == "off"){
-			STS.expOutlineIcons=false;
+		}else if(x=="off"){
+			SRS.outlineIcons.tValue="off";
 		}
 	}
+    }
 	applySettings();
 }
 executeRadiosParent(SRS);
-function executeRadiosParent(text){
-    //console.log(text);
-	executeRadios("layoutMode", text.layoutMode, true);
-	executeRadios("layoutSelect", text.layoutSelect, true);
-	executeRadios("faviconSelect", text.faviconSelect, true);
-	executeRadios("gbarVersion", text.gbarVersion, true);
-    executeRadios("searchText", text.searchText, true);
-	executeRadios("accountMenu", text.accountMenu, true);
-	executeRadios("playerVersion", text.playerVersion, true);
-    executeRadios("playerSpinner", text.playerSpinner, true);
-	executeRadios("playerSizerules", text.playerSizerules, true);
-	executeRadios("watchLayout", text.watchLayout, true);
-	executeRadios("relatedTabs", text.relatedTabs, true);
-	executeRadios("relatedGrid", text.relatedGrid, true);
-	executeRadios("relatedSize", text.relatedSize, true);
-	executeRadios("compactDate", text.compactDate, true);
-	executeRadios("guideNavToFeed", text.guideNavToFeed, true);
-	executeRadios("guideAlwaysPinned", text.guideAlwaysPinned, true);
-    executeRadios("homeRedir",text.homeRedir,true);
-    executeRadios("logoLink",text.logoLink,true);
-    executeRadios("subsGrid", text.subsGrid, true);
-	executeRadios("channelVersion", text.channelVersion, true);
-	executeRadios("colorfulChannels", text.colorfulChannels, true);
-    executeRadios("outlineIcons", text.outlineIcons, true);
+function executeRadiosParent(s){
+	executeRadios("layoutMode",s.layoutMode,true);
+	executeRadios("layoutSelect",s.layoutSelect,true);
+	executeRadios("faviconSelect",s.faviconSelect,true);
+    executeRadios("rndThumbs",s.rndThumbs,true);
+    executeRadios("siteFont",s.siteFont,true);
+	executeRadios("gbarVersion",s.gbarVersion,true);
+    executeRadios("searchText",s.searchText,true);
+    executeRadios("frostedGlass",s.frostedGlass,true);
+    executeRadios("uploadBtn",s.uploadBtn,true);
+    executeRadios("appsBtn",s.appsBtn,true);
+	executeRadios("accountMenu",s.accountMenu,true);
+    executeRadios("rndPlayer",s.rndPlayer,true);
+	executeRadios("playerVersion",s.playerVersion,true);
+    executeRadios("playerSpinner",s.playerSpinner,true);
+	executeRadios("playerSizerules",s.playerSizerules,true);
+	executeRadios("watchLayout",s.watchLayout,true);
+	executeRadios("relatedTabs",s.relatedTabs,true);
+	executeRadios("relatedGrid",s.relatedGrid,true);
+	executeRadios("relatedSize",s.relatedSize,true);
+	executeRadios("compactDate",s.compactDate,true);
+    executeRadios("compactName",s.compactName,true);
+	executeRadios("guideNavToFeed",s.guideNavToFeed,true);
+	executeRadios("guideAlwaysPinned",s.guideAlwaysPinned,true);
+    executeRadios("homeRedir",s.homeRedir,true);
+    executeRadios("logoLink",s.logoLink,true);
+    executeRadios("subsGrid",s.subsGrid,true);
+	executeRadios("channelVersion",s.channelVersion,true);
+	executeRadios("colorfulChannels",s.colorfulChannels,true);
+    executeRadios("outlineIcons",s.outlineIcons,true);
 }
 getIronSettings();
 function STAltWatch9(){
@@ -3296,13 +4505,9 @@ function STAltWatch9(){
     SRS.relatedTabs.tValue="on";
 	STS.expWatch9NoOwner = true;
 	STS.expWatch9TrueExpander = false;
-	STS.expWatch9SidebarBus = false;
-	STS.expWatch9StickyColumns = false;
-	STS.expRelatedGrid = false;
 	STS.expWatch8NoMore = false;
 	STS.expMoveCountsToButtons = false;
 	STS.expSharrow = false;
-	STS.expCommentsTeaser = false;
 	STS.expSegmentedLtod = false;
 	STS.expRoundedSubscribe = false;
 	STS.expBlackSubscribe = false;
@@ -3317,13 +4522,9 @@ function STAltWatch9Fancy(){
     SRS.relatedTabs.tValue="on";
 	STS.expWatch9NoOwner = true;
 	STS.expWatch9TrueExpander = false;
-	STS.expWatch9SidebarBus = true;
-	STS.expWatch9StickyColumns = true;
-	STS.expRelatedGrid = false;
 	STS.expWatch8NoMore = false;
 	STS.expMoveCountsToButtons = false;
 	STS.expSharrow = false;
-	STS.expCommentsTeaser = false;
 	STS.expSegmentedLtod = false;
 	STS.expRoundedSubscribe = false;
 	STS.expBlackSubscribe = false;
@@ -3335,14 +4536,16 @@ function STAltWatch9Fancy(){
 }
     function STWatch9(){
 		STS.expMoveCountsToButtons=true;
-        STS.expYTSansTitle=false;
 	}
     function STWatch10(){
-		STS.expCommentsTeaser=false;
         STS.expMoveCountsToButtons=true;
 	}
     function STWatch10Teaser(){
-		STS.expCommentsTeaser=true;
+        STS.expMoveCountsToButtons=true;
+	}
+    function STWatch11(){
+		STS.expWMRNoSaveText=true;
+        STS.expWMRNoShareText=true;
         STS.expMoveCountsToButtons=true;
 	}
     function STWatch8(){
@@ -3350,13 +4553,9 @@ function STAltWatch9Fancy(){
         SRS.relatedTabs.tValue="off";
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = true;
 		STS.expSharrow = true;
-		STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
@@ -3370,13 +4569,9 @@ function STAltWatch9Fancy(){
         SRS.relatedTabs.tValue="off";
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = false;
 		STS.expSharrow = false;
-		STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
@@ -3390,13 +4585,9 @@ function STAltWatch9Fancy(){
         SRS.relatedTabs.tValue="off";
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = false;
 		STS.expSharrow = false;
-		STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
@@ -3410,13 +4601,9 @@ function STAltWatch9Fancy(){
         SRS.relatedTabs.tValue="off";
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = false;
 		STS.expSharrow = false;
-		STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
@@ -3427,94 +4614,58 @@ function STAltWatch9Fancy(){
 	}
 	function STModernHitchhikerSettings(){
         SRS.layoutSelect.tValue="hh2015";
+        SRS.faviconSelect.tValue="2015";
+        SRS.outlineIcons.tValue="off";
+        SRS.rndThumbs.tValue="off";
+        SRS.siteFont.tValue="roboto";
         SRS.homeRedir.tValue="off";
         SRS.logoLink.tValue="home";
         SRS.searchText.tValue="off";
+        SRS.accountMenu.tValue="mhh";
+        SRS.frostedGlass.tValue="off";
+        SRS.uploadBtn.tValue="modern";
+        SRS.appsBtn.tValue="off";
+        SRS.guideAlwaysPinned.tValue="off";
         SRS.subsGrid.tValue="grid";
+        SRS.rndPlayer.tValue="off";
         SRS.playerVersion.tValue="modernV1";
         SRS.watchLayout.tValue="watch8";
         SRS.relatedTabs.tValue="off";
         SRS.relatedSize.tValue="small";
+        SRS.compactDate.tValue="off";
+        SRS.compactName.tValue="off";
         SRS.playerSpinner.tValue="classic";
-		STS.expAlwaysShowCompactDate = false;
-		STS.expNeverShowCompactDate = false;
+        SRS.channelVersion.tValue="c4";
 		STS.expMoveGuideMainSectionToTop = false;
 		STS.expMoreTooltips = false;
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = true;
 		STS.expSharrow = false;
-		STS.expGuideAlwaysPinned = false;
 		STS.expWatch7AboutTabRename = false;
 		STS.expWatch7AboutTabRename2 = false;
-		STS.expTwoColumnSearchResults = false;
-		STS.configWatch7SidebarCardShadow = true;
 		STS.expFlatLogo = false;
 		STS.expInvertLogo = false;
 		STS.expGlossyLogo = false;
 		STS.expClassicTitle = false;
 		STS.expClassicGuide = false;
 		STS.expClassicSubscribe = false;
-		STS.expClassicStyles = false;
 		STS.expClassicLtod = false;
-		STS.expClassicButtons = false;
-		STS.expBigSearchThumbs = false;
-		STS.expBiggerSearchThumbs = false;
 		STS.expNoVideosLink = true;
-		STS.expSkinnySubscribe = true;
-		STS.expModernStyles = true;
-		STS.modernCards = true;
-        STS.sbStyles=false;
-        STS.sbCardPhysics=false;
-		STS.expLightChannelBar = true;
-		STS.expModernNotifIcon = false;
-		STS.expModernTopbar = true;
-		STS.expModernUpload = true;
-		STS.expModernGuideButton = false;
-		STS.expModernSearchIcon = false;
-		STS.expModernTitle = false;
 		STS.expModernGuide = false;
-		STS.expModernHome = true;
-		STS.expModernPlaylists = true;
-		STS.expModernPlaylistThumbnails = true;
 		STS.expPlaylistRedBorder = true;
 		STS.expPlaylistTimestamps = true;
 		STS.expTrueScrollableGuide = true;
-		STS.materialSpinner = false;
 		STS.expViewsString = false;
-		STS.expGoogleApps = false;
-		STS.expCommentsFullWidth = true;
 		STS.expNoByText = false;
-		STS.expAccountMenu = true;
 
 		STS.expStaticSite = false;
-		STS.expHideAppbar = false;
 
-		STS.expEpicWatch7Flat = false;
-		STS.expEpicHeader = false;
-		STS.expEpicStyling = false;
-		STS.expEpicFeeds = false;
-
-		STS.expCosmicHeader = false;
-		STS.expCosmicBG = false;
-		STS.expCosmicButtons = false;
-		STS.expCosmicStyles = false;
-		STS.expCosmicBanners = false;
-		STS.expCosmicBannersV2 = false;
 		STS.expCosmicComments = false;
-		STS.expCosmicGuideStyle = false;
 		STS.expCosmicGuideLayout = false;
-		STS.expCosmicFeedsV1 = false;
-		STS.expCosmicFeedsV2 = false;
-		STS.expCosmicFeedsV3 = false;
-		STS.expCosmicFeedsThirdColumn = false;
 		STS.expNotifSquare = false;
 
-		STS.expChannels3 = false;
 		STS.expChannels3TimeVisible = false;
 		STS.expChannels3DateVisible = false;
 		STS.expChannels3DateHidden = false;
@@ -3522,76 +4673,25 @@ function STAltWatch9Fancy(){
 		STS.expNoGuide = false;
 		STS.expGuideOnFeedsOnly = false;
 
-		STS.expAozoraHome = false;
-		STS.expAozoraHeader = false;
-		STS.expAozoraBG = false;
-		STS.expAozoraStyles = false;
 		STS.expAozoraComments = false;
-		STS.expAozoraSubscribe = false;
-		STS.expAozoraTopbarLinks = false;
 		STS.expAozoraSearch = false;
 
-		STS.expStargazerTabbedHeader = false;
-		STS.expStargazerBarHeader = false;
-		STS.expStargazerSimpleHeader = false;
-		STS.expStargazerSubscribe = false;
-
-		STS.expHomeTab = true;
-		STS.expRoboto = false;
 		STS.expCenteredSearch = false;
 		STS.expBigSearch = false;
-		STS.expSecondarySearchIcon = false;
 		STS.expMaterialSearch = false;
-		STS.expPolymerAccountMenu = false;
-		STS.expPolymerShell = false;
-		STS.expEarlyPolymerShell = false;
-		STS.expEarlyPolymerGuide = false;
-		STS.expPolymerGen2Colors = false;
-		STS.polymerGen2Comments = false;
-		STS.simpleReply = false;
-		STS.typographySpacing = false;
-		STS.expPolymerSubscribe = false;
-		STS.expPolymerGen2Subscribe = false;
-		STS.expPolymerStyles = false;
-		STS.expBetaPolymerStyles = false;
-		STS.expPolymerChannels = false;
-		STS.expColorfulChannels = false;
-		STS.expPolymerComments = false;
-		STS.expPolymerTooltips = false;
 		STS.expTopbarShadow = false;
-		STS.expMaterialSignIn = false;
 		STS.expRichGridHome = false;
-		STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
-		STS.expRoundedThumbs = false;
-		STS.expRoundedPlayer = false;
 		STS.expRoundedSearch = false;
-		STS.expRoundedGuide = false;
-		STS.expRoundedStyles = false;
-		STS.expFrostedGlass = false;
-		STS.expPolymerGen3Colors = false;
-		STS.expYTSansTitle = false;
 		STS.expWMRButtonsLowercase = false;
 		STS.expWMRAddTo = false;
 		STS.expWMRNoSaveText = false;
 		STS.expWMRNoShareText = false;
-		STS.expOutlineIcons = false;
 		STS.expRoundedTopbarPfp = false;
-		STS.expUploadIcon = false;
-		STS.expCreateIcon = false;
-		STS.expYouTubeApps = false;
 		STS.expRingo2 = false;
 		STS.expRingo2Gradients = false;
-		STS.favi24 = false;
-		STS.favi24O = false;
-		STS.favi17 = false;
-		STS.favi15 = true;
-		STS.favi12 = false;
-		STS.favi10 = false;
-		STS.favi05 = false;
-		STS.expHideYoodles = false;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("nirvana15");
@@ -3599,10 +4699,10 @@ function STAltWatch9Fancy(){
 	}
 	function STEarly2015Settings(){
         SRS.layoutSelect.tValue="hhE2015";
+        SRS.faviconSelect.tValue="2012";
+        SRS.siteFont.tValue="arial";
         SRS.playerVersion.tValue="default2014";
 		STS.expTrueScrollableGuide = false;
-		STS.favi15 = false;
-		STS.favi12 = true;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("nirvana15Early");
@@ -3610,28 +4710,19 @@ function STAltWatch9Fancy(){
 	}
 	function ST2016Settings(){
         SRS.layoutSelect.tValue="hh2016";
+        SRS.faviconSelect.tValue="2015";
         SRS.playerVersion.tValue="modernV2";
         SRS.searchText.tValue="on";
         SRS.relatedSize.tValue="large";
 		STS.expSharrow = true;
 		STS.expFlatLogo = true;
-		STS.expModernNotifIcon = true;
-		STS.expModernGuideButton = true;
-		STS.expModernSearchIcon = true;
-		STS.expModernTitle = true;
 		STS.expModernGuide = true;
-		STS.expModernHome = true;
 		STS.expPlaylistRedBorder = false;
 		STS.expTrueScrollableGuide = true;
-		STS.materialSpinner = false;
 		STS.expViewsString = true;
 		STS.expNoByText = true;
-		STS.expHomeTab = true;
-		STS.expRoboto = true;
 		STS.expRoundedTopbarPfp = true;
 		STS.expHideYoodles = true;
-		STS.favi15 = true;
-		STS.favi12 = false;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("nirvana16");
@@ -3641,14 +4732,9 @@ function STAltWatch9Fancy(){
         SRS.layoutSelect.tValue="hhE2016";
 		STS.expSharrow = true;
 		STS.expFlatLogo = true;
-		STS.expModernGuideButton = true;
-		STS.expModernSearchIcon = true;
 		STS.expModernGuide = true;
-		STS.expModernHome = true;
 		STS.expTrueScrollableGuide = true;
 		STS.expNoByText = true;
-		STS.expHomeTab = true;
-		STS.expRoboto = true;
 		STS.expRoundedTopbarPfp = true;
 		STS.expHideYoodles = true;
 
@@ -3665,8 +4751,8 @@ function STAltWatch9Fancy(){
 	}
 	function STEarly2017Settings(){
         SRS.layoutSelect.tValue="hhE2017";
+        SRS.uploadBtn.tValue="icon";
 		STS.expBigSearchThumbs = true;
-		STS.expUploadIcon = true;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("nirvana16");
@@ -3674,12 +4760,11 @@ function STAltWatch9Fancy(){
 	}
 	function ST2017Settings(){
         SRS.layoutSelect.tValue="hh2017";
+        SRS.faviconSelect.tValue="2017";
+        SRS.uploadBtn.tValue="icon";
 		STS.expFlatLogo = false;
 		STS.expInvertLogo = true;
 		STS.expBigSearchThumbs = true;
-		STS.expUploadIcon = true;
-		STS.favi17 = true;
-		STS.favi15 = false;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("nirvana16");
@@ -3687,10 +4772,8 @@ function STAltWatch9Fancy(){
 	}
 	function ST2018Settings(){
         SRS.layoutSelect.tValue="hh2018";
+        SRS.uploadBtn.tValue="create";
         SRS.playerSpinner.tValue="material";
-		STS.expUploadIcon = false;
-		STS.expCreateIcon = true;
-		STS.materialSpinner = true;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("nirvana16");
@@ -3698,40 +4781,20 @@ function STAltWatch9Fancy(){
 	}
 function STRingo2(){
     SRS.layoutSelect.tValue="hh2024";
+    SRS.faviconSelect.tValue="2024";
 	STS.expRingo2 = true;
 	STS.expRingo2Gradients = true;
-	STS.favi24 = true;
-	STS.favi24O = false;
-	STS.favi17 = false;
 }
-	function STIdealLayout(){
-		STS.expWatch9SidebarBus = true;
-		STS.expWatch9StickyColumns = true;
-		STS.expRelatedGrid = true;
-		STS.expGuideAlwaysPinned = true;
-
-		if(STS.STPresetsAlsoSetV3Settings == true){
-			setV3Settings("nirvana16");
-		}
-	}
 	function ST2014Settings(){
         SRS.layoutSelect.tValue="hh2014";
+        SRS.faviconSelect.tValue="2012";
+        SRS.siteFont.tValue="arial";
+        SRS.accountMenu.tValue="me";
         SRS.playerVersion.tValue="default2014";
         SRS.subsGrid.tValue="list";
         SRS.watchLayout.tValue="watch7";
-		STS.expModernStyles = false;
-		STS.expLightChannelBar = false;
-		STS.expModernNotifIcon = false;
-		STS.expModernGuideButton = false;
-		STS.expModernSearchIcon = false;
-		STS.expModernHome = true;
-		STS.expModernTopbar = false;
-		STS.expModernPlaylistThumbnails = false;
 		STS.expTrueScrollableGuide = false;
-		STS.materialSpinner = false;
-		STS.expAccountMenu = false;
-		STS.favi15 = false;
-		STS.favi12 = true;
+
 		STS.expHideYoodles = false;
 		STS.expNoVideosLink = false;
 
@@ -3741,37 +4804,27 @@ function STRingo2(){
 	}
     function ST2013AltSettings(){
         SRS.layoutSelect.tValue="hh2013alt_3";
-        STS.expModernUpload=false;
-        STS.expModernTopbar=false;
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("hitchhiker13centered");
 		}
 	}
     function ST2014AltSettings(){
         SRS.layoutSelect.tValue="hh2014alt_1";
-        STS.expModernUpload=false;
-        STS.expModernTopbar=false;
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("hitchhiker14centered");
 		}
 	}
 	function ST2013Settings(){
         SRS.layoutSelect.tValue="hh2013_3";
-		STS.modernCards = false;
-		STS.expModernPlaylists = false;
 		STS.expPlaylistRedBorder = false;
 		STS.expPlaylistTimestamps = false;
 		STS.expNoVideosLink = false;
-		STS.expHomeTab = false;
-		STS.expModernHome = false;
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("hitchhiker13");
 		}
 	}
 	function STMid2013Settings(){
         SRS.layoutSelect.tValue="hh2013_2";
-		STS.expSkinnySubscribe = false;
-		STS.expAozoraHome = true;
 		STS.expClassicLtod = true;
 		STS.expNotifSquare = true;
 		if(STS.STPresetsAlsoSetV3Settings == true){
@@ -3780,17 +4833,14 @@ function STRingo2(){
 	}
 	function STEarly2013Settings(){
         SRS.layoutSelect.tValue="hh2013_1";
-		STS.expChannels3 = true;
+        SRS.channelVersion.tValue="c3";
 		STS.expChannels3TimeVisible = true;
 		STS.expChannels3DateVisible = true;
 		STS.expChannels3DateHidden = false;
 		STS.expClassicTitle = true;
 		STS.expClassicGuide = true;
 		STS.expClassicSubscribe = true;
-		STS.expClassicStyles = true;
 		STS.expClassicLtod = true;
-		STS.expClassicButtons = true;
-		STS.expAozoraHome = true;
 		STS.expNotifSquare = true;
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("hitchhiker13early");
@@ -3798,93 +4848,57 @@ function STRingo2(){
 	}
 	function STEpicPandaSettings(){
         SRS.layoutSelect.tValue="epic2012_1";
+        SRS.faviconSelect.tValue="2012";
+        SRS.outlineIcons.tValue="off";
+        SRS.rndThumbs.tValue="off";
+        SRS.siteFont.tValue="arial";
         SRS.homeRedir.tValue="off";
         SRS.logoLink.tValue="home";
         SRS.searchText.tValue="off";
+        SRS.accountMenu.tValue="me";
+        SRS.frostedGlass.tValue="off";
+        SRS.uploadBtn.tValue="modern";
+        SRS.appsBtn.tValue="off";
+        SRS.guideAlwaysPinned.tValue="off";
         SRS.subsGrid.tValue="list";
+        SRS.rndPlayer.tValue="off";
         SRS.playerVersion.tValue="default2014";
         SRS.watchLayout.tValue="watch7beta";
         SRS.relatedTabs.tValue="off";
         SRS.relatedSize.tValue="small";
+        SRS.compactDate.tValue="off";
+        SRS.compactName.tValue="off";
         SRS.playerSpinner.tValue="classic";
-		STS.expAlwaysShowCompactDate = false;
-		STS.expNeverShowCompactDate = false;
+        SRS.channelVersion.tValue="c3";
 		STS.expMoveGuideMainSectionToTop = false;
 		STS.expMoreTooltips = true;
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = false;
 		STS.expSharrow = false;
-		STS.expGuideAlwaysPinned = false;
 		STS.expWatch7AboutTabRename = false;
 		STS.expWatch7AboutTabRename2 = true;
-		STS.expTwoColumnSearchResults = false;
-		STS.configWatch7SidebarCardShadow = true;
 		STS.expFlatLogo = false;
 		STS.expInvertLogo = false;
 		STS.expGlossyLogo = false;
 		STS.expClassicTitle = false;
 		STS.expClassicGuide = false;
 		STS.expClassicSubscribe = true;
-		STS.expClassicStyles = false;
 		STS.expClassicLtod = false;
-		STS.expClassicButtons = true;
-		STS.expBigSearchThumbs = false;
-		STS.expBiggerSearchThumbs = false;
 		STS.expNoVideosLink = false;
-		STS.expSkinnySubscribe = true;
-		STS.expModernStyles = false;
-		STS.modernCards = false;
-        STS.sbStyles=false;
-        STS.sbCardPhysics=false;
-		STS.expLightChannelBar = false;
-		STS.expModernNotifIcon = false;
-		STS.expModernTopbar = false;
-		STS.expModernUpload = true;
-		STS.expModernGuideButton = false;
-		STS.expModernSearchIcon = false;
-		STS.expModernTitle = false;
 		STS.expModernGuide = false;
-		STS.expModernHome = false;
-		STS.expModernPlaylists = false;
-		STS.expModernPlaylistThumbnails = false;
 		STS.expPlaylistRedBorder = false;
 		STS.expTrueScrollableGuide = false;
-		STS.materialSpinner = false;
 		STS.expViewsString = false;
-		STS.expGoogleApps = false;
-		STS.expCommentsFullWidth = true;
 		STS.expNoByText = false;
-		STS.expAccountMenu = false;
 
 		STS.expStaticSite = true;
-		STS.expHideAppbar = true;
 
-		STS.expEpicWatch7Flat = true;
-		STS.expEpicHeader = true;
-		STS.expEpicStyling = true;
-		STS.expEpicFeeds = false;
-
-		STS.expCosmicHeader = false;
-		STS.expCosmicBG = false;
-		STS.expCosmicButtons = false;
-		STS.expCosmicStyles = false;
-		STS.expCosmicBanners = false;
-		STS.expCosmicBannersV2 = false;
 		STS.expCosmicComments = true;
-		STS.expCosmicGuideStyle = false;
 		STS.expCosmicGuideLayout = true;
-		STS.expCosmicFeedsV1 = false;
-		STS.expCosmicFeedsV2 = false;
-		STS.expCosmicFeedsV3 = false;
-		STS.expCosmicFeedsThirdColumn = false;
 		STS.expNotifSquare = true;
 
-		STS.expChannels3 = true;
 		STS.expChannels3TimeVisible = true;
 		STS.expChannels3DateVisible = true;
 		STS.expChannels3DateHidden = false;
@@ -3892,75 +4906,25 @@ function STRingo2(){
 		STS.expNoGuide = false;
 		STS.expGuideOnFeedsOnly = true;
 
-		STS.expAozoraHome = true;
-		STS.expAozoraHeader = false;
-		STS.expAozoraBG = false;
-		STS.expAozoraStyles = false;
 		STS.expAozoraComments = false;
-		STS.expAozoraSubscribe = false;
-		STS.expAozoraTopbarLinks = false;
 		STS.expAozoraSearch = true;
 
-		STS.expStargazerTabbedHeader = false;
-		STS.expStargazerBarHeader = false;
-		STS.expStargazerSimpleHeader = false;
-		STS.expStargazerSubscribe = false;
-
-		STS.expHomeTab = false;
-		STS.expRoboto = false;
 		STS.expCenteredSearch = false;
 		STS.expBigSearch = false;
-		STS.expSecondarySearchIcon = false;
 		STS.expMaterialSearch = false;
-		STS.expPolymerAccountMenu = false;
-		STS.expPolymerShell = false;
-		STS.expEarlyPolymerShell = false;
-		STS.expEarlyPolymerGuide = false;
-		STS.expPolymerGen2Colors = false;
-		STS.polymerGen2Comments = false;
-		STS.simpleReply = false;
-		STS.typographySpacing = false;
-		STS.expPolymerSubscribe = false;
-		STS.expPolymerGen2Subscribe = false;
-		STS.expPolymerStyles = false;
-		STS.expBetaPolymerStyles = false;
-		STS.expPolymerChannels = false;
-		STS.expColorfulChannels = false;
-		STS.expPolymerComments = false;
-		STS.expPolymerTooltips = false;
 		STS.expTopbarShadow = false;
-		STS.expMaterialSignIn = false;
 		STS.expRichGridHome = false;
-		STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
-		STS.expRoundedThumbs = false;
-		STS.expRoundedPlayer = false;
 		STS.expRoundedSearch = false;
-		STS.expRoundedGuide = false;
-		STS.expRoundedStyles = false;
-		STS.expFrostedGlass = false;
-		STS.expPolymerGen3Colors = false;
-		STS.expYTSansTitle = false;
 		STS.expWMRButtonsLowercase = false;
 		STS.expWMRAddTo = false;
 		STS.expWMRNoSaveText = false;
 		STS.expWMRNoShareText = false;
-		STS.expOutlineIcons = false;
 		STS.expRoundedTopbarPfp = false;
-		STS.expUploadIcon = false;
-		STS.expCreateIcon = false;
-		STS.expYouTubeApps = false;
 		STS.expRingo2 = false;
 		STS.expRingo2Gradients = false;
-		STS.favi24 = false;
-		STS.favi24O = false;
-		STS.favi17 = false;
-		STS.favi15 = false;
-		STS.favi12 = true;
-		STS.favi10 = false;
-		STS.favi05 = false;
 		STS.expHideYoodles = true;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
@@ -3976,14 +4940,6 @@ function STEpicPandaRealSettings(){
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="small";
     SRS.playerSpinner.tValue="classic";
-		STS.expEpicWatch7Flat = false;
-		STS.expEpicHeader = false;
-		STS.expEpicStyling = true;
-		STS.expEpicFeeds = true;
-
-		STS.expCosmicHeader = true;
-		STS.expCosmicButtons = true;
-		STS.expAozoraTopbarLinks = true;
 
 		if(STS.STPresetsAlsoSetV3Settings==true){
 			setV3Settings("epicreal");
@@ -3991,94 +4947,58 @@ function STEpicPandaRealSettings(){
 	}
 	function STCosmicPandaSettings(){
         SRS.layoutSelect.tValue="cosmic2012_1";
+        SRS.faviconSelect.tValue="2012";
+        SRS.outlineIcons.tValue="off";
+        SRS.rndThumbs.tValue="off";
+        SRS.siteFont.tValue="arial";
         SRS.homeRedir.tValue="feedList";
         SRS.logoLink.tValue="feedList";
         SRS.searchText.tValue="off";
+        SRS.accountMenu.tValue="me";
+        SRS.frostedGlass.tValue="off";
+        SRS.uploadBtn.tValue="modern";
+        SRS.appsBtn.tValue="off";
+        SRS.guideAlwaysPinned.tValue="off";
         SRS.subsGrid.tValue="list";
+        SRS.rndPlayer.tValue="off";
         SRS.playerVersion.tValue="default2014";
         SRS.watchLayout.tValue="watch5d";
         SRS.relatedTabs.tValue="off";
         SRS.relatedSize.tValue="small";
+        SRS.compactDate.tValue="off";
+        SRS.compactName.tValue="off";
         SRS.playerSpinner.tValue="classic";
-		STS.expAlwaysShowCompactDate = false;
-		STS.expNeverShowCompactDate = false;
+        SRS.channelVersion.tValue="c3";
 		STS.expMoveGuideMainSectionToTop = false;
 		STS.expMoreTooltips = true;
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = false;
 		STS.expSharrow = false;
-		STS.expGuideAlwaysPinned = false;
 		STS.expWatch7AboutTabRename = false;
 		STS.expWatch7AboutTabRename2 = false;
-		STS.expTwoColumnSearchResults = false;
-		STS.configWatch7SidebarCardShadow = true;
 		STS.expFlatLogo = false;
 		STS.expInvertLogo = false;
 		STS.expGlossyLogo = false;
 		STS.expClassicTitle = false;
 		STS.expClassicGuide = false;
 		STS.expClassicSubscribe = false;
-		STS.expClassicStyles = false;
 		STS.expClassicLtod = false;
-		STS.expClassicButtons = false;
-		STS.expBigSearchThumbs = false;
-		STS.expBiggerSearchThumbs = false;
 		STS.expNoVideosLink = false;
-		STS.expSkinnySubscribe = false;
-		STS.expModernStyles = false;
-		STS.modernCards = false;
-        STS.sbStyles=false;
-        STS.sbCardPhysics=false;
-		STS.expLightChannelBar = false;
-		STS.expModernNotifIcon = false;
-		STS.expModernTopbar = false;
-		STS.expModernUpload = true;
-		STS.expModernGuideButton = false;
-		STS.expModernSearchIcon = false;
-		STS.expModernTitle = false;
 		STS.expModernGuide = false;
-		STS.expModernHome = false;
-		STS.expModernPlaylists = false;
-		STS.expModernPlaylistThumbnails = false;
 		STS.expPlaylistRedBorder = false;
 		STS.expPlaylistTimestamps = false;
 		STS.expTrueScrollableGuide = true;
-		STS.materialSpinner = false;
 		STS.expViewsString = false;
-		STS.expGoogleApps = false;
-		STS.expCommentsFullWidth = true;
 		STS.expNoByText = false;
-		STS.expAccountMenu = false;
 
 		STS.expStaticSite = true;
-		STS.expHideAppbar = true;
 
-		STS.expEpicWatch7Flat = false;
-		STS.expEpicHeader = false;
-		STS.expEpicStyling = false;
-		STS.expEpicFeeds = false;
-
-		STS.expCosmicHeader = true;
-		STS.expCosmicBG = true;
-		STS.expCosmicButtons = true;
-		STS.expCosmicStyles = true;
-		STS.expCosmicBanners = true;
-		STS.expCosmicBannersV2 = false;
 		STS.expCosmicComments = true;
-		STS.expCosmicGuideStyle = true;
 		STS.expCosmicGuideLayout = true;
-		STS.expCosmicFeedsV1 = true;
-		STS.expCosmicFeedsV2 = false;
-		STS.expCosmicFeedsV3 = false;
-		STS.expCosmicFeedsThirdColumn = true;
 		STS.expNotifSquare = true;
 
-		STS.expChannels3 = true;
 		STS.expChannels3TimeVisible = false;
 		STS.expChannels3DateVisible = false;
 		STS.expChannels3DateHidden = false;
@@ -4086,75 +5006,25 @@ function STEpicPandaRealSettings(){
 		STS.expNoGuide = false;
 		STS.expGuideOnFeedsOnly = true;
 
-		STS.expAozoraHome = true;
-		STS.expAozoraHeader = false;
-		STS.expAozoraBG = false;
-		STS.expAozoraStyles = false;
 		STS.expAozoraComments = false;
-		STS.expAozoraSubscribe = false;
-		STS.expAozoraTopbarLinks = true;
 		STS.expAozoraSearch = true;
 
-		STS.expStargazerTabbedHeader = false;
-		STS.expStargazerBarHeader = false;
-		STS.expStargazerSimpleHeader = false;
-		STS.expStargazerSubscribe = false;
-
-		STS.expHomeTab = false;
-		STS.expRoboto = false;
 		STS.expCenteredSearch = false;
 		STS.expBigSearch = false;
-		STS.expSecondarySearchIcon = false;
 		STS.expMaterialSearch = false;
-		STS.expPolymerAccountMenu = false;
-		STS.expPolymerShell = false;
-		STS.expEarlyPolymerShell = false;
-		STS.expEarlyPolymerGuide = false;
-		STS.expPolymerGen2Colors = false;
-		STS.polymerGen2Comments = false;
-		STS.simpleReply = false;
-		STS.typographySpacing = false;
-		STS.expPolymerSubscribe = false;
-		STS.expPolymerGen2Subscribe = false;
-		STS.expPolymerStyles = false;
-		STS.expBetaPolymerStyles = false;
-		STS.expPolymerChannels = false;
-		STS.expColorfulChannels = false;
-		STS.expPolymerComments = false;
-		STS.expPolymerTooltips = false;
 		STS.expTopbarShadow = false;
-		STS.expMaterialSignIn = false;
 		STS.expRichGridHome = false;
-		STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
-		STS.expRoundedThumbs = false;
-		STS.expRoundedPlayer = false;
 		STS.expRoundedSearch = false;
-		STS.expRoundedGuide = false;
-		STS.expRoundedStyles = false;
-		STS.expFrostedGlass = false;
-		STS.expPolymerGen3Colors = false;
-		STS.expYTSansTitle = false;
 		STS.expWMRButtonsLowercase = false;
 		STS.expWMRAddTo = false;
 		STS.expWMRNoSaveText = false;
 		STS.expWMRNoShareText = false;
-		STS.expOutlineIcons = false;
 		STS.expRoundedTopbarPfp = false;
-		STS.expUploadIcon = false;
-		STS.expCreateIcon = false;
-		STS.expYouTubeApps = false;
 		STS.expRingo2 = false;
 		STS.expRingo2Gradients = false;
-		STS.favi24 = false;
-		STS.favi24O = false;
-		STS.favi17 = false;
-		STS.favi15 = false;
-		STS.favi12 = true;
-		STS.favi10 = false;
-		STS.favi05 = false;
 		STS.expHideYoodles = true;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
@@ -4163,11 +5033,6 @@ function STEpicPandaRealSettings(){
 	}
 function STCosmicPandaMidSettings(){
     SRS.layoutSelect.tValue="cosmic2012_2";
-	STS.expCosmicBanners = false;
-	STS.expCosmicBannersV2 = true;
-	STS.expCosmicFeedsV1 = false;
-	STS.expCosmicFeedsV2 = true;
-	STS.expCosmicFeedsV3 = false;
 	STS.expChannels3TimeVisible = true;
 	STS.expChannels3DateVisible = true;
 	STS.expChannels3DateHidden = false;
@@ -4175,9 +5040,6 @@ function STCosmicPandaMidSettings(){
 }
 function STCosmicPandaLateSettings(){
     SRS.layoutSelect.tValue="cosmic2012_3";
-	STS.expCosmicFeedsV1 = false;
-	STS.expCosmicFeedsV2 = false;
-	STS.expCosmicFeedsV3 = true;
 	STS.expChannels3TimeVisible = true;
 	STS.expChannels3DateVisible = true;
 	STS.expChannels3DateHidden = false;
@@ -4185,38 +5047,29 @@ function STCosmicPandaLateSettings(){
 }
 function STAozoraSettings(){
     SRS.layoutSelect.tValue="aozora2011_2";
+    SRS.faviconSelect.tValue="2010";
+    SRS.outlineIcons.tValue="off";
+    SRS.rndThumbs.tValue="off";
+    SRS.siteFont.tValue="arial";
     SRS.homeRedir.tValue="off";
     SRS.logoLink.tValue="home";
     SRS.subsGrid.tValue="grid";
+    SRS.rndPlayer.tValue="off";
     SRS.playerVersion.tValue="default2014";
     SRS.watchLayout.tValue="watch5c";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="smaller";
+    SRS.compactDate.tValue="off";
+    SRS.compactName.tValue="off";
     SRS.playerSpinner.tValue="classic";
-	STS.expCosmicHeader = false;
-	STS.expCosmicBG = false;
-	STS.expCosmicButtons = false;
-	STS.expCosmicStyles = false;
-	STS.expCosmicBanners = false;
-	STS.expCosmicComments = false;
-	STS.expCosmicGuideStyle = false;
+    SRS.channelVersion.tValue="c3";
 	STS.expCosmicGuideLayout = true;
-	STS.expCosmicFeedsV1 = false;
-	STS.expCosmicFeedsV2 = false;
-	STS.expCosmicFeedsV3 = false;
-	STS.expCosmicFeedsThirdColumn = false;
 
 	STS.expChannels3TimeVisible = false;
 	STS.expChannels3DateVisible = false;
 	STS.expChannels3DateHidden = false;
 
-	STS.expAozoraHeader = true;
-	STS.expAozoraBG = true;
-	STS.expAozoraStyles = true;
 	STS.expAozoraComments = true;
-	STS.expAozoraSubscribe = true;
-	STS.favi12 = false;
-	STS.favi10 = true;
 }
 function STEarly2011Settings(){
     SRS.layoutSelect.tValue="aozora2011_1";
@@ -4228,94 +5081,58 @@ function ST2010Settings(){
 }
 function STStargazerSettings(){
     SRS.layoutSelect.tValue="stargazer2009_3";
+    SRS.faviconSelect.tValue="2005";
+    SRS.outlineIcons.tValue="off";
+    SRS.rndThumbs.tValue="off";
+    SRS.siteFont.tValue="arial";
     SRS.homeRedir.tValue="off";
     SRS.logoLink.tValue="home";
     SRS.searchText.tValue="off";
+    SRS.accountMenu.tValue="me";
+    SRS.frostedGlass.tValue="off";
+    SRS.uploadBtn.tValue="modern";
+    SRS.appsBtn.tValue="off";
+    SRS.guideAlwaysPinned.tValue="off";
     SRS.subsGrid.tValue="grid";
+    SRS.rndPlayer.tValue="off";
     SRS.playerVersion.tValue="default2014";
     SRS.watchLayout.tValue="watch4b";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="smaller";
+    SRS.compactDate.tValue="off";
+    SRS.compactName.tValue="on";
     SRS.playerSpinner.tValue="classic";
-		STS.expAlwaysShowCompactDate = false;
-		STS.expNeverShowCompactDate = false;
+    SRS.channelVersion.tValue="c3";
 		STS.expMoveGuideMainSectionToTop = false;
 		STS.expMoreTooltips = true;
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = false;
 		STS.expSharrow = false;
-		STS.expGuideAlwaysPinned = false;
 		STS.expWatch7AboutTabRename = false;
 		STS.expWatch7AboutTabRename2 = false;
-		STS.expTwoColumnSearchResults = false;
-		STS.configWatch7SidebarCardShadow = true;
 		STS.expFlatLogo = false;
 		STS.expInvertLogo = false;
 		STS.expGlossyLogo = false;
 		STS.expClassicTitle = false;
 		STS.expClassicGuide = false;
 		STS.expClassicSubscribe = false;
-		STS.expClassicStyles = false;
 		STS.expClassicLtod = false;
-		STS.expClassicButtons = false;
-		STS.expBigSearchThumbs = false;
-		STS.expBiggerSearchThumbs = false;
 		STS.expNoVideosLink = false;
-		STS.expSkinnySubscribe = false;
-		STS.expModernStyles = false;
-		STS.modernCards = false;
-    STS.sbStyles=false;
-    STS.sbCardPhysics=false;
-		STS.expLightChannelBar = false;
-		STS.expModernNotifIcon = false;
-		STS.expModernTopbar = false;
-		STS.expModernUpload = true;
-		STS.expModernGuideButton = false;
-		STS.expModernSearchIcon = false;
-		STS.expModernTitle = false;
 		STS.expModernGuide = false;
-		STS.expModernHome = false;
-		STS.expModernPlaylists = false;
-		STS.expModernPlaylistThumbnails = false;
 		STS.expPlaylistRedBorder = false;
 		STS.expPlaylistTimestamps = false;
 		STS.expTrueScrollableGuide = true;
-	STS.materialSpinner = false;
 		STS.expViewsString = false;
-		STS.expGoogleApps = false;
-		STS.expCommentsFullWidth = true;
 		STS.expNoByText = false;
-		STS.expAccountMenu = false;
 
 		STS.expStaticSite = true;
-		STS.expHideAppbar = true;
 
-		STS.expEpicWatch7Flat = false;
-		STS.expEpicHeader = false;
-		STS.expEpicStyling = false;
-		STS.expEpicFeeds = false;
-
-		STS.expCosmicHeader = false;
-		STS.expCosmicBG = false;
-		STS.expCosmicButtons = false;
-		STS.expCosmicStyles = false;
-		STS.expCosmicBanners = false;
-		STS.expCosmicBannersV2 = false;
 		STS.expCosmicComments = false;
-		STS.expCosmicGuideStyle = false;
 		STS.expCosmicGuideLayout = true;
-		STS.expCosmicFeedsV1 = false;
-		STS.expCosmicFeedsV2 = false;
-		STS.expCosmicFeedsV3 = false;
-		STS.expCosmicFeedsThirdColumn = false;
 		STS.expNotifSquare = true;
 
-		STS.expChannels3 = true;
 		STS.expChannels3TimeVisible = false;
 		STS.expChannels3DateVisible = false;
 		STS.expChannels3DateHidden = false;
@@ -4323,75 +5140,25 @@ function STStargazerSettings(){
 		STS.expNoGuide = true;
 		STS.expGuideOnFeedsOnly = false;
 
-		STS.expAozoraHome = true;
-		STS.expAozoraHeader = false;
-		STS.expAozoraBG = true;
-		STS.expAozoraStyles = true;
 		STS.expAozoraComments = true;
-		STS.expAozoraSubscribe = false;
-		STS.expAozoraTopbarLinks = false;
 		STS.expAozoraSearch = true;
 
-		STS.expStargazerTabbedHeader = false;
-		STS.expStargazerBarHeader = false;
-		STS.expStargazerSimpleHeader = true;
-		STS.expStargazerSubscribe = true;
-
-		STS.expHomeTab = false;
-		STS.expRoboto = false;
 		STS.expCenteredSearch = false;
 		STS.expBigSearch = false;
-		STS.expSecondarySearchIcon = false;
 		STS.expMaterialSearch = false;
-		STS.expPolymerAccountMenu = false;
-		STS.expPolymerShell = false;
-		STS.expEarlyPolymerShell = false;
-		STS.expEarlyPolymerGuide = false;
-		STS.expPolymerGen2Colors = false;
-	STS.polymerGen2Comments = false;
-		STS.simpleReply = false;
-	STS.typographySpacing = false;
-		STS.expPolymerSubscribe = false;
-		STS.expPolymerGen2Subscribe = false;
-		STS.expPolymerStyles = false;
-		STS.expBetaPolymerStyles = false;
-		STS.expPolymerChannels = false;
-		STS.expColorfulChannels = false;
-		STS.expPolymerComments = false;
-		STS.expPolymerTooltips = false;
 		STS.expTopbarShadow = false;
-		STS.expMaterialSignIn = false;
 		STS.expRichGridHome = false;
-	STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
-		STS.expRoundedThumbs = false;
-		STS.expRoundedPlayer = false;
 		STS.expRoundedSearch = false;
-		STS.expRoundedGuide = false;
-	STS.expRoundedStyles = false;
-		STS.expFrostedGlass = false;
-		STS.expPolymerGen3Colors = false;
-		STS.expYTSansTitle = false;
 		STS.expWMRButtonsLowercase = false;
 		STS.expWMRAddTo = false;
 		STS.expWMRNoSaveText = false;
 		STS.expWMRNoShareText = false;
-		STS.expOutlineIcons = false;
 		STS.expRoundedTopbarPfp = false;
-		STS.expUploadIcon = false;
-		STS.expCreateIcon = false;
-		STS.expYouTubeApps = false;
 		STS.expRingo2 = false;
 	STS.expRingo2Gradients = false;
-		STS.favi24 = false;
-	STS.favi24O = false;
-		STS.favi17 = false;
-		STS.favi15 = false;
-		STS.favi12 = false;
-		STS.favi10 = false;
-		STS.favi05 = true;
 		STS.expHideYoodles = true;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
@@ -4400,108 +5167,67 @@ function STStargazerSettings(){
 	}
 function STStargazerMid2009Settings(){
     SRS.layoutSelect.tValue="stargazer2009_2";
-	STS.expStargazerBarHeader = true;
-	STS.expStargazerSimpleHeader = false;
 }
 function STStargazerEarly2009Settings(){
     SRS.layoutSelect.tValue="stargazer2009_1";
-	STS.expStargazerBarHeader = true;
-	STS.expStargazerSimpleHeader = false;
 }
 function STStargazer2008Settings(){
     SRS.layoutSelect.tValue="stargazer2008_1";
-	STS.expStargazerTabbedHeader = true;
-	STS.expStargazerBarHeader = false;
 }
 function ST2019Settings(){
     SRS.layoutSelect.tValue="poly2019";
+    SRS.faviconSelect.tValue="2017";
+    SRS.outlineIcons.tValue="off";
+    SRS.rndThumbs.tValue="off";
+    SRS.siteFont.tValue="roboto";
     SRS.homeRedir.tValue="off";
     SRS.logoLink.tValue="home";
     SRS.searchText.tValue="on";
+    SRS.accountMenu.tValue="poly";
+    SRS.frostedGlass.tValue="off";
+    SRS.uploadBtn.tValue="create";
+    SRS.appsBtn.tValue="yt";
+    SRS.guideAlwaysPinned.tValue="off";
     SRS.subsGrid.tValue="grid";
+    SRS.rndPlayer.tValue="off";
     SRS.playerVersion.tValue="modernV2";
     SRS.watchLayout.tValue="watch9a";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="large";
+    SRS.compactDate.tValue="on";
+    SRS.compactName.tValue="off";
     SRS.playerSpinner.tValue="material";
-	STS.expAlwaysShowCompactDate = true;
-	STS.expNeverShowCompactDate = false;
+    SRS.channelVersion.tValue="c4";
 	STS.expMoveGuideMainSectionToTop = false;
 	STS.expMoreTooltips = true;
 	STS.expWatch9NoOwner = false;
 	STS.expWatch9TrueExpander = false;
-	STS.expWatch9SidebarBus = false;
-	STS.expWatch9StickyColumns = false;
-	STS.expRelatedGrid = false;
 	STS.expWatch8NoMore = false;
 	STS.expMoveCountsToButtons = true;
 	STS.expSharrow = true;
-	STS.expGuideAlwaysPinned = false;
 	STS.expWatch7AboutTabRename = false;
 	STS.expWatch7AboutTabRename2 = false;
-	STS.expTwoColumnSearchResults = false;
-	STS.configWatch7SidebarCardShadow = true;
 	STS.expFlatLogo = false;
 	STS.expInvertLogo = true;
 	STS.expGlossyLogo = false;
 	STS.expClassicTitle = false;
 	STS.expClassicGuide = false;
 	STS.expClassicSubscribe = false;
-	STS.expClassicStyles = false;
 	STS.expClassicLtod = false;
-	STS.expClassicButtons = false;
-	STS.expBigSearchThumbs = true;
-	STS.expBiggerSearchThumbs = false;
 	STS.expNoVideosLink = false;
-	STS.expModernStyles = false;
-	STS.modernCards = false;
-    STS.sbStyles=false;
-    STS.sbCardPhysics=false;
-	STS.expLightChannelBar = true;
-	STS.expModernNotifIcon = false;
-	STS.expModernTopbar = true;
-	STS.expModernUpload = true;
-	STS.expModernGuideButton = true;
-	STS.expModernSearchIcon = true;
-	STS.expModernTitle = true;
 	STS.expModernGuide = true;
-	STS.expModernHome = true;
-	STS.expModernPlaylists = true;
-	STS.expModernPlaylistThumbnails = true;
 	STS.expPlaylistRedBorder = false;
 	STS.expPlaylistTimestamps = true;
 	STS.expTrueScrollableGuide = true;
-	STS.materialSpinner = true;
 	STS.expViewsString = true;
-	STS.expGoogleApps = false;
-	STS.expCommentsFullWidth = true;
 	STS.expNoByText = true;
-	STS.expAccountMenu = false;
 
 	STS.expStaticSite = false;
-	STS.expHideAppbar = true;
 
-	STS.expEpicWatch7Flat = false;
-	STS.expEpicHeader = false;
-	STS.expEpicStyling = false;
-	STS.expEpicFeeds = false;
-
-	STS.expCosmicHeader = false;
-	STS.expCosmicBG = false;
-	STS.expCosmicButtons = false;
-	STS.expCosmicStyles = false;
-	STS.expCosmicBanners = false;
-	STS.expCosmicBannersV2 = false;
 	STS.expCosmicComments = false;
-	STS.expCosmicGuideStyle = false;
 	STS.expCosmicGuideLayout = false;
-	STS.expCosmicFeedsV1 = false;
-	STS.expCosmicFeedsV2 = false;
-	STS.expCosmicFeedsV3 = false;
-	STS.expCosmicFeedsThirdColumn = false;
 	STS.expNotifSquare = false;
 
-	STS.expChannels3 = false;
 	STS.expChannels3TimeVisible = false;
 	STS.expChannels3DateVisible = false;
 	STS.expChannels3DateHidden = false;
@@ -4509,75 +5235,25 @@ function ST2019Settings(){
 	STS.expNoGuide = false;
 	STS.expGuideOnFeedsOnly = false;
 
-	STS.expAozoraHome = false;
-	STS.expAozoraHeader = false;
-	STS.expAozoraBG = false;
-	STS.expAozoraStyles = false;
 	STS.expAozoraComments = false;
-	STS.expAozoraSubscribe = false;
-	STS.expAozoraTopbarLinks = false;
 	STS.expAozoraSearch = false;
 
-	STS.expStargazerTabbedHeader = false;
-	STS.expStargazerBarHeader = false;
-	STS.expStargazerSimpleHeader = false;
-	STS.expStargazerSubscribe = false;
-
-	STS.expHomeTab = true;
-	STS.expRoboto = true;
 	STS.expCenteredSearch = true;
 	STS.expBigSearch = false;
-	STS.expSecondarySearchIcon = false;
 	STS.expMaterialSearch = false;
-	STS.expPolymerAccountMenu = true;
-	STS.expPolymerShell = true;
-	STS.expEarlyPolymerShell = false;
-	STS.expEarlyPolymerGuide = false;
-	STS.expPolymerGen2Colors = true;
-	STS.polymerGen2Comments = true;
-	STS.simpleReply = false;
-	STS.typographySpacing = false;
-	STS.expPolymerSubscribe = true;
-	STS.expPolymerGen2Subscribe = false;
-	STS.expPolymerStyles = true;
-	STS.expBetaPolymerStyles = false;
-	STS.expPolymerChannels = true;
-	STS.expColorfulChannels = false;
-	STS.expPolymerComments = true;
-	STS.expPolymerTooltips = true;
 	STS.expTopbarShadow = true;
-	STS.expMaterialSignIn = true;
 	STS.expRichGridHome = false;
-	STS.expCommentsTeaser = false;
 	STS.expSegmentedLtod = false;
 	STS.expRoundedSubscribe = false;
 	STS.expBlackSubscribe = false;
-	STS.expRoundedThumbs = false;
-	STS.expRoundedPlayer = false;
 	STS.expRoundedSearch = false;
-	STS.expRoundedGuide = false;
-	STS.expRoundedStyles = false;
-	STS.expFrostedGlass = false;
-	STS.expPolymerGen3Colors = false;
-	STS.expYTSansTitle = false;
 	STS.expWMRButtonsLowercase = false;
 	STS.expWMRAddTo = false;
 	STS.expWMRNoSaveText = false;
 	STS.expWMRNoShareText = false;
-	STS.expOutlineIcons = false;
 	STS.expRoundedTopbarPfp = true;
-	STS.expUploadIcon = false;
-	STS.expCreateIcon = true;
-	STS.expYouTubeApps = true;
 	STS.expRingo2 = false;
 	STS.expRingo2Gradients = false;
-	STS.favi24 = false;
-	STS.favi24O = false;
-	STS.favi17 = true;
-	STS.favi15 = false;
-	STS.favi12 = false;
-	STS.favi10 = false;
-	STS.favi05 = false;
 	STS.expHideYoodles = true;
 
 	if(STS.STPresetsAlsoSetV3Settings == true){
@@ -4587,9 +5263,6 @@ function ST2019Settings(){
 function ST2018PolySettings(){
     SRS.layoutSelect.tValue="poly2018";
 	STS.expCenteredSearch = true;
-	STS.expPolymerGen2Colors = false;
-	STS.polymerGen2Comments = false;
-	STS.expEarlyPolymerShell = false;
 	STS.expWMRNoSaveText = false;
 	STS.expWMRNoShareText = false;
 	STS.expTopbarShadow = true;
@@ -4601,13 +5274,10 @@ function ST2018PolySettings(){
 function ST2017PolySettings(){
     SRS.layoutSelect.tValue="poly2017";
     SRS.playerSpinner.tValue="classic";
-	STS.materialSpinner = false;
+    SRS.uploadBtn.tValue="icon";
 	STS.expCenteredSearch = false;
-	STS.expEarlyPolymerShell = true;
 	STS.expWMRNoSaveText = true;
 	STS.expWMRNoShareText = false;
-	STS.expUploadIcon = true;
-	STS.expCreateIcon = false;
 
 	if(STS.STPresetsAlsoSetV3Settings == true){
 		setV3Settings("poly17");
@@ -4615,10 +5285,9 @@ function ST2017PolySettings(){
 }
     function ST2017PolyEarlySettings(){
     SRS.layoutSelect.tValue="polyE2017";
+        SRS.faviconSelect.tValue="2015";
     STS.expInvertLogo=false;
     STS.expFlatLogo=true;
-    STS.favi17 = false;
-	STS.favi15 = true;
 
 	if(STS.STPresetsAlsoSetV3Settings == true){
 		setV3Settings("poly17");
@@ -4626,23 +5295,17 @@ function ST2017PolySettings(){
 }
 function ST2016PolySettings(){
     SRS.layoutSelect.tValue="poly2016";
+    SRS.faviconSelect.tValue="2015";
+    SRS.appsBtn.tValue="off";
+    SRS.compactDate.tValue="off";
 	STS.expFlatLogo = true;
 	STS.expInvertLogo = false;
 	STS.expBigSearch = true;
-	STS.materialSpinner = false;
 	STS.expMaterialSearch = true;
 	STS.expCenteredSearch = true;
-	STS.expEarlyPolymerShell = true;
-	STS.expBetaPolymerStyles = true;
-	STS.expColorfulChannels = true;
 	STS.expWMRAddTo = true;
 	STS.expWMRNoSaveText = true;
 	STS.expWMRNoShareText = true;
-	STS.expUploadIcon = true;
-	STS.expCreateIcon = false;
-	STS.expYouTubeApps = false;
-	STS.favi17 = false;
-	STS.favi15 = true;
 
 	if(STS.STPresetsAlsoSetV3Settings == true){
 		setV3Settings("poly16");
@@ -4654,10 +5317,6 @@ function ST2020Settings(){
     SRS.logoLink.tValue="feedGrid";
     SRS.playerVersion.tValue="modernV3";
     SRS.watchLayout.tValue="watch9b";
-	STS.expBigSearchThumbs=false;
-	STS.expBiggerSearchThumbs=true;
-	STS.expPolymerGen2Colors=true;
-	STS.expPolymerGen2Subscribe=true;
 	STS.expTopbarShadow=false;
 	STS.expRichGridHome=true;
 
@@ -4667,23 +5326,18 @@ function ST2020Settings(){
 }
 function ST2021Settings(){
     SRS.layoutSelect.tValue="poly2021";
+    SRS.outlineIcons.tValue="on";
     SRS.playerVersion.tValue="modernV4";
-	STS.typographySpacing=true;
 	STS.expBigSearch=true;
-	STS.expOutlineIcons=true;
 	if(STS.STPresetsAlsoSetV3Settings == true){
 		setV3Settings("poly17");
 	}
 }
 function ST2022Settings(){
     SRS.layoutSelect.tValue="poly2022";
+    SRS.appsBtn.tValue="off";
     SRS.watchLayout.tValue="watch10beta";
-	STS.simpleReply=true;
-	STS.expSecondarySearchIcon=true;
-	STS.expCommentsTeaser=true;
-	STS.expYTSansTitle=true;
 	STS.expWMRButtonsLowercase=true;
-	STS.expYouTubeApps=false;
 
 	if(STS.STPresetsAlsoSetV3Settings == true){
 		setV3Settings("poly17");
@@ -4691,144 +5345,114 @@ function ST2022Settings(){
 }
 function STAmsterdamSettings(){
     SRS.layoutSelect.tValue="amst2024c";
+    SRS.faviconSelect.tValue="2024";
+    SRS.outlineIcons.tValue="on";
+    SRS.rndThumbs.tValue="on";
+    SRS.siteFont.tValue="roboto";
     SRS.homeRedir.tValue="feedGrid";
     SRS.logoLink.tValue="feedGrid";
+    SRS.frostedGlass.tValue="on";
+    SRS.uploadBtn.tValue="createBtn";
+    SRS.appsBtn.tValue="off";
     SRS.subsGrid.tValue="grid";
+    SRS.rndPlayer.tValue="on";
     SRS.playerVersion.tValue="modernV4";
+    SRS.compactDate.tValue="off";
+    SRS.compactName.tValue="off";
     SRS.watchLayout.tValue="watch10teaser";
-	STS.typographySpacing=false;
-	STS.expCommentsTeaser=true;
 	STS.expSegmentedLtod=true;
 	STS.expRoundedSubscribe=true;
 	STS.expBlackSubscribe=false;
-	STS.expRoundedThumbs=true;
-	STS.expRoundedPlayer=true;
 	STS.expRoundedSearch=true;
-	STS.expRoundedGuide=true;
-	STS.expRoundedStyles=true;
-	STS.expFrostedGlass=true;
-	STS.expPolymerGen3Colors=true;
-	STS.expYTSansTitle=true;
 	STS.expRingo2=true;
 	STS.expRingo2Gradients=true;
-	STS.favi24=true;
-	STS.favi24O=false;
-	STS.favi17=false;
-	STS.favi15=false;
-	STS.favi12=false;
-	STS.favi10=false;
-	STS.favi05=false;
+
+    STS.expCreateIcon=false;
 
 	if(STS.STPresetsAlsoSetV3Settings == true){
 		setV3Settings("poly17");
 	}
 }
-    function STEarly2023Settings(){
+function STEarly2023Settings(){
     SRS.layoutSelect.tValue="amst2023_1";
+    SRS.faviconSelect.tValue="2017";
+    SRS.frostedGlass.tValue="off";
+    SRS.uploadBtn.tValue="create";
+    SRS.rndPlayer.tValue="off";
     SRS.watchLayout.tValue="watch10";
-	STS.expCommentsTeaser=false;
 	STS.expBlackSubscribe=true;
-	STS.expRoundedPlayer=false;
-	STS.expFrostedGlass=false;
-	STS.expYTSansTitle=true;
 	STS.expRingo2=false;
 	STS.expRingo2Gradients=false;
-	STS.favi24=false;
-	STS.favi17=true;
+    STS.expCreateIcon=true;
+	if(STS.STPresetsAlsoSetV3Settings==true){
+		setV3Settings("poly17");
+	}
+}
+function ST2025Settings(){
+    SRS.layoutSelect.tValue="amst2025p";
+    SRS.frostedGlass.tValue="off";
+    SRS.compactDate.tValue="on";
+    SRS.compactName.tValue="on";
+    SRS.watchLayout.tValue="watch11";
+	STS.expBlackSubscribe=true;
 	if(STS.STPresetsAlsoSetV3Settings==true){
 		setV3Settings("poly17");
 	}
 }
     function STSkybirdSettings(){
         SRS.layoutSelect.tValue="sb2016";
+        SRS.faviconSelect.tValue="2015";
+        SRS.outlineIcons.tValue="off";
+        SRS.rndThumbs.tValue="off";
+        SRS.siteFont.tValue="arial";
         SRS.homeRedir.tValue="off";
         SRS.logoLink.tValue="home";
         SRS.searchText.tValue="on";
+        SRS.accountMenu.tValue="poly";
+        SRS.frostedGlass.tValue="off";
+        SRS.uploadBtn.tValue="icon";
+        SRS.appsBtn.tValue="off";
+        SRS.guideAlwaysPinned.tValue="off";
         SRS.subsGrid.tValue="grid";
+        SRS.rndPlayer.tValue="off";
         SRS.playerVersion.tValue="modernV2";
         SRS.watchLayout.tValue="watch9b";
         SRS.relatedTabs.tValue="off";
         SRS.relatedSize.tValue="large";
+        SRS.compactDate.tValue="on";
+        SRS.compactName.tValue="on";
         SRS.playerSpinner.tValue="classic";
-		STS.expAlwaysShowCompactDate = false;
-		STS.expNeverShowCompactDate = false;
+        SRS.channelVersion.tValue="c4";
 		STS.expMoveGuideMainSectionToTop = false;
 		STS.expMoreTooltips = false;
 		STS.expWatch9NoOwner = false;
 		STS.expWatch9TrueExpander = false;
-		STS.expWatch9SidebarBus = false;
-		STS.expWatch9StickyColumns = false;
-		STS.expRelatedGrid = false;
 		STS.expWatch8NoMore = false;
 		STS.expMoveCountsToButtons = true;
 		STS.expSharrow = false;
-		STS.expGuideAlwaysPinned = false;
 		STS.expWatch7AboutTabRename = false;
 		STS.expWatch7AboutTabRename2 = false;
-		STS.expTwoColumnSearchResults = false;
-		STS.configWatch7SidebarCardShadow=false;
 		STS.expFlatLogo=true;
 		STS.expInvertLogo = false;
 		STS.expGlossyLogo = false;
 		STS.expClassicTitle = false;
 		STS.expClassicGuide = false;
 		STS.expClassicSubscribe = false;
-		STS.expClassicStyles = false;
 		STS.expClassicLtod = false;
-		STS.expClassicButtons = false;
-		STS.expBigSearchThumbs=true;
-		STS.expBiggerSearchThumbs = false;
 		STS.expNoVideosLink = true;
-		STS.expSkinnySubscribe = true;
-		STS.expModernStyles=false;
-		STS.modernCards = true;
-        STS.sbStyles=true;
-        STS.sbCardPhysics=true;
-		STS.expLightChannelBar = true;
-		STS.expModernNotifIcon = false;
-		STS.expModernTopbar = true;
-		STS.expModernUpload = true;
-		STS.expModernGuideButton=true;
-		STS.expModernSearchIcon=true;
-		STS.expModernTitle = false;
 		STS.expModernGuide=true;
-		STS.expModernHome = true;
-		STS.expModernPlaylists = true;
-		STS.expModernPlaylistThumbnails = true;
 		STS.expPlaylistRedBorder = true;
 		STS.expPlaylistTimestamps = true;
 		STS.expTrueScrollableGuide = true;
-		STS.materialSpinner = false;
 		STS.expViewsString=true;
-		STS.expGoogleApps = false;
-		STS.expCommentsFullWidth = true;
 		STS.expNoByText=true;
-		STS.expAccountMenu = true;
 
 		STS.expStaticSite = false;
-		STS.expHideAppbar=true;
 
-		STS.expEpicWatch7Flat = false;
-		STS.expEpicHeader = false;
-		STS.expEpicStyling = false;
-		STS.expEpicFeeds = false;
-
-		STS.expCosmicHeader = false;
-		STS.expCosmicBG = false;
-		STS.expCosmicButtons = false;
-		STS.expCosmicStyles = false;
-		STS.expCosmicBanners = false;
-		STS.expCosmicBannersV2 = false;
 		STS.expCosmicComments = false;
-		STS.expCosmicGuideStyle = false;
 		STS.expCosmicGuideLayout = false;
-		STS.expCosmicFeedsV1 = false;
-		STS.expCosmicFeedsV2 = false;
-		STS.expCosmicFeedsV3 = false;
-		STS.expCosmicFeedsThirdColumn = false;
 		STS.expNotifSquare = false;
 
-		STS.expChannels3 = false;
 		STS.expChannels3TimeVisible = false;
 		STS.expChannels3DateVisible = false;
 		STS.expChannels3DateHidden = false;
@@ -4836,81 +5460,44 @@ function STAmsterdamSettings(){
 		STS.expNoGuide = false;
 		STS.expGuideOnFeedsOnly = false;
 
-		STS.expAozoraHome = false;
-		STS.expAozoraHeader = false;
-		STS.expAozoraBG = false;
-		STS.expAozoraStyles = false;
 		STS.expAozoraComments = false;
-		STS.expAozoraSubscribe = false;
-		STS.expAozoraTopbarLinks = false;
 		STS.expAozoraSearch = false;
 
-		STS.expStargazerTabbedHeader = false;
-		STS.expStargazerBarHeader = false;
-		STS.expStargazerSimpleHeader = false;
-		STS.expStargazerSubscribe = false;
-
-		STS.expHomeTab = true;
-		STS.expRoboto=false;
 		STS.expCenteredSearch=true;
 		STS.expBigSearch = false;
-		STS.expSecondarySearchIcon = false;
 		STS.expMaterialSearch = false;
-		STS.expPolymerAccountMenu=true;
-		STS.expPolymerShell = false;
-		STS.expEarlyPolymerShell = false;
-		STS.expEarlyPolymerGuide = false;
-		STS.expPolymerGen2Colors = false;
-		STS.polymerGen2Comments = false;
-		STS.simpleReply = false;
-		STS.typographySpacing = false;
-		STS.expPolymerSubscribe=true;
-		STS.expPolymerGen2Subscribe=true;
-		STS.expPolymerStyles = false;
-		STS.expBetaPolymerStyles = false;
-		STS.expPolymerChannels = false;
-		STS.expColorfulChannels = false;
-		STS.expPolymerComments=true;
-		STS.expPolymerTooltips = false;
 		STS.expTopbarShadow = false;
-		STS.expMaterialSignIn = false;
 		STS.expRichGridHome = false;
-		STS.expCommentsTeaser = false;
 		STS.expSegmentedLtod = false;
 		STS.expRoundedSubscribe = false;
 		STS.expBlackSubscribe = false;
-		STS.expRoundedThumbs = false;
-		STS.expRoundedPlayer = false;
 		STS.expRoundedSearch = false;
-		STS.expRoundedGuide = false;
-		STS.expRoundedStyles = false;
-		STS.expFrostedGlass = false;
-		STS.expPolymerGen3Colors = false;
-		STS.expYTSansTitle = false;
 		STS.expWMRButtonsLowercase=true;
 		STS.expWMRAddTo=true;
 		STS.expWMRNoSaveText = false;
 		STS.expWMRNoShareText = false;
-		STS.expOutlineIcons = false;
 		STS.expRoundedTopbarPfp=true;
-		STS.expUploadIcon=true;
-		STS.expCreateIcon = false;
-		STS.expYouTubeApps = false;
 		STS.expRingo2 = false;
 		STS.expRingo2Gradients = false;
-		STS.favi24 = false;
-		STS.favi24O = false;
-		STS.favi17 = false;
-		STS.favi15 = true;
-		STS.favi12 = false;
-		STS.favi10 = false;
-		STS.favi05 = false;
 		STS.expHideYoodles = false;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("nirvana16");
 		}
 	}
+    function STSkybird2017Settings(){
+        SRS.layoutSelect.tValue="sb2017";
+        SRS.faviconSelect.tValue="2017";
+        SRS.uploadBtn.tValue="create";
+        STS.expFlatLogo=false;
+		STS.expInvertLogo=true;
+    }
+    function STSkybird2024Settings(){
+        SRS.layoutSelect.tValue="sb2024";
+        SRS.faviconSelect.tValue="2024";
+        STS.expRingo2=true;
+        STS.expRingo2Gradients=true;
+    }
 function setV3Settings(preset){
 	if(preset == "modernGbar" || preset == "materialGbar"){
 		V3_SETTINGS_CONF.USING_GBAR = true;
@@ -5017,6 +5604,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.PLAYER_SIZERULE3_API_SIZE_HEIGHT = 1080;
 	}
 	if(preset == "poly16"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5049,6 +5638,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = true;
 	}
 	if(preset == "poly17"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5081,6 +5672,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
     if(preset == "hitchhiker13centered"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=false;
+
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
 		V3_SETTINGS_CONF.APPBAR_GUIDE = true;
@@ -5109,6 +5702,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
     if(preset == "hitchhiker14centered"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
 		V3_SETTINGS_CONF.APPBAR_GUIDE = true;
@@ -5137,6 +5732,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
 	if(preset == "hitchhiker13"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=false;
+
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = false;
 		V3_SETTINGS_CONF.APPBAR_GUIDE = false;
@@ -5164,6 +5761,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
 	if(preset == "hitchhiker13mid"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=false;
+
 		V3_SETTINGS_CONF.NEW_LOGO = false;
 		V3_SETTINGS_CONF.W2W_AS_LOHP_EVERYTIME = true;
 		V3_SETTINGS_CONF.LOHP_VIDEO_FIX_THUMB_ASPECTRATIO = false;
@@ -5172,6 +5771,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
 	if(preset == "hitchhiker13early"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=false;
+
 		V3_SETTINGS_CONF.NEW_LOGO = false;
 		V3_SETTINGS_CONF.W2W_AS_LOHP_EVERYTIME = true;
 		V3_SETTINGS_CONF.LOHP_VIDEO_FIX_THUMB_ASPECTRATIO = false;
@@ -5180,6 +5781,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
 	if(preset == "nirvana14"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
 		V3_SETTINGS_CONF.APPBAR_GUIDE = true;
@@ -5211,6 +5814,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
 	if(preset == "nirvana15Early"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
 		V3_SETTINGS_CONF.APPBAR_GUIDE = true;
@@ -5242,6 +5847,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
 	if(preset == "nirvana15"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5274,6 +5881,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
 	if(preset == "nirvana16"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5305,6 +5914,8 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.MATERIAL_C4 = false;
 	}
 	if(preset == "cosmic"){
+        V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=false;
+
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = false;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5498,7 +6109,7 @@ function createLoadMore(token, list, renderer, currNumb){
 		container=$(".st-scroller-inner");
 	}
 	var newElem = document.createElement("span");
-	newElem.setAttribute("class", "continuation_item_wrapper");
+	newElem.setAttribute("class", "continuation_item_wrapper st-load-more");
 	newElem.innerHTML = `
 <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-default"><span class="yt-uix-button-content"><span class="run">Load more</span><span class="loading hid"><span class="yt-spinner"><img src="https://s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif" title="Loading icon" class="yt-spinner-img yt-sprite">
 Loading...</span></span></span></button>
@@ -5810,7 +6421,6 @@ function getUpdatedMetadata(isLive){
     //return new Promise((resolve, reject) => {
         CWD.shortViewCount="????";
         EXFetch("none","nomod","next","videoId",CWD.id).then(result=>{
-            //console.log(result);
             let meta=result.contents.twoColumnWatchNextResults.results.results.contents;
             let modifier=0;
             if(meta[1].videoPrimaryInfoRenderer){
@@ -5858,6 +6468,14 @@ function getWatchMetadata(x){
                 if(CWD.id == null){
                     CWD.id=document.URL.split('/shorts/')[1].split("&")[0];
                 }
+            }
+            if($("#watch7-creator-bar")){
+                CWD.isOwner=true;
+                $("body .v3").setAttribute("is-owner","");
+            }else{
+                CWD.isOwner=false;
+                $("body .v3").setAttribute("is-owner","");
+                $("body .v3").removeAttribute("is-owner");
             }
             CWD.owner=$("#watch7-user-header").data.watch7UserHeader.userName.title.simpleText;
             CWD.pfp=$("#watch7-user-header").data.watch7UserHeader.userPhoto.thumbnails.thumbnails[0].url;
@@ -6158,7 +6776,7 @@ function getWatchMetadata(x){
             nH=$(".st-transcript-content");
             nH.insertBefore(tM,nH.children[0]);
         }
-        if(SRS.watchLayout.tValue=="watch8"||SRS.watchLayout.tValue=="watch9a"||SRS.watchLayout.tValue=="watch9b"||SRS.watchLayout.tValue=="watch9c"||SRS.watchLayout.tValue=="watch10beta"||SRS.watchLayout.tValue=="watch10teaser"||SRS.watchLayout.tValue=="watch10"){
+        if(SRS.watchLayout.tValue=="watch8"||SRS.watchLayout.tValue=="watch9a"||SRS.watchLayout.tValue=="watch9b"||SRS.watchLayout.tValue=="watch9c"||SRS.watchLayout.tValue=="watch10beta"||SRS.watchLayout.tValue=="watch10teaser"||SRS.watchLayout.tValue=="watch10"||SRS.watchLayout.tValue=="watch11"){
             tM=$("#watch-description-extra-info");
             nH=$("#watch-description-clip");
             nH.insertBefore(tM,nH.children[2]);
@@ -6197,6 +6815,29 @@ function getWatchMetadata(x){
                     }
                     $("#st-related-panel").classList.remove("hid");
                     $("#st-videos-panel").classList.remove("hid");
+                }else if(SRS.watchLayout.tValue=="watch11"){
+                    if($(".live_chat_box_iframe_holder")){
+                        tM=document.querySelectorAll("#watch7-sidebar-contents > .watch-sidebar-section")[1];
+                        nH=$("#below-related-holder");
+                        nH.insertBefore(tM,nH.children[0]);
+                        tM=document.querySelectorAll("#watch7-sidebar-contents > .watch-sidebar-section")[1];
+                        nH=$("#below-related-holder");
+                        nH.insertBefore(tM,nH.children[1]);
+                        if($("#watch7-sidebar-contents > .watch-sidebar-section")){
+                            tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
+                            nH=$("#watch-chat-holder");
+                            nH.insertBefore(tM,nH.children[2]);
+                        }
+                        $("#st-chat-panel").classList.remove("hid");
+                    }else{
+                        tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
+                        nH=$("#below-related-holder");
+                        nH.insertBefore(tM,nH.children[0]);
+                        if($("#watch7-sidebar-contents > .watch-sidebar-section")){
+                            tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
+                            nH.insertBefore(tM,nH.children[1]);
+                        }
+                    }
                 }
             }
         },500);
@@ -6210,13 +6851,13 @@ function getWatchMetadata(x){
             nH.insertBefore(tM,nH.children[0]);
         }
         if($(".st-owner-icon")){
-            if($(".yt-user-name-icon-verified")){
-                tM=$(".yt-user-name-icon-verified");
+            if($(".yt-uix-button-panel .yt-user-name-icon-verified")){
+                tM=$(".yt-uix-button-panel .yt-user-name-icon-verified");
                 nH=$(".st-owner-icon");
                 nH.insertBefore(tM,nH.children[0]);
             }
-            if($(".yt-user-name-icon-autogenerated")){
-                tM=$(".yt-user-name-icon-autogenerated");
+            if($(".yt-uix-button-panel .yt-user-name-icon-autogenerated")){
+                tM=$(".yt-uix-button-panel .yt-user-name-icon-autogenerated");
                 nH=$(".st-owner-icon");
                 nH.insertBefore(tM,nH.children[0]);
             }
@@ -6294,7 +6935,9 @@ function getWatchMetadata(x){
                 $("#watch7-subscription-container").classList.add("st-round-sub");
             }
             if(
-                SRS.layoutSelect.tValue=="sb2016"
+                SRS.layoutSelect.tValue=="sb2016"||
+                SRS.layoutSelect.tValue=="sb2017"||
+                SRS.layoutSelect.tValue=="sb2024"
             ){
                 if($(".st-sub-button")){
                     $(".st-sub-button").classList.add("st-skybird-sub");
@@ -6302,7 +6945,7 @@ function getWatchMetadata(x){
                 $("#watch7-subscription-container").classList.add("st-skybird-sub");
             }
         }
-        if(SRS.watchLayout.tValue=="watch9b"||SRS.watchLayout.tValue=="watch9c"||SRS.watchLayout.tValue=="watch10beta"||SRS.watchLayout.tValue=="watch10teaser"||SRS.watchLayout.tValue=="watch10"){
+        if(SRS.watchLayout.tValue=="watch9b"||SRS.watchLayout.tValue=="watch9c"||SRS.watchLayout.tValue=="watch10beta"||SRS.watchLayout.tValue=="watch10teaser"||SRS.watchLayout.tValue=="watch10"||SRS.watchLayout.tValue=="watch11"){
             if($(".st-sub-button")){
                 $(".st-sub-button").classList.add("st-poly-sub");
                 $(".st-sub-button").classList.add("st-poly-g2-sub");
@@ -6313,7 +6956,7 @@ function getWatchMetadata(x){
                 SRS.layoutSelect.tValue=="poly2020"||
                 SRS.layoutSelect.tValue=="poly2021"||
                 SRS.layoutSelect.tValue=="poly2022"||
-                STS.expPolymerGen2Subscribe==true
+                sets.polyG2Sub==true
             ){
                 if($(".st-sub-button")){
                     $(".st-sub-button").classList.add("st-poly-g2-sub");
@@ -6321,8 +6964,9 @@ function getWatchMetadata(x){
                 $("#watch7-subscription-container").classList.add("st-poly-g2-sub");
             }
             if(
+                SRS.layoutSelect.tValue=="amst2023_1"||
                 SRS.layoutSelect.tValue=="amst2024c"||
-                SRS.layoutSelect.tValue=="amst2023_1"
+                SRS.layoutSelect.tValue=="amst2025p"
             ){
                 if($(".st-sub-button")){
                     $(".st-sub-button").classList.add("st-round-sub");
@@ -6330,7 +6974,9 @@ function getWatchMetadata(x){
                 $("#watch7-subscription-container").classList.add("st-round-sub");
             }
             if(
-                SRS.layoutSelect.tValue=="sb2016"
+                SRS.layoutSelect.tValue=="sb2016"||
+                SRS.layoutSelect.tValue=="sb2017"||
+                SRS.layoutSelect.tValue=="sb2024"
             ){
                 if($(".st-sub-button")){
                     $(".st-sub-button").classList.add("st-skybird-sub");
@@ -6350,6 +6996,8 @@ function getWatchMetadata(x){
                 SRS.layoutSelect.tValue=="hh2018"||
                 SRS.layoutSelect.tValue=="hh2024"||
                 SRS.layoutSelect.tValue=="sb2016"||
+                SRS.layoutSelect.tValue=="sb2017"||
+                SRS.layoutSelect.tValue=="sb2024"||
                 SRS.layoutSelect.tValue=="poly2016"||
                 SRS.layoutSelect.tValue=="polyE2017"||
                 SRS.layoutSelect.tValue=="poly2017"||
@@ -6358,7 +7006,9 @@ function getWatchMetadata(x){
                 SRS.layoutSelect.tValue=="poly2020"||
                 SRS.layoutSelect.tValue=="poly2021"||
                 SRS.layoutSelect.tValue=="poly2022"||
-                SRS.layoutSelect.tValue=="amst2024c"
+                SRS.layoutSelect.tValue=="amst2023_1"||
+                SRS.layoutSelect.tValue=="amst2024c"||
+                SRS.layoutSelect.tValue=="amst2025p"
             ){
                 if($(".st-sub-button")){
                     $(".st-sub-button").classList.add("st-modern-sub");
@@ -6545,6 +7195,9 @@ function getWatchMetadata(x){
             $("#st-videos-panel").classList.add("hid");
             $("#st-about-panel").classList.add("hid");
             $("#st-transcript-panel").classList.add("hid");
+        }
+        if(SRS.watchLayout.tValue=="watch11"){
+            $("#st-comments-panel").classList.remove("st-scrollable-panel");
         }
         if($(".st-teaser svg")){
             let icon=$(".st-teaser .st-svg");
@@ -6975,6 +7628,29 @@ function getWatchMetadata(x){
                 },10);
             });
         }
+        if(SRS.watchLayout.tValue=="watch11"){
+            $("#watch-description").classList.remove("yt-uix-expander");
+            $("#st-side-title-row").addEventListener("click",function(){
+                if($(".st-desc .yt-uix-expander-collapsed")){
+                    $("#watch-description").classList.remove("yt-uix-expander-collapsed");
+                    $(".st-desc").classList.add("expanded");
+                }
+            });
+            $("#watch-description-expand").addEventListener("click",function(){
+                if($(".st-desc .yt-uix-expander-collapsed")){
+                    $("#watch-description").classList.remove("yt-uix-expander-collapsed");
+                     $(".st-desc").classList.add("expanded");
+                }
+            });
+            $("#watch-description-collapse").addEventListener("click",function(){
+                setTimeout(function(){
+                    if($(".st-desc.expanded")){
+                        $(".st-desc").classList.remove("expanded");
+                        $("#watch-description").classList.add("yt-uix-expander-collapsed");
+                    }
+                },10);
+             });
+        }
         if($("#related-related")){
             $("#watch7-sidebar-contents").setAttribute("show","related");
             $("#st-videos-panel").setAttribute("expanded");
@@ -7020,6 +7696,14 @@ function getWatchMetadata(x){
                     $("#st-comments-panel").classList.add("hid");
                 }
             });
+        }
+        if(SRS.watchLayout.tValue=="watch11"){
+            if($("#st-comments-panel #watch-discussion")==null){
+                $("#st-comments-panel").classList.remove("hid");
+                let tM=$("#watch-discussion");
+                let nH=$("#st-comments-panel #watch-comments-holder");
+                nH.append(tM);
+            }
         }
         if($("#st-transcript-panel")){
             $("#st-transcript-panel .st-side-panel-close").addEventListener("click",function(){
@@ -7114,11 +7798,26 @@ function getWatchMetadata(x){
             i.href=w.channelLink;
             i.data=w.channelNav;
         });
+        if($(".st-title-spec")){
+            document.querySelectorAll(".st-title-spec").forEach(i=>{
+                i.textContent=w.title;
+            });
+        }
         document.querySelectorAll(".st-owner-name-text").forEach(i=>{
             i.textContent=w.owner;
         });
         if($(".st-sub-count")){
-            $(".st-sub-count").textContent=w.subCount+" subscribers";
+            if(CWD.subCount!==""&&CWD.subCount!=undefined){
+                $(".st-sub-count").textContent=CWD.subCount+" subscribers";
+            }else if(CWD.channelSubCount!="0"){
+                $(".st-sub-count").textContent=CWD.channelSubCount+" subscribers";
+            }else{
+                $(".st-sub-count").textContent="";
+            }
+        }
+        if($("#st-edit-vid")){
+            $("#st-analytics").href="https://www.youtube.com/analytics#;fi=v-"+CWD.id;
+            $("#st-edit-vid").href="https://studio.youtube.com/video/"+CWD.id+"/edit";
         }
         if($(".st-video-count")){
             document.querySelectorAll(".st-video-count").forEach(i=>{
@@ -7560,9 +8259,6 @@ width: 360px !important;
         let titleOnTop=false;
         let titleOnSide=false;
         let hasSecondary=false;
-        if(SRS.watchLayout.tValue=="watch6"){
-            totRecon=true;
-        }
         if(
             SRS.watchLayout.tValue=="watch5d"||
             SRS.watchLayout.tValue=="watch5c"||
@@ -7626,6 +8322,8 @@ width: 360px !important;
             </div>
             <div id="st-below-tabs-row-holder" class="st-contents">
             </div>
+            <div id="st-below-related-row-holder" class="st-contents">
+            </div>
         </div>
         `;
         cont.insertBefore(nE,cont.children[number]);
@@ -7661,7 +8359,11 @@ width: 360px !important;
             </div>
             <div id="st-side-owner-row-holder" class="st-contents">
             </div>
+            <div id="st-side-poly-owner-row-holder" class="st-contents">
+            </div>
             <div id="st-side-desc-row-holder" class="st-contents">
+            </div>
+            <div id="st-side-actions-row-holder" class="st-contents">
             </div>
             <div id="st-side-tabs-row-holder" class="st-contents">
             </div>
@@ -7670,11 +8372,18 @@ width: 360px !important;
         </div>
         `;
         cont.insertBefore(nE,cont.children[0]);
-        if(titleOnTop==false&&titleOnSide==false&&SRS.watchLayout.tValue!=="watch7"&&SRS.watchLayout.tValue!=="watch7beta"){
+        if(titleOnTop==false&&titleOnSide==false&&SRS.watchLayout.tValue!="watch7"&&SRS.watchLayout.tValue!="watch7beta"&&SRS.watchLayout.tValue!="watch11"){
             $("#st-below-title-row-holder").innerHTML=STH.belowTitleRow;
         }
         if(titleOnTop==true){
             $("#st-above-title-row-holder").innerHTML=STH.aboveTitleRow;
+        }
+        if(SRS.watchLayout.tValue=="watch11"){
+            $("#st-side-title-row-holder").innerHTML=STH.sideTitleRow;
+            $("#st-side-poly-owner-row-holder").innerHTML=STH.sidePolyOwnerRow;
+            $("#st-side-actions-row-holder").innerHTML=STH.sideActionsRow;
+            $("#st-side-panels-row-holder").innerHTML=STH.sidePanelsRow;
+            $("#st-below-related-row-holder").innerHTML=STH.belowRelatedRow;
         }
         if(SRS.relatedTabs.tValue=="on"||SRS.relatedTabs.tValue=="onNoSub"){
             $("#st-side-banner-row-holder").innerHTML=STH.sideBannerRow;
@@ -7932,38 +8641,46 @@ function everyLoadNeo(x){
             }
         }
     });
+    setTimeout(function(){
     let pi=yt.config_.DATASYNC_ID;
-    if(pi.split("||")[1].length>=5){
-        gdp.pageId=pi.split("||")[0];
-        headers={
-            "accept": "application/json, text/plain, /",
-            "accept-language": "en-US,en;q=0.9",
-            "authorization": aion,
-            "Content-type": "application/json",
-            "sec-ch-ua-mobile": "?0",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-origin",
-            "x-goog-authuser":gdp.authUser,
-            "X-Goog-Pageid":gdp.pageId
-        }
-    }else{
-        headers={
-            "accept": "application/json, text/plain, /",
-            "accept-language": "en-US,en;q=0.9",
-            "authorization": aion,
-            "Content-type": "application/json",
-            "sec-ch-ua-mobile": "?0",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-origin",
-            "x-goog-authuser":gdp.authUser
+    if(pi){
+        if(pi.split("||")[1].length>=5){
+            gdp.pageId=pi.split("||")[0];
+            headers={
+                "accept": "application/json, text/plain, /",
+                "accept-language": "en-US,en;q=0.9",
+                "authorization": aion,
+                "Content-type": "application/json",
+                "sec-ch-ua-mobile": "?0",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "x-goog-authuser":gdp.authUser,
+                "X-Goog-Pageid":gdp.pageId
+            }
+        }else{
+            headers={
+                "accept": "application/json, text/plain, /",
+                "accept-language": "en-US,en;q=0.9",
+                "authorization": aion,
+                "Content-type": "application/json",
+                "sec-ch-ua-mobile": "?0",
+                "sec-fetch-dest": "empty",
+                "sec-fetch-mode": "cors",
+                "sec-fetch-site": "same-origin",
+                "x-goog-authuser":gdp.authUser
+            }
         }
     }
+    },200);
     gdp.authUser=yt.config_.SESSION_INDEX;
     gdp.watchLayout=SRS.watchLayout.tValue;
     if($("[lang='ja-JP']")){
         usedLang="ja";
+    }else if($("[lang='pl-PL']")){
+        usedLang="pl";
+    }else{
+        usedLang="en";
     }
 	if($(".dark-mode")){
 		html.setAttribute("dark","");
@@ -8002,16 +8719,22 @@ function everyLoadNeo(x){
 	if($("#page.watch")){
 		getVideoSize();
 	}
-	if(STS.expPolymerComments==true){
+	if(sets.polymerComments==true){
 		polyComment=true;
 	}
 	if($("#page.watch")||$("#page.all_comments")){
-		if(STS.expAozoraComments == true || STS.expCosmicComments == true || STS.expPolymerComments == true){
+		if(STS.expAozoraComments==true||STS.expCosmicComments == true||sets.polymerComments==true){
 			var elm = "#watch-discussion .distiller_yt_instance";
 			waitForElement10(elm).then(function(elm){
 				if(canGo != false && $(".distiller_content")){
-					modComments(polyComment);
-					listenToComments(x);
+                    setTimeout(function(){
+                        modComments(polyComment);
+                        listenToComments(x);
+                    },100);
+                    setTimeout(function(){
+                        modComments(polyComment);
+                        listenToComments(x);
+                    },2000);
 				}
 			});
 		}
@@ -8026,7 +8749,7 @@ function everyLoadNeo(x){
             });
         }
 	}
-    if(SRS.layoutSelect.tValue=="sb2016"){
+    if(SRS.layoutSelect.tValue=="sb2016"||SRS.layoutSelect.tValue=="sb2017"||SRS.layoutSelect.tValue=="sb2024"){
         setTimeout(doSubscribeIcons,100);
     }
 }
@@ -8114,7 +8837,7 @@ function modComments(ver){
 				if(count == 1){
 					newHome.classList.add("no-likes");
 				}
-				if(STS.polymerGen2Comments == true){
+				if(sets.polyG2Comments==true){
 					newHome.appendChild(toMove);
 					newHome.appendChild(toMove2);
 					if(toMove5 !== null){
@@ -8223,7 +8946,7 @@ function modComments(ver){
 				if(i.parentNode.classList != "post"){
 					i.classList.add("startube-reply");
 				}else if(i.parentNode.parentNode.parentNode.querySelector(".link_action")){
-					if($("[lang='en']") && STS.simpleReply == true){
+					if($("[lang='en']")&&sets.simpleReply==true){
 						let count = i.parentNode.parentNode.parentNode.querySelector(".link_action_text").textContent;
 						if(count.includes("View all")){
 							count = count.split("View all ")[1];
@@ -8232,7 +8955,7 @@ function modComments(ver){
 						}
 						i.parentNode.parentNode.parentNode.querySelector(".link_action_text").textContent = count;
 					}
-					if(STS.polymerGen2Comments == true){
+					if(sets.polyG2Comments==true){
 						let cont = i.parentNode.parentNode.parentNode.querySelector(".loader");
 						let nE = document.createElement("div");
 						nE.classList.add("st-svg");
@@ -8259,17 +8982,17 @@ function modComments(ver){
 	})
 }
 function commentStateChange(sort){
-	if(sort == "sort"){
-		if(STS.expPolymerComments == true){
-			setTimeout(moveSortBtn, 10);
+	if(sort=="sort"){
+		if(sets.polymerComments==true){
+			setTimeout(moveSortBtn,10);
 		}
-		var elm = "#watch-discussion .load-more-button:not(.listening)";
+		var elm="#watch-discussion .load-more-button:not(.listening)";
 		waitForElement10(elm).then(function(elm){
-			if(canGo != false && $(".distiller_content")){
+			if(canGo!=false&&$(".distiller_content")){
 				setTimeout(function(){
 					modComments(polyComment);
 					listenToComments();
-				}, 500);
+				},500);
 			}
 		});
 	}else{
@@ -8345,7 +9068,6 @@ function grabData(){
 		let guideId = guideUrl.split("/channel/")[1];
 		gdp.myChanId = guideId;
 	}
-	//console.log(globalDataPoints);
 }
 function getSapisidhash()
 {
@@ -8593,7 +9315,7 @@ function numberWithCommas(x){
 		let c4h = d.header.c4TabbedHeaderRenderer;
 		let id = d.playlistOwnerId;
 		let shortId = id.split("UC")[1];
-		let plId = d.header.playlistHeaderRenderer.playlistId;
+		let plId = d.feedId.split("VL")[1];
 		let lastId;
 		let lastPlId;
 		let firstVideoId;
@@ -8614,7 +9336,6 @@ function numberWithCommas(x){
 			$("html").setAttribute("playlist-data-done","false");
 			let desc = "<i>No description available.</i>";
 			let header = d.header.playlistHeaderRenderer;
-			//console.log(header);
 			let name = header.ownerText.runs[1].text;
 			let playlistName = header.title.simpleText;
 			let viewCount = header.stats[1].simpleText;
@@ -8720,12 +9441,12 @@ function numberWithCommas(x){
 			getActiveTab(d).then(result => {
 				gdp.currChan.content = result;
 			});
-		}else{
+		} else{
 			$("html").setAttribute("channel-about-fetched","false");
 			let tvB = "";
 			if(gdp.currChan && lastId == id && c4h.banner){
 				tvB = gdp.currChan.header.tvBanner;
-			}else if(c4h.banner){
+			} else if(c4h.banner){
 				$("html").setAttribute("c4banner","");
 				let moddo = c4h.banner;
 				if(c4h.tvBanner){
@@ -8733,10 +9454,10 @@ function numberWithCommas(x){
 					tvB.forEach(i => {
 						tvB = i.url;
 					});
-				}else{
-					TheEXFetch(gdp.currChan == null,"nomodtv","browse","browseId",id);
+				} else{
+					TheEXFetch(gdp.currChan == null,"nomod","browse","browseId",id);
 				}
-			}else{
+			} else{
 				tvB = "none";
 				$("html").setAttribute("c4banner","");
 				$("html").removeAttribute("c4banner");
@@ -8759,21 +9480,20 @@ function numberWithCommas(x){
 			getActiveTab(d).then(result => {
 				gdp.currChan.content = result;
 			});
-            TheEXFetch(gdp.currChan == null,"nomod","browse","browseId",id);
 			let test = await(d.newChannelInfoRequest.then(function(r){
 				$("html").setAttribute("channel-about-fetched","true");
 				gdp.currChan.header.subscribeButton = r.fullAboutObject.subscribeButton;
 				if(r.fullAboutObject.videoCountText){
 					gdp.currChan.sidebar.videoCount = r.fullAboutObject.videoCountText;
 					gdp.currChan.sidebar.shortVideoCount = r.fullAboutObject.videoCountText.split(" v")[0];
-				}else{
+				} else{
 					gdp.currChan.sidebar.videoCount = "No videos";
 					gdp.currChan.sidebar.shortVideoCount = "0";
 				}
 				if(r.fullAboutObject.viewCountText){
 					gdp.currChan.header.viewCount = r.fullAboutObject.viewCountText;
 					gdp.currChan.header.shortViewCount = r.fullAboutObject.viewCountText.split(" v")[0];
-				}else{
+				} else{
 					gdp.currChan.header.viewCount = "No views";
 					gdp.currChan.header.shortViewCount = "0";
 				}
@@ -8782,7 +9502,7 @@ function numberWithCommas(x){
 				if(r.fullAboutObject.joinedDateText){
 					gdp.currChan.sidebar.joinedDate = r.fullAboutObject.joinedDateText.content;
 					gdp.currChan.sidebar.shortJoinedDate = r.fullAboutObject.joinedDateText.content.split("d ")[1];
-				}else{
+				} else{
 					gdp.currChan.sidebar.joinedDate = "Joined Dec 31, 1969";
 					gdp.currChan.sidebar.shortJoinedDate = "Dec 31, 1969";
 				}
@@ -10102,6 +10822,7 @@ Search
 		}else{
 			number = n;
 		}
+        if(gdp.currChan.content){
 		if(page == "search"){
 			gdp.currChan.content.forEach(i => {
 				if(i.itemSectionRenderer){
@@ -10240,10 +10961,17 @@ Search
 		}
 		if(page == "playlists"){
             gdp.currChan.content.forEach(i => {
-                /*if(i.lockupViewModel){
+                if(i.lockupViewModel){
                     i=i.lockupViewModel;
-					let href = i.rendererContext.commandContext.onTap.innertubeCommand.navigationEndpoint.commandMetadata.webCommandMetadata.url;
-                    let videoId = i.navigationEndpoint.watchEndpoint.videoId;
+					let href=i.rendererContext.commandContext.onTap.innertubeCommand.commandMetadata.webCommandMetadata.url;
+                    let wE=i.rendererContext.commandContext.onTap.innertubeCommand.watchEndpoint;
+                    let videoId=wE.videoId;
+                    let playlistId=wE.playlistId;
+                    let title=i.metadata.lockupMetadataViewModel.title.content;
+                    let thumbVM=i.contentImage.collectionThumbnailViewModel.primaryThumbnail.thumbnailViewModel;
+                    let thumb=thumbVM.image.sources[0].url;
+                    let vidCount=thumbVM.overlays[0].thumbnailOverlayBadgeViewModel.thumbnailBadges[0].thumbnailBadgeViewModel.text;
+                    let shortVidCount=vidCount.split(" v")[0];
                     let container = $("#c3-content-items");
                     let newElem = document.createElement("div");
                     newElem.classList = "channels-content-item yt-shelf-grid-item";
@@ -10251,13 +10979,13 @@ Search
 <div class="context-data-item yt-lockup clearfix yt-lockup-grid yt-lockup-playlist"><div class="yt-lockup-thumbnail"><a class="yt-pl-thumb-link" href="${href}"><span class="yt-pl-thumb yt-pl-thumb-fluid"><span class="video-thumb yt-thumb yt-thumb-185 yt-thumb-fluid"><span class="yt-thumb-default">
 	<span class="yt-thumb-clip">
 	  <span class="yt-thumb-clip-inner">
-		<img alt="Thumbnail" src="${i.thumbnail.thumbnails[0].url}" width="185">
+		<img alt="Thumbnail" src="${thumb}" width="185">
 		<span class="vertical-align"></span>
 	  </span>
 	</span>
   </span></span><span class="sidebar"><span class="video-count-wrapper yt-valign">
 	<span class="video-count-block yt-valign-container">
-		<span class="count-label"> ${i.videoCountShortText.simpleText} </span>
+		<span class="count-label"> ${shortVidCount} </span>
 		<span class="text-label">  videos </span>
 	</span>
   </span><span class="side-thumbs"><span class="sidethumb"><span class="video-thumb yt-thumb yt-thumb-43"><span class="yt-thumb-default">
@@ -10289,61 +11017,61 @@ Search
 	  </span>
 	</span>
   </span></span></span></span></span><span class="yt-pl-thumb-overlay"><span class="yt-pl-thumb-overlay-content"><img src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif">Play all</span></span></span></a></div><div class="yt-lockup-content"><h3 class="yt-lockup-title">
-<a class="yt-uix-sessionlink yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 g-hovercard" dir="ltr" title="${i.title.runs[0].text}" href="/playlist?list=${i.playlistId}"><span class="yt-ui-ellipsis-wrapper">${i.title.runs[0].text}</span></a>
+<a class="yt-uix-sessionlink yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 g-hovercard" dir="ltr" title="${title}" href="/playlist?list=${playlistId}"><span class="yt-ui-ellipsis-wrapper">${title}</span></a>
 </h3>
 <div class="yt-lockup-meta yt-ui-ellipsis yt-ui-ellipsis-2"><ul class="yt-lockup-meta-info">
-<li class="view-count-stat">${i.videoCountShortText.simpleText} videos</li>
+<li class="view-count-stat">${shortVidCount} videos</li>
 <li class="yt-lockup-deemphasized-text"></li></ul></div>
 </div></div>
 				`;
                     container.insertBefore(newElem,container.children[number]);
-                    let numberT = 0;
-                    newElem.querySelector(".yt-pl-thumb-link").data = {
-                        abstractVorElement: {
-                            navigationEndpoint: {
-                                watchEndpoint: {
-                                    videoId: videoId,
-                                    playlistId: i.playlistId,
+                    let numberT=0;
+                    newElem.querySelector(".yt-pl-thumb-link").data={
+                        abstractVorElement:{
+                            navigationEndpoint:{
+                                watchEndpoint:{
+                                    videoId:videoId,
+                                    playlistId:playlistId,
                                     canonicalBaseUrl: href
                                 },
-                                commandMetadata: {
-                                    webCommandMetadata: {
-                                        url: href
+                                commandMetadata:{
+                                    webCommandMetadata:{
+                                        url:href
                                     }
                                 }
                             }
                         }
                     }
-                    newElem.querySelector(".yt-uix-sessionlink").data = {
-                        abstractVorElement: {
-                            navigationEndpoint: {
-                                browseEndpoint: {
-                                    browseId: "VL" + i.playlistId
+                    newElem.querySelector(".yt-uix-sessionlink").data={
+                        abstractVorElement:{
+                            navigationEndpoint:{
+                                browseEndpoint:{
+                                    browseId:"VL"+playlistId
                                 },
-                                commandMetadata: {
-                                    webCommandMetadata: {
-                                        url: "/playlist?list=" + i.playlistId
+                                commandMetadata:{
+                                    webCommandMetadata:{
+                                        url:"/playlist?list="+playlistId
                                     }
                                 }
                             }
                         }
                     }
                     if(i.sidebarThumbnails){
-                        i.sidebarThumbnails.forEach(xl => {
-                            if(xl.empty == null){
-                                newElem.querySelectorAll(".sidethumb img")[numberT].src = xl.thumbnails[0].url;
+                        i.sidebarThumbnails.forEach(xl=>{
+                            if(xl.empty==null){
+                                newElem.querySelectorAll(".sidethumb img")[numberT].src=xl.thumbnails[0].url;
                             }else{
                                 newElem.querySelectorAll(".sidethumb")[numberT].classList.add("empty");
                             }
                             numberT++;
                         });
                     }else{
-                        newElem.querySelectorAll(".sidethumb").forEach(c => {
+                        newElem.querySelectorAll(".sidethumb").forEach(c=>{
                             c.classList.add("empty");
                         });
                     }
                 }
-				else */if(i.gridPlaylistRenderer){
+				else if(i.gridPlaylistRenderer){
 					i = i.gridPlaylistRenderer;
 					let i2 = i.contextItemData;
 					let href;
@@ -10588,6 +11316,7 @@ Search
 				number++;
 			});
 		}
+        }
 	}
 	function buildChannelPlayer(Bdata, number){
 		let id = Bdata.videoId;
@@ -10862,7 +11591,7 @@ Search
 			let time = i.lengthText.simpleText;
 			let thumbnail = i.thumbnail.thumbnails[2].url;
 			let newElem = document.createElement("li");
-			newElem.classList = "video-list-item related-list-item context-data-item";
+			newElem.classList = "video-list-item related-list-item context-data-item chan-name-clickable";
 			newElem.innerHTML = `
 			<a href="${href}" class="related-video yt-uix-contextlink yt-uix-sessionlink"><span class="ux-thumb-wrap contains-addto " href="${href}">    <span class="video-thumb yt-thumb yt-thumb-120"><span class="yt-thumb-default">
 	<span class="yt-thumb-clip">
@@ -11069,6 +11798,122 @@ Search
 							}
 						}
 					};
+		}
+        if(renderer == "relatedRichItem"){
+            if($("[video-id='"+i.videoId+"']")==null){
+			let i2 = i.contextItemData;
+					let href;
+					let viewCount;
+					let publishDate;
+					let title;
+					let thumbnail = i.thumbnail.thumbnails[1].url;
+            let time="";
+            let author;
+            let authorNav;
+            let authorId;
+                let pfp;
+                let authorHref;
+			href = i2.href;
+			viewCount = i2.viewCount;
+			publishDate = i2.publishDate;
+			title = i2.title;
+            if(i.lengthText){
+                time=i.lengthText.simpleText;
+            }
+            if(i.shortBylineText){
+                let aut=i.shortBylineText.runs[0];
+                author=aut.text;
+                authorNav=aut.navigationEndpoint;
+                authorId=aut.navigationEndpoint.browseEndpoint.browseId;
+                authorHref="/channel/"+authorId;
+            }
+                if(i.channelThumbnail){
+                    pfp=i.channelThumbnail.thumbnails[0].url;
+                }
+					if(i.thumbnail.thumbnails[3]){
+						thumbnail = i.thumbnail.thumbnails[3].url;
+					}
+							let container = $("#below-related-holder .watch-sidebar-section");
+					let newElem = document.createElement("div");
+					newElem.classList = "channels-content-item yt-shelf-grid-item yt-rich-lockup-item";
+					newElem.innerHTML = `
+				<div class="context-data-item yt-lockup clearfix yt-lockup-grid yt-rich-lockup-item yt-lockup-video">
+                <div class="yt-lockup-thumbnail"><a class="ux-thumb-wrap contains-addto " href="${href}">    <span class="video-thumb yt-thumb yt-thumb-185 yt-thumb-fluid"><span class="yt-thumb-default">
+	<span class="yt-thumb-clip">
+	  <span class="yt-thumb-clip-inner">
+		<img alt="Thumbnail" src="${thumbnail}" width="185">
+		<span class="vertical-align"></span>
+	  </span>
+	</span>
+  </span></span>
+<span class="video-time">${time}</span>
+<button class="yt-uix-button yt-uix-button-size-default yt-uix-button-default addto-button video-actions addto-watch-later-button yt-uix-button-size-small yt-uix-button-empty"><span class="yt-uix-button-content"><img src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"></span></button>
+</a></div><div class="yt-lockup-content">
+<a class="yt-lockup-user-photo" href="${authorHref}">
+				<img src="${pfp}">
+				</a>
+<div class="yt-lockup-details"><h3 class="yt-lockup-title">
+<a class="yt-uix-sessionlink yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 g-hovercard" dir="ltr" href="${href}"><span class="yt-ui-ellipsis-wrapper">${title}</span></a>
+</h3>
+<div class="yt-lockup-meta yt-ui-ellipsis yt-ui-ellipsis-2"><ul class="yt-lockup-meta-info">
+<li class="g-hovercard"><span class="run run-text">by </span><a class="yt-user-name" href="/channel/UC9ecwl3FTG66jIKA9JRDtmg">${author}</a></li>
+<li class="view-count-stat">${viewCount}</li>
+<li class="yt-lockup-deemphasized-text">${publishDate}</li></ul></div>
+</div>
+</div></div>
+				`;
+					container.insertBefore(newElem,container.children[number]);
+									newElem.querySelector(".yt-uix-sessionlink").setAttribute("title",title);
+            newElem.setAttribute("video-id",i.videoId);
+					newElem.querySelector("a").data = {
+						abstractVorElement: {
+							navigationEndpoint: {
+								watchEndpoint: {
+									videoId: i.videoId,
+									canonicalBaseUrl: href
+								},
+								commandMetadata: {
+									webCommandMetadata: {
+										url: href
+									}
+								}
+							}
+						}
+					};
+					newElem.querySelectorAll("a")[1].data = {
+						abstractVorElement: {
+							navigationEndpoint: {
+								watchEndpoint: {
+									videoId: i.videoId,
+									canonicalBaseUrl: href
+								},
+								commandMetadata: {
+									webCommandMetadata: {
+										url: href
+									}
+								}
+							}
+						}
+					};
+            newElem.querySelectorAll("a")[2].data={
+						abstractVorElement:authorNav
+					};
+            newElem.querySelector(".g-hovercard").data={
+                abstractVorElement: {
+							cardNavigationEndpoint: {
+								browseEndpoint: {
+									browseId:authorId,
+									canonicalBaseUrl:"/channel/"+authorId
+								},
+								commandMetadata: {
+									webCommandMetadata: {
+										url:"/channel/"+authorId
+									}
+								}
+							}
+						}
+            }
+            }
 		}
 		if(renderer == "featuredPlaylist"){
 			let id = i.contextItemData.playlistId;
@@ -11581,9 +12426,11 @@ ${date}
 </div>
 					`;
 			let rgi = $("#content").data.twoColumnBrowseResultsRenderer.items[0].brandedPageV2Renderer.tabs[1].tabRenderer.richGridInfo;
-			let chipBar0 = rgi.header.feedFilterChipBarRenderer.contents[0].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
-			let chipBar1 = rgi.header.feedFilterChipBarRenderer.contents[1].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
-			let chipBar2 = rgi.header.feedFilterChipBarRenderer.contents[2].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+            if(rgi){
+                let chipBar0 = rgi.header.feedFilterChipBarRenderer.contents[0].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                let chipBar1 = rgi.header.feedFilterChipBarRenderer.contents[1].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                let chipBar2 = rgi.header.feedFilterChipBarRenderer.contents[2].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+            }
 			if(!window.location.href.includes("view=0")){
 			}else{
 				$("#c3-sort-popular").addEventListener("click", function(){
@@ -11854,14 +12701,10 @@ function dupeDetect(){
 }
 function doStarTube(){
 document.addEventListener("V3_NAVITRONIC_STARTED", function(e){
-    //console.log(e.detail);
     if(e.detail.isPopstateCached==true){
         isPopstate=true;
-        //deleteTitleOnTop();
     }else{
         isPopstate=false;
-        //returnWatchElements();
-        //deleteTitleOnTop();
     }
 	setTimeout(checkContentMargin, 500);
 	setTimeout(checkContentMargin, 1500);
@@ -12061,7 +12904,7 @@ waitForElement10(elm).then(function(elm){
 function createThirdColumn(){
 	if(
 		$("#page.home")&&
-		STS.expAozoraHome==true&&
+		sets.aozoraHome==true&&
 		!window.location.href.includes("/feed")
     ){
 let theRecs="";
@@ -12108,7 +12951,7 @@ let theRecs="";
 }
 	function createShelfIcons(){
 		if(
-			STS.expPolymerStyles==true&&
+			sets.polymerStyles==true&&
 			!window.location.href.includes("/feed")
 		){
 			if($(".home")||$(".channel")){
@@ -12699,7 +13542,7 @@ function deleteTitleOnTop(){
 					`;
 					container.insertBefore(newElem, container.children[0]);
 					$("#logo-container").classList.add("startube");
-					if(STS.expOutlineIcons == true){
+					if(sets.outlineIcons == true){
 						$("#ringo-svg-logo svg").setAttribute("viewBox","0 0 200 56");
 						$("#ringo-svg-logo svg").style.marginTop = "-1px";
 					}
@@ -13462,7 +14305,7 @@ border-width: 12px;
 					newElem2.id = "st-masthead-expanded-startube-settings-button";
 					newElem2.classList = "masthead-expanded-menu-item";
 					newElem2.innerHTML = `
-					<a class="yt-uix-sessionlink">StarTube Settings</a>
+					<a class="yt-uix-sessionlink">${lang[usedLang].stsets}</a>
 					`;
 					container2.insertBefore(newElem2, container2.children[6]);
 					newElem2.addEventListener("click", showHideSettings);
@@ -13707,7 +14550,7 @@ border-width: 12px;
 	  </svg>
 										</div>
 									</div>
-									<span>StarTube Settings</span>
+									<span>${lang[usedLang].stsets}</span>
 								</a>
 								<a id="st-polymer-help" class="st-polymer-menu-item flex-bar" href="https://support.google.com/youtube">
 									<div class="st-svg st-polymer-menu-svg">
@@ -13772,7 +14615,7 @@ border-width: 12px;
 									<a id="st-account-menu-settings" href="/account" class="yt-uix-tooltip st-gear" title="YouTube settings">
 										<span></span>
 									</a>
-									<a id="st-account-menu-startube-settings" class="yt-uix-tooltip st-gear" title="StarTube settings">
+									<a id="st-account-menu-startube-settings" class="yt-uix-tooltip st-gear" title="${lang[usedLang].stsets}">
 										<span></span>
 									</a>
 									<a id="st-account-menu-v3-settings" class="yt-uix-tooltip st-gear" title="V3 settings">
@@ -14149,6 +14992,81 @@ border-width: 12px;
 				}
 			}
 	}
+    // EXfunct
+    function multiMod(w){
+        let list;
+        if(w=="related"){
+            var elm = "#page.watch .context-data-item";
+            waitForElement10(elm).then(function(elm){
+                if(canGo != false){
+                    list=document.querySelectorAll("#page.watch .context-data-item");
+                    list.forEach(i=>{
+                        if(i.querySelector(".chan-name")==null){
+                            let pfp;
+                            let data;
+                            let href;
+                            let author;
+                            if(i.querySelector(".g-hovercard")){
+                                author=i.querySelector(".g-hovercard .run:last-child").textContent;
+                            }
+                            if(i.data){
+                                if(i.data.compactVideoRenderer){
+                                    pfp=i.data.compactVideoRenderer.channelThumbnail.thumbnails[0].url;
+                                    data=i.data.compactVideoRenderer.contextItemData.authorNavigationEndpoint;
+                                    href="/channel/"+i.data.compactVideoRenderer.contextItemData.authorNavigationEndpoint.browseEndpoint.browseId;
+                                }
+                                data={
+                                    abstractVorElement:{
+                                        navigationEndpoint:data
+                                    }
+                                }
+                                i.querySelector(".g-hovercard").innerHTML=`
+                            <span class="run run-text">by </span>
+                            <span class="run run-text">
+                                    <a class="chan-name"></a>
+                            </span>
+                            `;
+                                let name=i.querySelector(".chan-name");
+                                name.textContent=author;
+                                name.data=data;
+                                name.href=href;
+                                i.classList.add("chan-name-clickable");
+                            }
+                        }
+                    });
+                    var elm="#watch-related .continuation_item_wrapper:not(.st-load-more)";
+                    waitForElement10(elm).then(function(elm){
+                        if(canGo!=false){
+                            if($("#watch-related .continuation_item_wrapper:not(.st-load-more)")&&$(".st-related-cont")==null){
+                                $("#watch-related .continuation_item_wrapper:not(.st-load-more)").classList.add("st-related-cont");
+                                $("#watch-related .continuation_item_wrapper:not(.st-load-more) button").addEventListener("click",function(){
+                                    var elm=".context-data-item:not(.chan-name-clickable) .related-video";
+                                    waitForElement10(elm).then(function(elm){
+                                        if(canGo!=false){
+                                            if($(".st-related-cont")){
+                                                $(".st-related-cont").classList.remove("st-related-cont");
+                                            }
+                                            multiMod("related");
+                                            setTimeout(function(){
+                                                multiMod("related");
+                                            },1000);
+                                            setTimeout(function(){
+                                                multiMod("related");
+                                            },2000);
+                                            setTimeout(function(){
+                                                multiMod("related");
+                                            },4000);
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    });
+
+                }
+            });
+        }
+    }
 	// EXfunct
 	function doRichGridHome(){
 		if($("#page.home") || $("[location='feed-recs']")){
@@ -14161,7 +15079,6 @@ border-width: 12px;
 					let url;
                     let allowContinue=true;
 					if(item.data.richItemRenderer){
-                        console.log(item.data.richItemRenderer);
                         let rndr="";
                         if(item.data.richItemRenderer.content.gridVideoRenderer){
                             rndr=item.data.richItemRenderer.content.gridVideoRenderer;
@@ -14189,7 +15106,6 @@ border-width: 12px;
 							navigationEndpoint: data
                         }
                     }
-                    console.log(allowContinue);
                     if(allowContinue==true){
                         let container = item.querySelector(".yt-lockup-content");
                         let newElem = document.createElement("a");
@@ -14347,39 +15263,39 @@ border-width: 12px;
 	}
     // EXfunct
 	function replaceFavicon(favi){
-		if(favi !== "2012"){
-			let icoElm = $("head [rel='icon']");
-			let timeout = 100;
-			if($("#st-favi") == null){
-				let clone = icoElm.cloneNode(true);
-				clone.id = "st-favi";
+		if(favi!=="2012"){
+			let icoElm=$("head [rel='icon']");
+			let timeout=100;
+			if($("#st-favi")==null){
+				let clone=icoElm.cloneNode(true);
+				clone.id="st-favi";
 				$("head").appendChild(clone);
 				icoElm.remove();
-				icoElm = clone;
-				timeout = 3000;
+				icoElm=clone;
+				timeout=3000;
 			}
 			setTimeout(function(){
 				switch (favi){
 					case "2024":
-						icoElm.href = "https://www.youtube.com/s/desktop/9fa451de/img/logos/favicon_32x32.png";
+						icoElm.href="https://www.youtube.com/s/desktop/9fa451de/img/logos/favicon_32x32.png";
 						break;
 					case "2024_old":
-						icoElm.href = "https://www.youtube.com/s/desktop/71ca99b3/img/logos/favicon.ico";
+						icoElm.href="https://www.youtube.com/s/desktop/71ca99b3/img/logos/favicon.ico";
 						break;
 					case "2017":
-						icoElm.setAttribute("href","https://www.youtube.com/s/desktop/daa4e47c/img/favicon_32x32.png");
+						icoElm.href="https://www.youtube.com/s/desktop/daa4e47c/img/favicon_32x32.png";
 						break;
 					case "2015":
-						icoElm.href = "https://s.ytimg.com/yts/img/favicon_32-vfl8NGn4k.png";
+						icoElm.href="https://s.ytimg.com/yts/img/favicon_32-vfl8NGn4k.png";
 						break;
 					case "2012":
-						icoElm.href = "https://s.ytimg.com/yts/img/favicon-vfldLzJxy.ico";
+						icoElm.href="https://s.ytimg.com/yts/img/favicon-vfldLzJxy.ico";
 						break;
 					case "2010":
-						icoElm.href = "https://s.ytimg.com/yt/favicon-vflZlzSbU.ico";
+						icoElm.href="https://s.ytimg.com/yt/favicon-vflZlzSbU.ico";
 						break;
 					case "2005":
-						icoElm.href = "https://s.ytimg.com/yt/favicon-vfl1123.ico";
+						icoElm.href="https://s.ytimg.com/yt/favicon-vfl1123.ico";
 						break;
 					default:
 				}
@@ -14388,11 +15304,11 @@ border-width: 12px;
 	}
     // EXfunct
 	function createFrostedGlass(){
-		if($("#yt-masthead-content") && $("#st-frosted-glass") == null){
-			let container=$("#masthead-positioner-container");
-			let newElem=document.createElement("div");
-			newElem.id="st-frosted-glass";
-			container.insertBefore(newElem,container.children[0]);
+		if($("#yt-masthead-content")&&$("#st-frosted-glass")==null){
+			let conta=$("#masthead-positioner-container");
+			let nE=document.createElement("div");
+			nE.id="st-frosted-glass";
+			conta.insertBefore(nE,conta.children[0]);
 		}
 	}
 	// EXfunct
@@ -14411,16 +15327,35 @@ border-width: 12px;
 		}
 	}
 	// EXfunct
-	function createCreateIcon(){
-		if($("#yt-masthead-content") && $("#startube-create-icon") == null){
+	function createCreateIcon(n){
+		if($("#yt-masthead-content") && $(".st-create") == null && layoutFactor>=367000){
 			let container = $("#yt-masthead-content");
 			let newElem = document.createElement("div");
-			newElem.id = "startube-create-icon";
-			newElem.setAttribute("class","st-show-svgs yt-uix-tooltip");
-			newElem.innerHTML=STH2.ST_SVG;
-			container.insertBefore(newElem, container.children[2]);
-            newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.create.f);
-            newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.create.o);
+            if(n==0){
+                newElem.id="startube-create-icon";
+                newElem.setAttribute("class","st-show-svgs yt-uix-tooltip st-create");
+                newElem.innerHTML=STH2.ST_SVG;
+                container.insertBefore(newElem, container.children[2]);
+                newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.create.f);
+                newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.create.o);
+            }
+            if(n==1){
+                newElem = document.createElement("button");
+                newElem.id="startube-create-btn";
+                newElem.setAttribute("class","st-show-svgs yt-uix-tooltip st-create st-poly-btn poly-create-button flex-bar yt-uix-button yt-uix-button-default yt-uix-button-size-default");
+                newElem.innerHTML=`
+                    <div class="st-svg poly-btn-icon">${STH0.SVG}</div>
+                    <div class="poly-btn-text">
+                        <span>${lang[usedLang].create}</span>
+                    </div>
+                    <span class="yt-uix-button-icon-wrapper poly-btn-arrow">
+							<img src="https://s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif" class="yt-uix-button-icon yt-uix-button-arrow">
+						</span>
+                `;
+                container.insertBefore(newElem, container.children[2]);
+                newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.addTo.f);
+                newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.addTo.o);
+            }
 			let container2 = $("#st-menus");
 			let newElem2 = document.createElement("div");
 			newElem2.id = "startube-create-menu";
@@ -14772,19 +15707,15 @@ border-width: 12px;
 			newElem.id = "startube-search-tumor";
 			newElem.setAttribute("class","st-svg thumb");
 			container.classList.add("startube-has-icon");
-			newElem.innerHTML = `
-			<div class="filled-icon">
-				<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope iron-icon"><g class="style-scope iron-icon">
-	<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" class="style-scope iron-icon"></path>
-  </g></svg>
-				</div>
-				<div class="outline-icon">
-				<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon">
-<g class="style-scope yt-icon"><path d="M20.87,20.17l-5.59-5.59C16.35,13.35,17,11.75,17,10c0-3.87-3.13-7-7-7s-7,3.13-7,7s3.13,7,7,7c1.75,0,3.35-0.65,4.58-1.71 l5.59,5.59L20.87,20.17z M10,16c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S13.31,16,10,16z" class="style-scope yt-icon"></path></g>
-</svg><!--css-build:shady-->
-				</div>
-				`;
+			newElem.innerHTML=STH0.SVG;
 			container.insertBefore(newElem, container.children[0]);
+            newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.search.f);
+            newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.search.o);
+            if(SRS.layoutSelect.tValue=="amst2024c"){
+                newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.prominentSearch.c);
+                newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.prominentSearch.o);
+                newElem.querySelector(".filled-icon path").setAttribute("fill-rule","evenodd");
+            }
 		}
 	}
 	// EXfunct
@@ -14795,17 +15726,15 @@ border-width: 12px;
 			newElem.id = "startube-search-icon";
 			newElem.setAttribute("class","st-svg thumb");
 			container.classList.add("startube-has-icon");
-			newElem.innerHTML = `
-				<div class="filled-icon">
-				<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope iron-icon"><g class="style-scope iron-icon">
-	<path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" class="style-scope iron-icon"></path>
-  </g></svg>
-				</div>
-				<div class="outline-icon">
-				<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon"><g class="style-scope yt-icon"><path d="M20.87,20.17l-5.59-5.59C16.35,13.35,17,11.75,17,10c0-3.87-3.13-7-7-7s-7,3.13-7,7s3.13,7,7,7c1.75,0,3.35-0.65,4.58-1.71 l5.59,5.59L20.87,20.17z M10,16c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S13.31,16,10,16z" class="style-scope yt-icon"></path></g></svg><!--css-build:shady-->
-				</div>
-				`;
+			newElem.innerHTML=STH0.SVG;
 			container.insertBefore(newElem, container.children[0]);
+            newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.search.f);
+            newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.search.o);
+            if(SRS.layoutSelect.tValue=="amst2024c"){
+                newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.prominentSearch.c);
+                newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.prominentSearch.o);
+                newElem.querySelector(".filled-icon path").setAttribute("fill-rule","evenodd");
+            }
 		}
 	}
 	// EXfunct
@@ -16241,11 +17170,11 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		if(($("#st-welcome-alert") == null) && ($("#alerts")) && closedWelcomeBanner == false && STS.showWelcomeBanner == true){
 			createWelcomeAlert();
 		}
-		if(window.location.href.includes("force-c4") && STS.expChannels3 == true){
+		if(window.location.href.includes("force-c4")&&sets.channels3==true){
 			forceC4 = true;
 			$("html").setAttribute("exp-channels3","");
 			$("html").removeAttribute("exp-channels3");
-		}else if(x === "x" && STS.expChannels3 == true && !window.location.href.includes("/post/")){
+		}else if(x==="x"&&sets.channels3==true&&!window.location.href.includes("/post/")){
 			forceC4 = false;
 			$("html").setAttribute("exp-channels3","");
 		}
@@ -16271,7 +17200,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 			var elm = ".feed-item-container:nth-child(5) img";
 			if(
 				x === "x" &&
-				STS.expAozoraHome == true
+				sets.aozoraHome==true
 			){
 				waitForElement10(elm).then(function(elm){
 					if(canGo != false){
@@ -16421,7 +17350,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 				`;
 				container.insertBefore(newElem,container.children[0]);
 			}
-			if($("#st-filter-icon") == null && STS.expPolymerStyles == true){
+			if($("#st-filter-icon")==null&&sets.polymerStyles==true){
 				let container = $(".search-header .yt-uix-button-content");
 				let newElem = document.createElement("div");
 				newElem.id = "st-filter-icon";
@@ -16510,7 +17439,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 				$("html").setAttribute("chan-loc","search");
 			}
 			grabChannelData(x);
-			if(STS.expPolymerChannels == true){
+			if(sets.polymerChannels==true){
 				if($(".channel-header-profile-image-container")){
 					var theBtn = document.querySelector(".channel-header-profile-image-container");
 					var newHome = document.querySelector('#c4-primary-header-contents');
@@ -16526,7 +17455,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					});
 				}
 			}
-			if(STS.expPolymerChannels == true){
+			if(sets.polymerChannels==true){
 				if($(".yt-subscription-button-subscriber-count-branded-horizontal") && $(".startube-poly-sub-count") == null){
 					var theBtn = document.querySelector(".yt-subscription-button-subscriber-count-branded-horizontal");
 					theBtn.textContent = theBtn.textContent + " subscribers";
@@ -16546,7 +17475,35 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					});
 				}
 			}
-			if(STS.expHomeTab == true){
+            if(sets.polymerChannels==true){
+                let srch="search";
+                if(SRS.layoutSelect.tValue=="amst2024c"){
+                    srch="prominentSearch";
+                }
+				if($("#channel-search")&&$("#channel-search svg")==null){
+					let conta=$("#channel-search .epic-nav-item");
+					let nE=document.createElement("div");
+					nE.classList="st-svg";
+                    nE.innerHTML=STH2.ST_SVG;
+					conta.append(nE);
+                    nE.querySelector(".filled-icon path").setAttribute("d",svgDefs[srch].f);
+                    nE.querySelector(".outline-icon path").setAttribute("d",svgDefs[srch].o);
+				}else{
+					var elm = "#channel-search";
+                    waitForElement10(elm).then(function(elm){
+                        if(canGo!=false&&$("#channel-search")&&$("#channel-search svg")==null){
+                            let conta=$("#channel-search .epic-nav-item");
+                            let nE=document.createElement("div");
+                            nE.classList="st-svg";
+                            nE.innerHTML=STH2.ST_SVG;
+                            conta.append(nE);
+                            nE.querySelector(".filled-icon path").setAttribute("d",svgDefs[srch].f);
+                            nE.querySelector(".outline-icon path").setAttribute("d",svgDefs[srch].o);
+                        }
+					});
+				}
+			}
+			if(sets.homeTab==true){
 				setTimeout(function(){
 				if($(".startube-tab") == null){
 					if($(".epic-nav-item-empty.selected")){
@@ -16683,6 +17640,119 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
             theDelay=300;
         }
         setTimeout(function(){
+            switch (SRS.layoutSelect.tValue){
+                case "stargazer2008_1":
+                    layoutFactor=150000;
+                    break;
+                case "stargazer2009_1":
+                    layoutFactor=180000;
+                    break;
+                case "stargazer2009_3":
+                    layoutFactor=200000;
+                    break;
+                case "aozora2011_2":
+                    layoutFactor=250000;
+                    break;
+                case "cosmic2012_1":
+                    layoutFactor=276000;
+                    break;
+                case "cosmic2012_2":
+                    layoutFactor=278000;
+                    break;
+                case "cosmic2012_3":
+                    layoutFactor=280000;
+                    break;
+                case "epic2012_2":
+                    layoutFactor=310000;
+                    break;
+                case "epic2012_1":
+                    layoutFactor=320000;
+                    break;
+                case "hh2013_1":
+                    layoutFactor=336000;
+                    break;
+                case "hh2013_2":
+                    layoutFactor=338000;
+                    break;
+                case "hh2013_3":
+                    layoutFactor=340000;
+                    break;
+                case "hh2013alt_3":
+                    layoutFactor=350000;
+                    break;
+                case "hh2014alt_1":
+                    layoutFactor=360000;
+                    break;
+                case "hh2014":
+                    layoutFactor=368000;
+                    break;
+                case "hhE2015":
+                    layoutFactor=370000;
+                    break;
+                case "hh2015":
+                    layoutFactor=372000;
+                    break;
+                case "hhE2016":
+                    layoutFactor=374000;
+                    break;
+                case "hhM2016":
+                    layoutFactor=375000;
+                    break;
+                case "hh2016":
+                    layoutFactor=376000;
+                    break;
+                case "hhE2017":
+                    layoutFactor=377000;
+                    break;
+                case "hh2017":
+                    layoutFactor=378000;
+                    break;
+                case "hh2018":
+                    layoutFactor=379000;
+                    break;
+                case "hh2024":
+                    layoutFactor=380000;
+                    break;
+                case "sb2016":
+                    layoutFactor=410000;
+                    break;
+                case "sb2017":
+                    layoutFactor=415000;
+                    break;
+                case "sb2024":
+                    layoutFactor=420000;
+                    break;
+                case "poly2016":
+                    layoutFactor=445000;
+                    break;
+                case "polyE2017":
+                    layoutFactor=450000;
+                    break;
+                case "poly2017":
+                    layoutFactor=455000;
+                    break;
+                case "poly2018":
+                    layoutFactor=460000;
+                    break;
+                case "poly2019":
+                    layoutFactor=465000;
+                    break;
+                case "poly2020":
+                    layoutFactor=470000;
+                    break;
+                case "poly2021":
+                    layoutFactor=475000;
+                    break;
+                case "poly2022":
+                    layoutFactor=480000;
+                    break;
+                case "amst2023_1":
+                    layoutFactor=490000;
+                    break;
+                case "amst2024c":
+                    layoutFactor=500000;
+                    break;
+            }
             switch (SRS.relatedTabs.tValue){
                 case "onNoSub":
                     $(".spitfire-body-container").setAttribute("rel-tabs","on-no-sub");
@@ -16713,6 +17783,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 case "watch5d":
                     $(".spitfire-body-container").setAttribute("wl","w5d");
                     break;
+                case "watch6":
+                    $(".spitfire-body-container").setAttribute("wl","w6");
+                    break;
                 case "watch7beta":
                     $(".spitfire-body-container").setAttribute("wl","w7beta");
                     html.setAttribute("exp-epic-watch7","");
@@ -16734,18 +17807,25 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                     break;
                 case "watch10beta":
                     $(".spitfire-body-container").setAttribute("wl","w10beta");
+					html.setAttribute("comment-teaser","");
                     break;
                 case "watch10teaser":
                     $(".spitfire-body-container").setAttribute("wl","w10finalteaser");
+                    html.setAttribute("comment-teaser","");
                     break;
                 case "watch10":
                     $(".spitfire-body-container").setAttribute("wl","w10final");
+                    break;
+                case "watch11":
+                    $(".spitfire-body-container").setAttribute("wl","w11");
                     break;
                 case "altWatch9":
                     $(".spitfire-body-container").setAttribute("wl","aw9");
                     break;
                 case "altWatch9Fancy":
                     $(".spitfire-body-container").setAttribute("wl","aw9f");
+					html.setAttribute("exp-watch9-sidebar-bus","");
+					html.setAttribute("exp-watch9-sticky-columns","");
                     break;
                 default:
             }
@@ -16774,10 +17854,350 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                     html.setAttribute("pl-ver","mv2-34");
                     break;
             }
+            switch (SRS.accountMenu.tValue){
+                case "mhh":
+                    createAccountMenu();
+                    html.setAttribute("exp-account-menu","");
+                    break;
+                case "poly":
+                    createAccountMenu();
+                    html.setAttribute("exp-account-menu","");
+                    html.setAttribute("exp-polymer-account-menu","");
+                    break;
+            }
+            switch (SRS.uploadBtn.tValue){
+                case "icon":
+                    createUploadIcon();
+                    html.setAttribute("upload-icon","");
+                    break;
+                case "create":
+                    createCreateIcon(0);
+                    html.setAttribute("create-icon","");
+                    break;
+                case "createBtn":
+                    createCreateIcon(1);
+                    html.setAttribute("create-btn","");
+                    break;
+            }
+            switch (SRS.appsBtn.tValue){
+                case "yt":
+                    createYouTubeApps();
+                    html.setAttribute("exp-youtube-apps","");
+                    break;
+                case "goog":
+                    createGoogleApps();
+                    html.setAttribute("exp-google-apps","");
+                    break;
+            }
+            if(SRS.guideAlwaysPinned.tValue=="on"){
+                guideAlwaysPinned();
+            }
+            if(SRS.relatedGrid.tValue=="on"){
+                html.setAttribute("exp-related-grid","");
+            }
+            if(SRS.frostedGlass.tValue=="on"){
+                $(".spitfire-body-container").setAttribute("frosted-glass","");
+                createFrostedGlass();
+            }
+            if(SRS.rndPlayer.tValue=="on"){
+                html.setAttribute("round-player","");
+            }
+            if(SRS.rndThumbs.tValue=="on"){
+                html.setAttribute("round-thumbs","");
+            }
+            if(SRS.siteFont.tValue=="roboto"){
+                html.setAttribute("exp-roboto","");
+            }
+            if(SRS.colorfulChannels.tValue=="on"){
+                html.setAttribute("exp-colorful-channels","");
+            }
+            if(SRS.playerSpinner.tValue=="material"){
+                html.setAttribute("mtrl-spin","");
+                setTimeout(createMaterialSpinner,100);
+            }
+            if(SRS.outlineIcons.tValue=="on"){
+                html.setAttribute("exp-outline-icons","");
+                sets.outlineIcons=true;
+            }
+            if(SRS.channelVersion.tValue=="c3"&&!window.location.href.includes("force-c4")){
+                html.setAttribute("exp-channels3","");
+                createChannels3Prep();
+            }
+            /*thesets*/
+            $(".spitfire-body-container").setAttribute("layout",SRS.layoutSelect.tValue);
+            html.setAttribute("ly",SRS.layoutSelect.tValue);
+            if(SRS.layoutSelect.tValue=="poly2022"||SRS.layoutSelect.tValue=="amst2023_1"||SRS.layoutSelect.tValue=="amst2024c"){
+                html.setAttribute("exp-secondary-search-icon","");
+                createSearchTumor();
+                sets.secondarySearchIcon=true;
+                html.setAttribute("simple-reply","");
+                sets.simpleReply=true;
+            }
+            if($("[layout^='hh']")==null){
+                html.setAttribute("hide-appbar","");
+            }
+            if($("[layout^='hh']")||$("[layout^='sb']")||$("[layout^='poly']")||$("[layout^='amst']")){
+                if($("[layout^='hh2013']")==null){
+                    html.setAttribute("exp-modern-playlists","");
+                    sets.modernPlaylists=true;
+                    html.setAttribute("exp-modern-playlist-thumbnails","");
+                    sets.modernPlaylistThumbnails=true;
+                }
+                if($("[layout^='hh2013']")==null&&$("[layout^='hh2014']")==null){
+					html.setAttribute("exp-home-tab","");
+                    sets.homeTab=true;
+					html.setAttribute("exp-modern-topbar","");
+                    sets.modernTopbar=true;
+                }
+                if($("[layout^='hh']")==null&&$("[layout^='sb']")==null){
+                    html.setAttribute("exp-polymer-channels","");
+                    sets.polymerChannels=true;
+                }
+                if($("[layout^='hh2013']")==null&&$("[layout^='hh2014']")==null&&$("[layout^='hhE2015']")==null&&$("[layout^='hh2015']")==null){
+					html.setAttribute("exp-modern-guide-button","");
+                    sets.modernGuideButton=true;
+                }
+            }
+            if($("[layout^='sb']")||$("[layout^='poly']")||$("[layout^='amst']")){
+                html.setAttribute("poly-comments","");
+                html.setAttribute("exp-polymer-comments","");
+                moveSortBtn();
+                sets.polymerComments=true;
+                html.setAttribute("exp-material-sign-in","");
+                sets.materialSignIn=true;
+                changeCommentPlaceholder(1);
+                changeCommentHeader(1);
+                setTimeout(createShelfIcons,200);
+                createNotifIcon();
+                createSearchIcon();
+                setTimeout(createNotifIcon,20000);
+                html.setAttribute("exp-modern-home","");
+                sets.modernHome=true;
+            }
+            if($("[layout^='poly']")||$("[layout^='amst']")){
+                html.setAttribute("exp-polymer-shell","");
+                sets.polymerShell=true;
+                html.setAttribute("poly-styles","");
+                html.setAttribute("exp-polymer-styles","");
+                sets.polymerStyles=true;
+            }
+            if($("[layout^='hh']")){
+                if($("[layout^='hh2013']")==null&&$("[layout^='hh2014']")==null&&$("[layout^='hhE2015']")==null&&$("[layout^='hh2015']")==null&&$("[layout^='hhE2016']")==null){
+                    html.setAttribute("exp-modern-notif-icon","");
+                    sets.modernNotifIcon=true;
+                    html.setAttribute("exp-modern-title","");
+                    sets.modernTitle=true;
+                }
+                if($("[layout^='hh2013']")==null&&$("[layout^='hh2014']")==null){
+					html.setAttribute("modern-styles","");
+					changeCommentPlaceholder(0);
+					changeCommentHeader(0);
+                    sets.modernStyles=true;
+                }
+                if($("[layout^='hh2013']")==null){
+					html.setAttribute("exp-light-channel-bar","");
+                    sets.lightChannelBar=true;
+                    html.setAttribute("exp-modern-home","");
+                    sets.modernHome=true;
+					html.setAttribute("modern-cards","");
+                }
+            }
+            if(SRS.gbarVersion.tValue=="material"){
+                html.setAttribute("exp-material-gbar","");
+            }
+            if($("[layout^='star']")){
+                html.setAttribute("stargazer-sub","");
+            }
+            if($("[layout^='stargazer2008']")){
+                html.setAttribute("stargazer-header","tabbed");
+                stargazerHeader(0);
+                searchButtonLowercase();
+            }
+            if($("[layout^='stargazer2009_1']")){
+                html.setAttribute("stargazer-header","bar");
+                stargazerHeader(1);
+                searchButtonLowercase();
+            }
+            if($("[layout^='stargazer2009_3']")){
+                html.setAttribute("stargazer-header","simple");
+                stargazerHeader(2);
+                searchButtonLowercase();
+            }
+            if($("[layout^='aoz']")||$("[layout^='star']")){
+                html.setAttribute("aozora-styles","");
+                html.setAttribute("exp-aozora-styles","");
+                sets.aozoraStyles=true;
+                html.setAttribute("exp-aozora-bg","");
+                sets.aozoraBG=true;
+                html.setAttribute("aozora-home","");
+                html.setAttribute("exp-aozora-home","");
+                sets.aozoraHome=true;
+            }
+            if($("[layout^='aoz']")){
+                html.setAttribute("aozora-header","");
+                html.setAttribute("exp-aozora-header","");
+                searchButtonLowercase();
+                sets.aozoraHeader=true;
+                html.setAttribute("exp-aozora-topbar-links","");
+                createAozoraTopbarLinks();
+                sets.aozoraTopbarLinks=true;
+            }
+            if($("[layout^='cos']")){
+                html.setAttribute("cosmic-styles","");
+                sets.cosmicStyles=true;
+                html.setAttribute("cosmic-buttons","");
+                sets.cosmicButtons=true;
+                html.setAttribute("exp-cosmic-guide-style","");
+                sets.cosmicGuideStyle=true;
+                html.setAttribute("exp-aozora-topbar-links","");
+                createAozoraTopbarLinks();
+                sets.aozoraTopbarLinks=true;
+                html.setAttribute("exp-cosmic-feeds-third-column","");
+				doThirdColumnVideosPrep();
+                html.setAttribute("aozora-home","");
+                html.setAttribute("exp-aozora-home","");
+                sets.aozoraHome=true;
+                html.setAttribute("topbar","cosmic");
+                html.setAttribute("cosmic-bg","");
+            }
+			if($("[layout^='cosmic2012_1']")){
+                html.setAttribute("exp-cosmic-banners","");
+                html.setAttribute("exp-cosmic-feeds-v1","");
+                doCosmicFeedHeader();
+            }
+            if($("[layout^='cosmic2012_2']")){
+                html.setAttribute("exp-cosmic-banners-v2","");
+                html.setAttribute("exp-cosmic-feeds-v2","");
+                doCosmicFeedHeader();
+            }
+            if($("[layout^='cosmic2012_3']")){
+                html.setAttribute("exp-cosmic-banners-v2","");
+                html.setAttribute("exp-cosmic-feeds-v3","");
+                doCosmicFeedHeader();
+            }
+            if($("[layout^='hhE2017']")||$("[layout^='hh2017']")||$("[layout^='hh2018']")||$("[layout^='hh2024']")){
+                html.setAttribute("exp-big-search-thumbs","");
+            }
+            if($("[layout^='epic2012_2']")){
+                html.setAttribute("cosmic-buttons","");
+                sets.cosmicButtons=true;
+                html.setAttribute("exp-aozora-topbar-links","");
+                createAozoraTopbarLinks();
+                sets.aozoraTopbarLinks=true;
+                html.setAttribute("topbar","cosmic");
+            }
+            if($("[layout^='epic2012_1']")||$("[layout^='epic2012_2']")){
+                html.setAttribute("exp-epic-styling","");
+                sets.epicStyling=true;
+                html.setAttribute("aozora-home","");
+                html.setAttribute("exp-aozora-home","");
+                sets.aozoraHome=true;
+            }
+            if($("[layout^='hh2013_1']")||$("[layout^='hh2013_2']")){
+                html.setAttribute("aozora-home","");
+                html.setAttribute("exp-aozora-home","");
+                sets.aozoraHome=true;
+            }
+            if($("[layout^='epic2012_2']")){
+                html.setAttribute("exp-epic-feeds","");
+                doCosmicFeedHeader();
+            }
+            if($("[layout^='epic2012_1']")){
+                html.setAttribute("topbar","epic");
+                html.setAttribute("exp-epic-watch7-flat","");
+            }
+            if($("[layout^='hh2013_1']")||$("[layout^='epic2012_1']")){
+                html.setAttribute("exp-classic-buttons","");
+            }
+            if($("[layout^='poly2016']")){
+                html.setAttribute("exp-beta-polymer-styles","");
+                sets.betaPolyStyles=true;
+                html.setAttribute("exp-early-polymer-shell","");
+                sets.earlyPolymerShell=true;
+            }
+            if($("[layout^='poly2017']")||$("[layout^='polyE2017']")){
+                html.setAttribute("exp-early-polymer-shell","");
+                sets.earlyPolymerShell=true;
+            }
+            if($("[layout^='amst']")){
+                html.setAttribute("exp-rounded-guide","");
+                sets.roundedGuide=true;
+                html.setAttribute("round-styles","");
+                sets.roundStyles=true;
+                html.setAttribute("poly-g3-colors","");
+                sets.polyG3Colors=true;
+            }
+            if($("[layout^='poly201']")){
+                html.setAttribute("exp-polymer-subscribe","");
+            }
+            if($("[layout^='poly202']")||$("[layout^='amst']")){
+                html.setAttribute("exp-polymer-subscribe","");
+                html.setAttribute("exp-polymer-gen2-subscribe","");
+                html.setAttribute("exp-bigger-search-thumbs","");
+                sets.polyG2Sub=true;
+            }
+            if($("[layout^='poly2021']")||$("[layout^='poly2022']")){
+                html.setAttribute("typography-spacing","");
+            }
+            if($("[layout^='poly2019']")||$("[layout^='poly202']")||$("[layout^='amst']")){
+                html.setAttribute("poly-g2-colors","");
+                html.setAttribute("exp-polymer-gen2-colors","");
+                sets.polyG2Colors=true;
+                html.setAttribute("poly-g2-comments","");
+                sets.polyG2Comments=true;
+            }
+            if($("[layout^='sb']")){
+                html.setAttribute("skybird","");
+                createSearchIcon();
+                createNotifIcon();
+                setTimeout(createNotifIcon,20000);
+                sets.sb=true;
+                html.setAttribute("skybird-cards","");
+                sets.sbCards=true;
+                html.setAttribute("exp-polymer-subscribe","");
+                html.setAttribute("exp-polymer-gen2-subscribe","");
+                sets.polyG2Sub=true;
+                html.setAttribute("modern-cards","");
+                sets.modernCards=true;
+            }
+            if($("[layout^='sb']")||$("[layout^='poly']")||$("[layout^='amst']")){
+                $("body .v3").setAttribute("poly-layout","");
+            }
+            if($("[layout^='poly']")||$("[layout^='amst']")){
+                $("body .v3").setAttribute("poly-layout","true");
+            }
+            if($("[layout^='hh2013_1']")==null&&$("[layout^='hh2013_2']")==null&&$("[layout^='star']")==null&&$("[layout^='epic']")==null&&$("[layout^='aoz']")==null&&$("[layout^='coz']")==null){
+                html.setAttribute("exp-skinny-subscribe","");
+            }
+            if($("[layout^='hh2013']")==null&&$("[layout^='hh2014alt']")==null){
+                html.setAttribute("exp-modern-upload","");
+            }
+            if($("[layout^='hh2013_1']")){
+                html.setAttribute("classic-styles","");
+            }
+            if($("[layout^='hhE2016']")||$("[layout^='hhM2016']")||$("[layout^='hh2016']")||$("[layout^='hhE2017']")||$("[layout^='hh2017']")||$("[layout^='hh2018']")||$("[layout^='hh2024']")||$("[layout^='poly']")||$("[layout^='ams']")){
+                html.setAttribute("exp-modern-search-icon","");
+            }
+            if($("[layout^='poly2022']")||$("[layout^='amst2023_1']")||$("[layout^='amst2024c']")){
+                if($("[wl^='w9']")==null){
+                html.setAttribute("exp-yt-sans-title","");
+                }
+            }
+            /*if($("[layout^='amst2024c']")){
+                html.setAttribute("create-btn","");
+                createCreateIcon(1);
+            }*/
+            html.setAttribute("config-watch7-sidebar-card-shadow","");
+            html.setAttribute("exp-comments-full-width","");
+            html.setAttribute("exp-fixed-share-icons","");
+            replaceFavicon(SRS.faviconSelect.tValue);
             $(".spitfire-body-container").setAttribute("search-text",SRS.searchText.tValue);
             $(".spitfire-body-container").setAttribute("rel-size",SRS.relatedSize.tValue);
-            $(".spitfire-body-container").setAttribute("layout",SRS.layoutSelect.tValue);
+            $(".spitfire-body-container").setAttribute("compact-date",SRS.compactDate.tValue);
             createNewWatchPrep();
+            if(SRS.compactName.tValue=="on"&&$("#page.watch")){
+                multiMod("related");
+            }
         },theDelay);
 		var arraNum=0;
 		arra.forEach(i=>{
@@ -16792,30 +18212,14 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					html.setAttribute("config-polymer-menu-v3-settings-button","");
 				}else if(value == true && name == "configCreateMenuV3SettingsButton"){
 					html.setAttribute("config-create-menu-v3-settings-button","");
-				}else if(value == true && name == "configWatch7SidebarCardShadow"){
-					html.setAttribute("config-watch7-sidebar-card-shadow","");
-                }else if(value == true && name == "expWatch9NoOwner"){
+				}else if(value == true && name == "expWatch9NoOwner"){
 					html.setAttribute("exp-watch9-no-owner", "");
 				}else if(value == true && name == "expWatch9TrueExpander"){
 					html.setAttribute("exp-watch9-true-expander","");
-				}else if(value == true && name == "expWatch9SidebarBus"){
-					html.setAttribute("exp-watch9-sidebar-bus","");
-				}else if(value == true && name == "expWatch9StickyColumns"){
-					html.setAttribute("exp-watch9-sticky-columns","");
-				}else if(value == true && name == "expGuideAlwaysPinned"){
-					guideAlwaysPinned();
 				}else if(value == true && name == "expWatch8NoMore"){
 					html.setAttribute("exp-watch8-no-more","");
 				}else if(value == true && name == "expSharrow"){
 					html.setAttribute("exp-sharrow","");
-				}else if(value == true && name == "expAlwaysShowCompactDate"){
-					html.setAttribute("exp-always-show-compact-date","");
-				}else if(value == true && name == "expNeverShowCompactDate"){
-					html.setAttribute("exp-never-show-compact-date","");
-				}else if(value == true && name == "expTwoColumnSearchResults"){
-					html.setAttribute("exp-two-column-search-results","");
-				}else if(value == true && name == "expRelatedGrid"){
-					html.setAttribute("exp-related-grid","");
 				}else if(value == true && name == "expMoveCountsToButtons"){
 					html.setAttribute("exp-move-counts-to-buttons","");
 					moveCountsToButtons();
@@ -16834,57 +18238,13 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					html.setAttribute("exp-classic-guide","");
 				}else if(value == true && name == "expClassicSubscribe"){
 					html.setAttribute("classic-sub","");
-				}else if(value == true && name == "expClassicStyles"){
-					html.setAttribute("classic-styles","");
-					html.setAttribute("exp-classic-styles","");
-				}else if(value == true && name == "expClassicLtod"){
+                }else if(value == true && name == "expClassicLtod"){
 					html.setAttribute("exp-classic-ltod","");
-				}else if(value == true && name == "expClassicButtons"){
-					html.setAttribute("exp-classic-buttons","");
-				}else if(value == true && name == "expBigSearchThumbs"){
-					html.setAttribute("exp-big-search-thumbs","");
-				}else if(value == true && name == "expBiggerSearchThumbs"){
-					html.setAttribute("exp-bigger-search-thumbs","");
 				}else if(value == true && name == "expNoVideosLink"){
 					html.setAttribute("exp-no-videos-link","");
-				}else if(value == true && name == "expSkinnySubscribe"){
-					html.setAttribute("exp-skinny-subscribe","");
-				}else if(value == true && name == "expModernStyles"){
-					html.setAttribute("modern-styles","");
-					changeCommentPlaceholder(0);
-					changeCommentHeader(0);
-				}else if(value == true && name == "modernCards"){
-					html.setAttribute("modern-cards","");
-				}else if(value == true && name == "sbStyles"){
-					html.setAttribute("skybird","");
-                    createSearchIcon();
-                    createNotifIcon();
-                    //doStuffForSkybird
-				}else if(value == true && name == "sbCardPhysics"){
-					html.setAttribute("skybird-cards","");
-				}else if(value == true && name == "expLightChannelBar"){
-					html.setAttribute("exp-light-channel-bar","");
-				}else if(value == true && name == "expModernNotifIcon"){
-					html.setAttribute("exp-modern-notif-icon","");
-				}else if(value == true && name == "expModernTopbar"){
-					html.setAttribute("exp-modern-topbar","");
-				}else if(value == true && name == "expModernUpload"){
-					html.setAttribute("exp-modern-upload","");
-				}else if(value == true && name == "expModernGuideButton"){
-					html.setAttribute("exp-modern-guide-button","");
-				}else if(value == true && name == "expModernSearchIcon"){
-					html.setAttribute("exp-modern-search-icon","");
-				}else if(value == true && name == "expModernTitle"){
-					html.setAttribute("exp-modern-title","");
 				}else if(value == true && name == "expModernGuide"){
 					html.setAttribute("exp-modern-guide","");
 					doModernGuide();
-				}else if(value == true && name == "expModernHome"){
-					html.setAttribute("exp-modern-home","");
-				}else if(value == true && name == "expModernPlaylists"){
-					html.setAttribute("exp-modern-playlists","");
-				}else if(value == true && name == "expModernPlaylistThumbnails"){
-					html.setAttribute("exp-modern-playlist-thumbnails","");
 				}else if(value == true && name == "expPlaylistRedBorder"){
 					html.setAttribute("exp-playlist-red-border","");
 				}else if(value == true && name == "expPlaylistTimestamps"){
@@ -16892,69 +18252,18 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 				}else if(value == true && name == "expTrueScrollableGuide"){
 					html.setAttribute("exp-true-scrollable-guide","");
 					doScrollableGuide();
-				}else if(value == true && name == "materialSpinner"){
-					html.setAttribute("mtrl-spin","");
-					setTimeout(createMaterialSpinner, 100);
-				}else if(value == true && name == "expGoogleApps"){
-					html.setAttribute("exp-google-apps","");
-					createGoogleApps();
-				}else if(value == true && name == "expCommentsFullWidth"){
-					html.setAttribute("exp-comments-full-width","");
 				}else if(value == true && name == "expNoByText"){
 					html.setAttribute("exp-no-by-text","");
-				}else if(value == true && name == "expAccountMenu"){
-					html.setAttribute("exp-account-menu","");
-					createAccountMenu();
 				}else if(value == true && name == "expStaticSite"){
 					html.setAttribute("static", "");
-				}else if(value == true && name == "expHideAppbar"){
-					html.setAttribute("hide-appbar", "");
-				}else if(value == true && name == "expEpicWatch7Flat"){
-					html.setAttribute("exp-epic-watch7-flat","");
-				}else if(value == true && name == "expEpicHeader"){
-					html.setAttribute("topbar","epic");
-				}else if(value == true && name == "expEpicStyling"){
-					html.setAttribute("exp-epic-styling","");
-				}else if(value == true && name == "expEpicFeeds"){
-					html.setAttribute("exp-epic-feeds","");
-					doCosmicFeedHeader();
-				}else if(value == true && name == "expCosmicHeader"){
-					html.setAttribute("topbar","cosmic");
-				}else if(value == true && name == "expCosmicBG"){
-					html.setAttribute("cosmic-bg","");
-				}else if(value == true && name == "expCosmicButtons"){
-					html.setAttribute("cosmic-buttons","");
-				}else if(value == true && name == "expCosmicStyles"){
-					html.setAttribute("cosmic-styles","");
-				}else if(value == true && name == "expCosmicBanners"){
-					html.setAttribute("exp-cosmic-banners","");
-				}else if(value == true && name == "expCosmicBannersV2"){
-					html.setAttribute("exp-cosmic-banners-v2","");
 				}else if(value == true && name == "expCosmicComments"){
 					html.setAttribute("exp-legacy-comments","");
 					html.setAttribute("exp-cosmic-comments","");
 				}else if(value == true && name == "expCosmicGuideLayout"){
 					html.setAttribute("exp-cosmic-guide-layout","");
 					createCosmicGuide();
-				}else if(value == true && name == "expCosmicGuideStyle"){
-					html.setAttribute("exp-cosmic-guide-style","");
-				}else if(value == true && name == "expCosmicFeedsV1"){
-					html.setAttribute("exp-cosmic-feeds-v1","");
-					doCosmicFeedHeader();
-				}else if(value == true && name == "expCosmicFeedsV2"){
-					html.setAttribute("exp-cosmic-feeds-v2","");
-					doCosmicFeedHeader();
-				}else if(value == true && name == "expCosmicFeedsV3"){
-					html.setAttribute("exp-cosmic-feeds-v3","");
-					doCosmicFeedHeader();
-				}else if(value == true && name == "expCosmicFeedsThirdColumn"){
-					html.setAttribute("exp-cosmic-feeds-third-column","");
-					doThirdColumnVideosPrep();
 				}else if(value == true && name == "expNotifSquare"){
 					html.setAttribute("notif-square","");
-				}else if(value == true && name == "expChannels3" && !window.location.href.includes("force-c4")){
-					html.setAttribute("exp-channels3","");
-					createChannels3Prep();
 				}else if(value == true && name == "expChannels3BGVerticalRepeat" && !window.location.href.includes("force-c4")){
 					html.setAttribute("exp-channels3-bg-vertical-repeat","");
 				}else if(value == true && name == "expChannels3BGHorizontalRepeat" && !window.location.href.includes("force-c4")){
@@ -16969,134 +18278,31 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					html.setAttribute("guide","no");
 				}else if(value == true && name == "expGuideOnFeedsOnly"){
 					html.setAttribute("guide","feeds");
-				}else if(value == true && name == "expAozoraHome"){
-					html.setAttribute("aozora-home","");
-					html.setAttribute("exp-aozora-home","");
-				}else if(value == true && name == "expAozoraHeader"){
-					html.setAttribute("aozora-header","");
-					html.setAttribute("exp-aozora-header","");
-					searchButtonLowercase();
-				}else if(value == true && name == "expAozoraBG"){
-					html.setAttribute("exp-aozora-bg","");
-				}else if(value == true && name == "expAozoraStyles"){
-					html.setAttribute("aozora-styles","");
-					html.setAttribute("exp-aozora-styles","");
 				}else if(value == true && name == "expAozoraComments"){
 					html.setAttribute("exp-legacy-comments","");
 					html.setAttribute("exp-aozora-comments","");
-				}else if(value == true && name == "expAozoraSubscribe"){
-					html.setAttribute("exp-aozora-subscribe","");
-				}else if(value == true && name == "expAozoraTopbarLinks"){
-					html.setAttribute("exp-aozora-topbar-links","");
-					createAozoraTopbarLinks();
-				}else if(value == true && name == "expAozoraSearch"){
+                }else if(value == true && name == "expAozoraSearch"){
 					html.setAttribute("aozora-search","");
-				}else if(value == true && name == "expStargazerTabbedHeader"){
-					html.setAttribute("stargazer-header","tabbed");
-					stargazerHeader(0);
-					searchButtonLowercase();
-				}else if(value == true && name == "expStargazerBarHeader"){
-					html.setAttribute("stargazer-header","bar");
-					stargazerHeader(1);
-					searchButtonLowercase();
-				}else if(value == true && name == "expStargazerSimpleHeader"){
-					html.setAttribute("stargazer-header","simple");
-					stargazerHeader(2);
-					searchButtonLowercase();
-				}else if(value == true && name == "expStargazerSubscribe"){
-					html.setAttribute("stargazer-sub","");
-				}else if(value == true && name == "expHomeTab"){
-					html.setAttribute("exp-home-tab","");
-				}else if(value == true && name == "expRoboto"){
-					html.setAttribute("exp-roboto","");
 				}else if(value == true && name == "expCenteredSearch"){
 					html.setAttribute("exp-centered-search","");
 				}else if(value == true && name == "expBigSearch"){
 					html.setAttribute("exp-big-search","");
-				}else if(value == true && name == "expSecondarySearchIcon"){
-					html.setAttribute("exp-secondary-search-icon","");
-					createSearchTumor();
 				}else if(value == true && name == "expMaterialSearch"){
 					html.setAttribute("exp-material-search","");
 					createSearchIcon();
-				}else if(value == true && name == "expPolymerAccountMenu"){
-					html.setAttribute("exp-account-menu","");
-					html.setAttribute("exp-polymer-account-menu","");
-					createAccountMenu();
-				}else if(value == true && name == "expPolymerShell"){
-					html.setAttribute("exp-polymer-shell","");
-					createSearchIcon();
-					createNotifIcon();
-				}else if(value == true && name == "expEarlyPolymerShell"){
-					html.setAttribute("exp-polymer-shell","");
-					html.setAttribute("exp-early-polymer-shell","");
-					createNotifIcon();
-				}else if(value == true && name == "expEarlyPolymerGuide"){
-					html.setAttribute("exp-early-polymer-guide","");
-				}else if(value == true && name == "expPolymerGen2Colors"){
-					html.setAttribute("poly-g2-colors","");
-					html.setAttribute("exp-polymer-gen2-colors","");
-				}else if(value == true && name == "polymerGen2Comments"){
-					html.setAttribute("poly-g2-comments","");
-				}else if(value == true && name == "simpleReply"){
-					html.setAttribute("simple-reply","");
-				}else if(value == true && name == "typographySpacing"){
-					html.setAttribute("typography-spacing","");
-				}else if(value == true && name == "expPolymerSubscribe"){
-					html.setAttribute("exp-polymer-subscribe","");
-				}else if(value == true && name == "expPolymerGen2Subscribe"){
-					html.setAttribute("exp-polymer-subscribe","");
-					html.setAttribute("exp-polymer-gen2-subscribe","");
-				}else if(value == true && name == "expPolymerStyles"){
-					html.setAttribute("poly-styles","");
-					html.setAttribute("exp-polymer-styles","");
-					changeCommentPlaceholder(1);
-					changeCommentHeader(1);
-					setTimeout(createShelfIcons,200);
-				}else if(value == true && name == "expBetaPolymerStyles"){
-					html.setAttribute("exp-beta-polymer-styles","");
-				}else if(value == true && name == "expPolymerChannels"){
-					html.setAttribute("exp-polymer-channels","");
-				}else if(value == true && name == "expColorfulChannels"){
-					html.setAttribute("exp-colorful-channels","");
-				}else if(value == true && name == "expPolymerComments"){
-					html.setAttribute("poly-comments","");
-					html.setAttribute("exp-polymer-comments","");
-					moveSortBtn();
-				}else if(value == true && name == "expPolymerTooltips"){
-					html.setAttribute("exp-polymer-tooltips","");
-				}else if(value == true && name == "expTopbarShadow"){
+                }else if(value == true && name == "expTopbarShadow"){
 					html.setAttribute("exp-topbar-shadow","");
-				}else if(value == true && name == "expMaterialSignIn"){
-					html.setAttribute("exp-material-sign-in","");
 				}else if(value == true && name == "expRichGridHome"){
 					html.setAttribute("exp-rich-grid-home","");
                     setTimeout(doRichGridHome,200);
-				}else if(value == true && name == "expCommentsTeaser"){
-					html.setAttribute("comment-teaser","");
 				}else if(value == true && name == "expSegmentedLtod"){
 					html.setAttribute("segmented-ltod","");
 				}else if(value == true && name == "expRoundedSubscribe"){
 					html.setAttribute("round-sub","");
 				}else if(value == true && name == "expBlackSubscribe"){
 					html.setAttribute("black-sub","");
-				}else if(value == true && name == "expRoundedThumbs"){
-					html.setAttribute("round-thumbs","");
-				}else if(value == true && name == "expRoundedPlayer"){
-					html.setAttribute("round-player","");
 				}else if(value == true && name == "expRoundedSearch"){
 					html.setAttribute("round-search","");
-				}else if(value == true && name == "expRoundedGuide"){
-					html.setAttribute("exp-rounded-guide","");
-				}else if(value == true && name == "expRoundedStyles"){
-					html.setAttribute("round-styles","");
-				}else if(value == true && name == "expFrostedGlass"){
-					html.setAttribute("frosted-glass","");
-                    createFrostedGlass();
-				}else if(value == true && name == "expPolymerGen3Colors"){
-					html.setAttribute("poly-g3-colors","");
-				}else if(value == true && name == "expYTSansTitle"){
-					html.setAttribute("exp-yt-sans-title","");
 				}else if(value == true && name == "expWMRButtonsLowercase"){
 					html.setAttribute("exp-wmr-buttons-lowercase","");
 				}else if(value == true && name == "expWMRAddTo"){
@@ -17105,48 +18311,19 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					html.setAttribute("exp-wmr-no-save-text","");
 				}else if(value == true && name == "expWMRNoShareText"){
 					html.setAttribute("exp-wmr-no-share-text","");
-				}else if(value == true && name == "expOutlineIcons"){
-					html.setAttribute("exp-outline-icons","");
 				}else if(value == true && name == "expRoundedTopbarPfp"){
 					html.setAttribute("exp-rounded-topbar-pfp","");
-				}else if(value == true && name == "expUploadIcon"){
-					html.setAttribute("upload-icon","");
-					createUploadIcon();
-				}else if(value == true && name == "expCreateIcon"){
-					html.setAttribute("create-icon","");
-					createCreateIcon();
-				}else if(value == true && name == "expYouTubeApps"){
-					html.setAttribute("exp-youtube-apps","");
-					createYouTubeApps();
-				}else if(value == true && name == "expRingo2"){
+                }else if(value == true && name == "expRingo2"){
 					html.setAttribute("ringo2","");
 					html.setAttribute("exp-ringo2","");
 					doGuideIcons("ringo2");
 				}else if(value == true && name == "expRingo2Gradients"){
 					html.setAttribute("ringo2-gradients","");
-                }else if(value == true && name == "favi24"){
-					replaceFavicon("2024");
-				}else if(value == true && name == "favi24O"){
-					replaceFavicon("2024_old");
-				}else if(value == true && name == "favi17"){
-					replaceFavicon("2017");
-				}else if(value == true && name == "favi15"){
-					replaceFavicon("2015");
-				}else if(value == true && name == "favi12"){
-					replaceFavicon("2012");
-				}else if(value == true && name == "favi10"){
-					replaceFavicon("2010");
-				}else if(value == true && name == "favi05"){
-					replaceFavicon("2005");
-				}else if(value == true && name == "expHideYoodles"){
+                }else if(value == true && name == "expHideYoodles"){
 					html.setAttribute("exp-hide-yoodles","");
 					hideYoodles();
-				}else if(value == true && name == "expFixedShareIcons"){
-					html.setAttribute("exp-fixed-share-icons","");
 				}else if(value == true && name == "expFixedXIcon"){
 					html.setAttribute("exp-fixed-x-icon","");
-				}else if(value == true && name == "expMaterialGbar"){
-					html.setAttribute("exp-material-gbar","");
 				}
 			});
 		});
@@ -17290,7 +18467,7 @@ container76.insertBefore(newElem76, container76.children[0]);
 								</g>
 							</svg>
 	</div>
-	<span>StarTube Settings</span>
+	<span>${lang[usedLang].stsets}</span>
 			</div>
 
 `;
@@ -17335,7 +18512,7 @@ margin-bottom: 4px;
 }
 	</style>
 	<button class="" id="st-settings-button">
-		<span>StarTube Settings</span>
+		<span>${lang[usedLang].stsets}</span>
 	</button>
 
 `;
@@ -17343,11 +18520,13 @@ margin-bottom: 4px;
 	$("#st-settings-button").addEventListener("click", showHideSettings);
 }
 	function createSettingsMenu(){
-	let cont=$('.spitfire-body-container.v3');
+	let conta=$('.spitfire-body-container.v3');
 	let nE=document.createElement("div");
 	nE.id="startube-settings-window-entity";
 	nE.classList="hid astronomical-settings-refresh astro-settings flex-bar";
 	nE.innerHTML=`
+<div id="st-fancy-fx">
+</div>
 <style>
 #startube-settings-window-entity{
 position:fixed;
@@ -17390,7 +18569,7 @@ overflow:hidden
 }
 50%{
 width:6px;
-height:80vh
+height:90vh
 }
 70%{
 width:6px
@@ -17418,7 +18597,7 @@ width:1200px
 height:5px
 }
 100%{
-height:80vh;
+height:90vh;
 overflow:hidden
 }
 }
@@ -17441,7 +18620,7 @@ position:relative;
 z-index:19;
 width:1200px;
 margin:0 auto;
-height:80vh;
+height:90vh;
 background:#fff;
 border:1px solid #c5c5c5;
 box-shadow:0 0 15px rgba(0,0,0,.18);
@@ -17566,7 +18745,7 @@ font-size:16px;
 color:#c2463c
 }
 .astro-scroller{
-max-height:calc(80vh - 99px);
+max-height:calc(90vh - 99px);
 overflow-y:auto;
 overscroll-behavior:contain
 }
@@ -17624,7 +18803,7 @@ padding: 10px 0;
 }
 #startube-settings-content {
 width: 1058px;
-height: calc(80vh - 15px);
+height: calc(90vh - 15px);
 }
 
 
@@ -17635,8 +18814,13 @@ opacity: 0;
 position: fixed;
 pointer-events: none;
 }
-#startube-result-count {
-padding: 0 10px 10px;
+#startube-result-count{
+padding:0 10px 10px
+}
+#st-adv-dep-warn{
+padding:10px;
+background:#ffc;
+border-block:1px solid #cc0
 }
 
 .astro-sidebar-text {
@@ -17667,6 +18851,9 @@ font-weight: bold;
 [exp-roboto] .astro-sidebar-item.active {
 font-weight: 500;
 }
+.astro-checkbox-setting:first-of-type .astro-setting-top{
+  border-top:none
+}
 /*
 #startube-astro-settings {
 width: fit-content;
@@ -17692,6 +18879,7 @@ padding: 3px 0;
 padding: 10px;
 border-bottom: 1px solid #ccc;
 }
+#cfgWinDen,
 #channelVersion,
 #faviconSelect,
 #guideNavToFeed,
@@ -17699,9 +18887,12 @@ border-bottom: 1px solid #ccc;
 #startube-config-overview,
 #playerVersion,
 #gbarVersion,
-#startube-layout-mode,
+#layoutMode,
 #astro-scroller .astro-section:first-child {
 padding-top: 0;
+}
+#startube-config-overview{
+display:none
 }
 .astro-radio {
 box-shadow: inset 0 0 1px rgba(0,0,0,.05);
@@ -17884,11 +19075,26 @@ border-color: #333;
 background: linear-gradient(to top,#181818 0, #2c2c2c 100%);
 border-color: #333;
 }
-.dark-mode .astro-radio {
-background: #222;
+#startube-settings-sidebar{
+  position:relative
 }
-.dark-mode .astro-radio-setting[checked="true"] .astro-radio {
-background-color: #ccc;
+#startube-settings-sidebar-below{
+  position:absolute;
+  z-index:1;
+  bottom:45px;
+  width:100%
+}
+.astro-link{
+  color:#2793e6
+}
+.astro-link:hover{
+  text-decoration:underline
+}
+.dark-mode .astro-radio{
+background:#222
+}
+.dark-mode .astro-radio-setting[checked="true"] .astro-radio{
+background-color:#ccc
 }
 .dark-mode .astro-setting-top {
 background: #222;
@@ -17910,1918 +19116,251 @@ border-color: #333;
 .dark-mode .astro-checkbox {
 filter: invert(1);
 }
+@keyframes radioBump{
+0%{
+  width:0;
+  height:0;
+  margin:10px 0 0 10px;
+}
+80%{
+  width:12px;
+  height:12px;
+  margin:4px 0 0 4px;
+}
+100%{
+  width:10px;
+  height:10px;
+  margin:5px 0 0 5px;
+}
+}
+@keyframes radioBumpC{
+0%{
+  width:0;
+  height:0;
+  margin:6px 0 0 6px;
+}
+80%{
+  width:10px;
+  height:10px;
+  margin:2px 0 0 2px;
+}
+100%{
+  width:8px;
+  height:8px;
+  margin:3px 0 0 3px;
+}
+}
+@keyframes slideupCont{
+0%{
+  overflow-y:hidden
+}
+100%{
+  overflow-y:hidden
+}
+}
+@keyframes slideup{
+0%{
+  transform:translateY(100px)
+}
+20%{
+  transform:translateY(100px)
+}
+100%{
+  transform:translateY(0px)
+}
+}
+.astro-radio{
+  background:none!important
+}
+[cfgwinden="0"] .astro-radio{
+  height:20px;
+  width:20px;
+  margin-right:6px
+}
+.astro-radio-setting .astro-radio::after{
+  width:8px;
+  height:8px;
+  background:linear-gradient(135deg,var(--666),var(--333));
+  background:var(--666);
+  display:block;
+  content:"";
+  border-radius:50%;
+  margin:3px 0 0 3px;
+  opacity:0;
+  transition-duration:.1s
+}
+[cfgwinden="0"] .astro-radio-setting .astro-radio::after{
+  width:10px;
+  height:10px;
+  margin:5px 0 0 5px
+}
+.astro-radio-setting[checked="true"] .astro-radio::after{
+  opacity:1;
+  animation:.25s radioBump 1
+}
+[cfgwinden="1"] .astro-radio-setting[checked="true"] .astro-radio::after{
+  animation:.25s radioBumpC 1
+}
+.astro-radio-setting[checked="true"]:hover .astro-radio::after{
+  background:#dd5044
+}
+[cfgwinden="0"] .astro-radio-setting{
+  padding:3px 0;
+}
+.astro-sidebar-item,
+.astro-radio-setting{
+  opacity:0.75
+}
+.astro-sidebar-item:hover,
+.astro-sidebar-item.active,
+.astro-radio-setting[checked="true"],
+.astro-radio-setting:hover{
+  opacity:0.9
+}
+.astro-sidebar-item.active:hover,
+.astro-sidebar-item:active,
+.astro-radio-setting:active,
+.astro-radio-setting[checked="true"]:hover{
+  opacity:1
+}
+.astro-title h4{
+  color:var(--333)
+}
+[cfgwinden="0"] .astro-title h4{
+  font-size:15px;
+}
+[cfgwinden="0"] .astro-description{
+  font-size:13px;
+  margin-bottom:6px
+}
+.astro-sector-title h5{
+  color:#dd5044
+}
+[cfgwinden="0"] .astro-sector-title h5{
+  font-size:13px;
+  padding:6px 0;
+}
+[cfgwinden="0"] .astro-minitext{
+  font-size:12px;
+  margin-left:6px
+}
+.dark-mode .astro-minitext{
+  color:#ccc
+}
+[cfgwinden="0"] .astro-sidebar-item{
+  width:180px;
+  height:32px
+}
+.astro-sidebar-item:not(.active):hover{
+  background:#fcfcfc;
+  border-color:#d4d4d4
+}
+.astro-sidebar-item.active{
+  background:#f4f4f4
+}
+.dark-mode .astro-sidebar-item:hover{
+  background:#191919;
+  border-color:#333
+}
+.dark-mode .astro-sidebar-item.active{
+  background:#222;
+  text-shadow:0.5px 0 0 #000
+}
+.astro-topbar{
+  padding:17px 15px
+}
+.astro-refresh-button,
+.astro-x-button{
+  top:13px
+}
+.astro-radio-setting:hover .astro-radio{
+  border-color:#dd5044
+}
+#startube-settings-sidebar-inner{
+  max-height:66%;
+  overflow:auto
+}
+
+.astro-title-bar{
+  animation:.5s slideupCont 1
+}
+.astro-options{
+  animation:.5s slideup 1
+}
 	</style>
-	<div id="startube-settings-fence" class="st-fence">
-	</div>
-	<div id="startube-settings-window" loading-config="false" changes-made="false">
-		<div id="startube-settings-window-inner">
-			<div id="startube-settings-topbar" class="astro-topbar flex-bar">
-				<div class="astro-topbar-left">
-					<span>StarTube Settings</span>
-					<span class="astro-subtitle">Version ${currStarVer}</span>
-				</div>
-				<div class="astro-topbar-right flex-bar">
-					<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default none" id="refreshPage2">
-						<span>Refresh</span>
-					</button>
-					<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default none" id="exitSettings2">
-						<span>OK</span>
-					</button>
-					<div class="astro-moving-text" id="astro-saved-changes">
-						<div class="astro-moving-text-inner">
-							<span>Your changes were automatically saved. Refresh the page for them to apply.</span>
-						</div>
-					</div>
-					<button class="astro-refresh-button yt-uix-tooltip" id="refreshPage" title="Refresh page">
-					</button>
-					<button class="astro-x-button yt-uix-tooltip" id="exitSettings" title="Close">
-						<div class="astro-x-icon">
-						</div>
-					</button>
-				</div>
-			</div>
-			<div id="startube-settings-below" class="flex">
-				<div id="startube-settings-sidebar" class="astro-sidebear">
-					<div id="startube-settings-sidebar-inner" class="astro-sidebear">
-						<div class="astro-sidebar-text">
-							<h3>Misc</h3>
-						</div>
-						<div id="st-astro-config" class="astro-sidebar-item flex-bar" p="config">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Config</span>
-							</div>
-						</div>
-						<div class="astro-sidebar-text">
-							<h3>Site</h3>
-						</div>
-						<div id="st-astro-layout" class="astro-sidebar-item flex-bar active" p="layout">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Layout</span>
-							</div>
-						</div>
-						<div id="st-astro-misc" class="astro-sidebar-item flex-bar" p="misc">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Misc</span>
-							</div>
-						</div>
-						<div id="st-astro-topbar" class="astro-sidebar-item flex-bar" p="topbar">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Topbar</span>
-							</div>
-						</div>
-						<div id="st-astro-guide" class="astro-sidebar-item flex-bar" p="guide">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Guide</span>
-							</div>
-						</div>
-						<div id="st-astro-player" class="astro-sidebar-item flex-bar" p="player">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Player</span>
-							</div>
-						</div>
-						<div id="st-astro-watch" class="astro-sidebar-item flex-bar" p="watch">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Watch page</span>
-							</div>
-						</div>
-						<div id="st-astro-channel" class="astro-sidebar-item flex-bar" p="channel">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Channel page</span>
-							</div>
-						</div>
-						<div id="st-astro-advanced" class="astro-sidebar-item flex-bar" p="advanced">
-							<div class="astro-sidebar-item-inner flex-bar">
-								<span>Advanced</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div id="startube-settings-content" class="astro-content">
-					<div class="multistate-handler" state="layout" multistate-id="">
-						<div class="multistate" state-id="config">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Config</h3>
-									</div>
-									<div class="astro-options flex-bar">
-										<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default" id="downloadJSON">
-											<span>Download StarTube Config JSON</span>
-										</button>
-										<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default" id="cancelJSON">
-											<span>Cancel</span>
-										</button>
-										<div id="st-load-file" class="astro-filter-button flex-bar">
-											<label id="st-file-upload" for="json-upload" class="astro-filter-button flex-bar yt-uix-button yt-uix-button-size-default yt-uix-button-default">Upload StarTube Config JSON</label>
-											<input type="file" id="json-upload" accept="application/json"></input>
-											<button id="useJSON" class="astro-filter-button flex-bar yt-uix-button yt-uix-button-size-default yt-uix-button-default">Use this JSON</button>
-										</div>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-layout-subtitle" class="hid">
-											<span>General site layout options.</span>
-										</div>
-										<!--div id="startube-save-files" class="astro-section">
-											<div class="astro-title">
-												<h4>StarTube save files</h4>
-											</div>
-											<div class="astro-save-files flex-bar">
-												<div id="astro-file-1" class="astro-save-file astro-file astro-file-in-use">
-													<div class="astro-file-inner">
-														<div class="astro-file-top">
-															<div class="astro-file-title">
-																<span>File 1</span>
-															</div>
-														</div>
-														<div class="astro-file-bottom">
-															<div class="astro-file-info">
-																<div class="astro-file-fact">
-																	<span>${STS.importantInfo.startubeVersion} ${STS.importantInfo.startubeChannel}</span>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div-->
-										<div id="startube-config-overview" class="astro-section">
-											<div class="astro-title">
-												<h4>Config overview</h4>
-											</div>
-											<div class="astro-info">
-												<span>Config is from StarTube version ${STS.importantInfo.startubeVersion}</span>
-											</div>
-											<div class="astro-info">
-												<span>Config is from the ${STS.importantInfo.startubeChannel} channel</span>
-											</div>
-										</div>
-										<div id="startube-reset-config" class="astro-section">
-											<div class="astro-title">
-												<h4>Reset config</h4>
-											</div>
-											<button id="RTD" class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
-												<span>Reset config</span>
-											</button>
-										</div>
-										<div id="startube-disable-options" class="astro-section">
-											<div class="astro-title">
-												<h4>Turn off all StarTube options (will not affect locked settings)</h4>
-											</div>
-											<button id="DAO" class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
-												<span>Turn off all StarTube options</span>
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="multistate" state-id="layout">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Layout</h3>
-									</div>
-									<div class="astro-options flex-bar">
-										<button class="astro-filter-button yt-uix-button yt-uix-button-size-default yt-uix-button-default" id="astro-v3-settings-access-btn">
-											<span>Open V3 Settings</span>
-										</button>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-layout-subtitle" class="hid">
-											<span>General site layout options.</span>
-										</div>
-										<div id="startube-layout-mode" class="astro-section">
-											<div class="astro-title">
-												<h4>Layout mode</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting" c="layoutMode" value="manual">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Manual</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" c="layoutMode" value="adaptive">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Adaptive</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div id="startube-layout-animator" class="astro-animation-container">
-											<div id="startube-adaptive-section" class="astro-section">
-												<div class="astro-title">
-													<h4>Adaptive layout is on. Switch to manual layout mode to choose your layout.</h4>
-												</div>
-											</div>
-											<div id="startube-layout-options" class="astro-section">
-												<div class="astro-title">
-													<h4>Layout select</h4>
-												</div>
-												<div class="astro-setting astro-radio-setting layoutSelect" c="layoutSelect" value="passive">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Custom (don't enforce any specific layout, ideal for making use of V3's config options)</span>
-															</div>
-														</div>
-													</div>
-												<div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Amsterdam</h5>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="amst2024c" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2024 (Custom ver)</span>
-															</div>
-														</div>
-													</div>
-                                                    <div class="astro-setting astro-radio-setting layoutSelect" value="amst2023_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2023</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Polymer</h5>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="poly2022" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2022</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="poly2021" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2021</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="poly2020" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2020</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="poly2019" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2019</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="poly2018" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2018</span>
-															</div>
-														</div>
-													</div>
-                                                    <div class="astro-setting astro-radio-setting layoutSelect" value="poly2017" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2017</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="polyE2017" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2017</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="poly2016" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2016 (prototype layout)</span>
-															</div>
-														</div>
-													</div>
-												</div>
-                                                <div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Skybird (Custom layout)</h5>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="sb2016" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2016 (alternate universe version)</span>
-															</div>
-                                                            <div class="astro-minitext">
-														    	<span>Unfinished</span>
-														    </div>
-														</div>
-													</div>
-												</div>
-												<div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Hitchhiker</h5>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2024" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2024 (unofficial legacy layout, uses the pinkish Ringo2 rebrand)</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2018" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2018-2020 (legacy layout)</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2017" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2017 (legacy layout)</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hhE2017" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2017</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2016" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Late 2016</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hhM2016" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Mid 2016</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hhE2016" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2016</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2015" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2015</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hhE2015" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2015</span>
-															</div>
-														</div>
-													</div>
-												<!--/div>
-												<div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Classic Hitchhiker (watch7)</h5>
-													</div-->
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2014" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2014</span>
-															</div>
-														</div>
-													</div>
-                                                    <div class="astro-setting astro-radio-setting layoutSelect" value="hh2014alt_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2014 (Prototype centered layout)</span>
-															</div>
-														</div>
-													</div>
-                                                    <div class="astro-setting astro-radio-setting layoutSelect" value="hh2013alt_3" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Late 2013 (Prototype centered layout)</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2013_3" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Late 2013</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2013_2" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Mid 2013</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="hh2013_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2013</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Epic Panda (prototype layout)</h5>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="epic2012_2" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Mid-Late 2012 (prototype layout)</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="epic2012_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Mid-Late 2012 (prototype layout, custom ver)</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Cosmic Panda</h5>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="cosmic2012_3" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Late 2012</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="cosmic2012_2" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Mid 2012</span>
-															</div>
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="cosmic2012_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2012</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Aozora</h5>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="aozora2011_2" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2011</span>
-															</div>
-														</div>
-													</div>
-                                                    <!--div class="astro-setting astro-radio-setting layoutSelect" value="aozora2011_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2011</span>
-															</div>
-														</div>
-													</div>
-                                                    <div class="astro-setting astro-radio-setting layoutSelect" value="aozora2010_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2010</span>
-															</div>
-														</div>
-													</div-->
-												</div>
-												<div class="astro-sector">
-													<div class="astro-sector-title">
-														<h5>Stargazer</h5>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="stargazer2009_3" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Late 2009</span>
-															</div>
-															<!--div class="astro-minitext">
-																<span>Very unfinished</span>
-															</div-->
-														</div>
-													</div>
-													<!--div class="astro-setting astro-radio-setting layoutSelect" value="stargazer2009_2" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Mid 2009</span>
-															</div>
-															<div class="astro-minitext">
-																<span>Very unfinished</span>
-															</div>
-														</div>
-													</div-->
-													<div class="astro-setting astro-radio-setting layoutSelect" value="stargazer2009_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>Early 2009</span>
-															</div>
-															<!--div class="astro-minitext">
-																<span>Very unfinished</span>
-															</div-->
-														</div>
-													</div>
-													<div class="astro-setting astro-radio-setting layoutSelect" value="stargazer2008_1" c="layoutSelect">
-														<div class="astro-setting-middle flex-bar">
-															<div class="astro-radio">
-															</div>
-															<div class="astro-setting-title">
-																<span>2008</span>
-															</div>
-															<!--div class="astro-minitext">
-																<span>Very unfinished</span>
-															</div-->
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="multistate" state-id="misc">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Misc</h3>
-									</div>
-									<div class="astro-options flex-bar st-fade">
-										<button class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
-										</button>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-layout-subtitle" class="hid">
-											<span>General site layout options.</span>
-										</div>
-										<div id="faviconSelect" class="astro-section">
-											<div class="astro-title">
-												<h4>Favicon select</h4>
-											</div>
-											<div class="astro-description">
-												<span>Choose which little icon appears on the tabs. Note that these don't work 100% of the time.</span>
-											</div>
-											<div class="astro-setting astro-radio-setting faviconSelect" value="auto" c="faviconSelect">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting faviconSelect" value="2024" c="faviconSelect">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2024</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting faviconSelect" value="2024_old" c="faviconSelect">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2024 (Old)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting faviconSelect" value="2017" c="faviconSelect">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2017-2024</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting faviconSelect" value="2015" c="faviconSelect">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2015-2017</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting faviconSelect" value="2012" c="faviconSelect">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2012-2015 (V3 default)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting faviconSelect" value="2010" c="faviconSelect">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2010-2011</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting faviconSelect" value="2005" c="faviconSelect">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2005-2010</span>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <div id="outlineIcons" class="astro-section">
-											<div class="astro-title">
-												<h4>Outline Icons</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="auto" c="outlineIcons">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-                                                    <div class="astro-minitext">
-														<span>On for 2021 and later layouts</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="poly" c="outlineIcons">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>On for Polymer and Amsterdam layouts</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="off" c="outlineIcons">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Off</span>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <div id="homeRedir" class="astro-section">
-											<div class="astro-title">
-												<h4>Homepage (https://www.youtube.com/) Redirect</h4>
-											</div>
-											<div class="astro-description">
-												<span>Choose which page the YouTube homepage redirects to. That is to say, this lets you select which version of the homepage to see on YouTube's <b>first load.</b></span>
-											</div>
-                                            <div class="astro-setting astro-radio-setting" value="auto" c="homeRedir">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting" value="off" c="homeRedir">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Off (do not redirect)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="feedGrid" c="homeRedir">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Grid Feed (used for 2020-present)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="feedList" c="homeRedir">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>List Feed (used for 2012)</span>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <!--div id="favsPlaylist" class="astro-section">
-											<div class="astro-title">
-												<h4>Favorites Playlist</h4>
-											</div>
-											<div class="astro-description">
-												<span>Choose which playlist to use for the add to playlists feature. (Must be your own playlist)</span>
-											</div>
-                                            <div class="astro-setting astro-input-setting" c="favsPlaylist">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-label">
-                                                        <span>Playlist ID: </span>
-													</div>
-													<div class="astro-setting-input">
-														<input placeholder="Insert a valid playlist id" value="${STS.inputSettings.favsPlaylist.tValue}"></input>
-													</div>
-												</div>
-											</div>
-										</div-->
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="multistate" state-id="topbar">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Topbar</h3>
-									</div>
-									<div class="astro-options flex-bar st-fade">
-										<button class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
-										</button>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-layout-subtitle" class="hid">
-											<span>General site layout options.</span>
-										</div>
-										<div id="gbarVersion" class="astro-section">
-											<div class="astro-title">
-												<h4>Gbar version</h4>
-											</div>
-											<!--div class="astro-setting astro-radio-setting gbarVersion" value="auto" c="gbarVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Automatically decide based on layout (will use for Hitchhiker 2013 and 2014)</span>
-													</div>
-												</div>
-											</div-->
-											<div class="astro-setting astro-radio-setting gbarVersion" value="modern" c="gbarVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Use the modern Gbar on all layouts.</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting gbarVersion" value="classic" c="gbarVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Use the classic Gbar on all layouts.</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting gbarVersion" value="material" c="gbarVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Use the material Gbar on all layouts.</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting gbarVersion" value="off" c="gbarVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Always off</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting gbarVersion hid" value="passive" c="gbarVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>None of the above; do not allow StarTube to change V3's Gbar settings (will not undo previous changes made by StarTube)</span>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <div id="logoLink" class="astro-section">
-											<div class="astro-title">
-												<h4>Logo Link</h4>
-											</div>
-											<div class="astro-description">
-												<span>Choose which page the YouTube logo links to.</span>
-											</div>
-                                            <div class="astro-setting astro-radio-setting" value="auto" c="logoLink">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting" value="home" c="logoLink">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Normal home [V3 Default]</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="feedGrid" c="logoLink">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Grid Feed (used for 2020-present)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="feedList" c="logoLink">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>List Feed (used for 2012)</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting" value="subs" c="logoLink">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Subscriptions</span>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <div id="searchText" class="astro-section">
-											<div class="astro-title">
-												<h4>"Search" text on searchbar</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="auto" c="searchText">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting" value="on" c="searchText">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>On (Mid 2016-Present)</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting" value="off" c="searchText">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Off (Until 2016)</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div id="accountMenu" class="astro-section">
-											<div class="astro-title">
-												<h4>Account menu</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting accountMenu" value="auto" c="accountMenu">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting accountMenu" value="me" c="accountMenu">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Masthead Expanded (2014 and earlier)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting accountMenu" value="mhh" c="accountMenu">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Hitchhiker Menu (2015 onwards Hitchhiker layouts)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting accountMenu" value="poly" c="accountMenu">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Polymer Menu (2017-present)</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="multistate" state-id="guide">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Guide</h3>
-									</div>
-									<div class="astro-options flex-bar st-fade">
-										<button class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
-										</button>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-layout-subtitle" class="hid">
-											<span>Guide (left sidebar) options.</span>
-										</div>
-										<div id="guideNavToFeed" class="astro-section">
-											<div class="astro-title">
-												<h4>Guide item link</h4>
-											</div>
-											<div class="astro-description">
-												<span>Choose whether channel links on the guide (left sidebar) take you to their channel, or their feed. [This setting just changes the existing V3 setting GUIDE_NAVIGATE_TO_CHANNEL_FEED.]</span>
-											</div>
-											<div class="astro-setting astro-radio-setting guideNavToFeed" value="auto" c="guideNavToFeed">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting guideNavToFeed" value="off" c="guideNavToFeed">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Channel</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting guideNavToFeed" value="on" c="guideNavToFeed">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Feed (V3 default)</span>
-													</div>
-												</div>
-											</div>
-											<!--div class="astro-setting astro-radio-setting guideNavToFeed" value="passive" c="guideNavToFeed">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>None of the above</span>
-													</div>
-												</div>
-											</div-->
-										</div>
-										<div id="guideAlwaysPinned" class="astro-section">
-											<div class="astro-title">
-												<h4>Guide always pinned</h4>
-											</div>
-											<div class="astro-description">
-												<span>Keep the guide visible on all pages, including the watch page. Only affects layouts from 2014 and later.</span>
-											</div>
-											<div class="astro-setting astro-radio-setting guideAlwaysPinned" value="on" c="guideAlwaysPinned">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>On</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting guideAlwaysPinned" value="off" c="guideAlwaysPinned">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Off</span>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <div id="subsGrid" class="astro-section">
-											<div class="astro-title">
-												<h4>Subscriptions page</h4>
-											</div>
-											<div class="astro-description">
-												<span>Choose whether to use List or Grid view for subscriptions by default.</span>
-											</div>
-                                            <div class="astro-setting astro-radio-setting" value="auto" c="subsGrid">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="grid" c="subsGrid">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Grid</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="list" c="subsGrid">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>List</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="multistate" state-id="player">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Player</h3>
-									</div>
-									<div class="astro-options flex-bar st-fade">
-										<button class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
-										</button>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-layout-subtitle" class="hid">
-											<span>General site layout options.</span>
-										</div>
-										<div id="playerVersion" class="astro-section">
-											<div class="astro-title">
-												<h4>Player version</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion" value="auto" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Automatically decide based on layout</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion" value="modernV4" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2021-Present</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion" value="modernV3" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2020-2021</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion" value="modernV2" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2016-2020</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion" value="modernV1" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2015-2016</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion" value="default2014" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>2013-2015 (V3 default)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion" value="flash7" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Flash7</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion" value="embed" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Embed Player (use this if the player isn't working)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerVersion hid" value="passive" c="playerVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>None of the above; do not allow StarTube to change V3's player settings (will not undo previous changes made by StarTube)</span>
-													</div>
-												</div>
-											</div>
-										</div>
-                                        <div id="playerSpinner" class="astro-section">
-											<div class="astro-title">
-												<h4>Player loading icon</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="auto" c="playerSpinner">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-                                                    <div class="astro-minitext">
-														<span>Classic will be used on layouts from before 2018.</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="classic" c="playerSpinner">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Classic (Pre-2018)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting" value="material" c="playerSpinner">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Material (2018-Present)</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div id="playerSizerules" class="astro-section">
-											<div class="astro-title">
-												<h4>Player size</h4>
-											</div>
-											<div class="astro-description">
-												<span>Choose the set of player sizes to use across different resolutions.</span>
-											</div>
-											<div class="astro-setting astro-radio-setting playerSizerules" value="passive" c="playerSizerules">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto (stable)</span>
-													</div>
-													<div class="astro-minitext astro-green">
-														<span>Sticks to the basic V3 player sizes. If you don't want bugs, use this</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerSizerules" value="auto" c="playerSizerules">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto (high accuracy, less stable)</span>
-													</div>
-													<div class="astro-minitext">
-														<span>More accurate, but uses the custom player sizes, and therefore <span class="astro-red">breaks theater mode</span> on most layouts</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerSizerules" value="noFlexwatch" c="playerSizerules">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Non-flexwatch [always 640x360]</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerSizerules" value="flexwatchMini" c="playerSizerules">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Flexwatch Mini (V3 default)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerSizerules" value="flexwatchMiniV2" c="playerSizerules">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Flexwatch Mini Version 2 (~2015 onwards) [Same player sizes, but they happen at different resoltions]</span>
-													</div>
-													<div class="astro-minitext astro-red">
-														<span>Breaks theater mode</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerSizerules" value="flexwatchMedium" c="playerSizerules">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Flexwatch Medium (Custom, bigger sizes) [640x360, 1024x576, 1600x900]</span>
-													</div>
-													<div class="astro-minitext astro-red">
-														<span>Breaks theater mode</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting playerSizerules" value="flexwatchLarge" c="playerSizerules">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Flexwatch Large (Custom, even bigger sizes, closer to modern YouTube) [854x480, 1280x720, 1920x1080]</span>
-													</div>
-													<div class="astro-minitext astro-red">
-														<span>Breaks theater mode</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="multistate" state-id="watch">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Watch page</h3>
-									</div>
-									<div class="astro-options flex-bar st-fade">
-										<button class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
-										</button>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-layout-subtitle" class="hid">
-											<span>General site layout options.</span>
-										</div>
-										<div id="watchLayout" class="astro-section">
-											<div class="astro-title">
-												<h4>Watch layout select</h4>
-											</div>
-                                            <div class="astro-description">
-												<span>Select the layout that the watch page uses. Note that not all combinations are tested, and some will work better than others (Watch4B will not work well on newer layouts for example)</span>
-											</div>
-											<div class="astro-setting astro-radio-setting watchLayout" value="auto" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting watchLayout" value="autoPreferAltW9" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto (use alt-watch9 for Hitchhiker layouts)</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch4b" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch4B (Early 2009)</span>
-													</div>
-                                                    <div class="astro-minitext">
-														<span>Star ratings, title on top, description on right</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch5c" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch5C (2011)</span>
-													</div>
-                                                    <div class="astro-minitext">
-														<span>Title on top</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch5d" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch5D (2012)</span>
-													</div>
-                                                    <div class="astro-minitext">
-														<span>Title on top</span>
-													</div>
-												</div>
-											</div>
-                                            <!--div class="astro-setting astro-radio-setting watchLayout" value="watch6" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch6 (cosmic panda beta)</span>
-													</div>
-												</div>
-											</div-->
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch7beta" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch7 Beta (2012, Epic Panda)</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch7" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch7 (2013-2014) [V3 default]</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch8" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch8 (2015-2017, 2017-2020 [Legacy layout])</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch9a" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch9A (2016-2019)</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch9b" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch9B (2020-2022)</span>
-													</div>
-												</div>
-											</div>
-                                            <!--div class="astro-setting astro-radio-setting watchLayout" value="watch9c" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch9C (Custom combination of Watch9A and Watch9B)</span>
-													</div>
-												</div>
-											</div-->
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch10beta" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch10 Beta (2022)</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch10teaser" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch10 (With comment teaser, late 2022 experiment)</span>
-													</div>
-												</div>
-											</div>
-                                            <div class="astro-setting astro-radio-setting watchLayout" value="watch10" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Watch10 (Late 2022-Present)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting watchLayout" value="altWatch9" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Alt-watch9 (works best on the hitchhiker layouts)</span>
-													</div>
-                                                    <div class="astro-minitext">
-														<span>Alternate universe 2015-2017-ish layout</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting watchLayout" value="altWatch9Fancy" c="watchLayout">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Fancy Alt-watch9 (works best on the hitchhiker layouts)</span>
-													</div>
-												</div>
-											</div>
-                                            <div id="astro-wl-cw" class="astro-compat-warning astro-red">
-												<span>Your current layout/watch layout combination may not work as intended.</span>
-											</div>
-										</div>
-										<div id="relatedTabs" class="astro-section">
-											<div class="astro-title">
-												<h4>Related tabs</h4>
-											</div>
-											<div class="astro-description">
-												<span>A component of alt-watch9 that can also be used in other layouts. If you disable this while using alt-watch9, you will get alt-watch9's original three-column layout.</span>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedTabs" value="auto" c="relatedTabs">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto (only enabled when alt-watch9 is enabled)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedTabs" value="on" c="relatedTabs">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>On</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedTabs" value="onNoSub" c="relatedTabs">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>On (don't move subscribe button)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedTabs" value="off" c="relatedTabs">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Off</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div id="relatedGrid" class="astro-section">
-											<div class="astro-title">
-												<h4>Related grid</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedGrid" value="on" c="relatedGrid">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>On (only works with 2013 and later)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedGrid" value="off" c="relatedGrid">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Off</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div id="relatedSize" class="astro-section">
-											<div class="astro-title">
-												<h4>Related video size</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedSize" value="auto" c="relatedSize">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedSize" value="smaller" c="relatedSize">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Smaller (2011 and below)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedSize" value="small" c="relatedSize">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Small (2012-2016)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedSize" value="medium" c="relatedSize">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Medium (custom middleground)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedSize" value="large" c="relatedSize">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Large (2016-present)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting relatedSize" value="stupid" c="relatedSize">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Huge (based on a Polymer experiment)</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div id="compactDate" class="astro-section">
-											<div class="astro-title">
-												<h4>Show dates on related videos</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting compactDate" value="auto" c="compactDate">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting compactDate" value="on" c="compactDate">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Always show</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting compactDate" value="hover" c="compactDate">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Show on hover (V3 default)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting compactDate" value="off" c="compactDate">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Never show</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="multistate" state-id="channel">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Channel page</h3>
-									</div>
-									<div class="astro-options flex-bar st-fade">
-										<button class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
-										</button>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-layout-subtitle" class="hid">
-											<span>General site layout options.</span>
-										</div>
-										<div id="channelVersion" class="astro-section">
-											<div class="astro-title">
-												<h4>Channel version</h4>
-											</div>
-											<div class="astro-setting astro-radio-setting channelVersion" value="auto" c="channelVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting channelVersion" value="c4" c="channelVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Channels4 (2013-present)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting channelVersion" value="c3" c="channelVersion">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Channels3 (Late 2011-Early 2013)</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div id="colorfulChannels" class="astro-section">
-											<div class="astro-title">
-												<h4>Colorful channels</h4>
-											</div>
-											<div class="astro-description">
-												<span>Makes the rest of the page use the colors of the channel banner. Only works with Channels4.</span>
-											</div>
-											<div class="astro-setting astro-radio-setting colorfulChannels" value="auto" c="colorfulChannels">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto (on for 2016 Polymer)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting colorfulChannels" value="polymer" c="colorfulChannels">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Auto (on for all Polymer layouts)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting colorfulChannels" value="on" c="colorfulChannels">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>On</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting colorfulChannels" value="v3version" c="colorfulChannels">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>On (V3 implementation, doesn't change the guide or topbar)</span>
-													</div>
-												</div>
-											</div>
-											<div class="astro-setting astro-radio-setting colorfulChannels" value="off" c="colorfulChannels">
-												<div class="astro-setting-middle flex-bar">
-													<div class="astro-radio">
-													</div>
-													<div class="astro-setting-title">
-														<span>Off</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="multistate" state-id="advanced">
-							<div class="astro-content-area">
-								<div class="astro-title-bar flex-bar">
-									<div class="astro-supertitle">
-										<h3>Advanced</h3>
-									</div>
-									<div class="astro-options flex-bar">
-										<div id="astro-searchbar" class="astro-filter flex-bar">
-											<span class=" yt-uix-form-input-container yt-uix-form-input-text-container ">
-											<input class="yt-uix-form-input-text search-field"id="channels-search-field" type="text" placeholder="Filter by Setting Name" maxlength="100" autocomplete="off">
-</span><!--button class="yt-uix-button yt-uix-button-size-default end search-button yt-uix-button-c4-search  yt-uix-button-empty" style="NONE"><span class="yt-uix-button-icon-wrapper">
-<img src="https://s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif" class="yt-uix-button-icon yt-uix-button-icon-search"></span><span class="yt-uix-button-content"></span></button-->
-										</div>
-										<div id="astro-micro-filter" class="astro-filter flex-bar">
-											<div class="astro-filter-text">
-											</div>
-											<button id="astro-micro-filter-button" class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default multistate-handler" state="all">
-												<span class="multistate" state-id="all">Show all settings</span>
-												<span class="multistate" state-id="locked">Locked settings</span>
-												<span class="multistate" state-id="unlocked">Unlocked settings</span>
-												<img class="yt-uix-button-arrow" src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif">
-											</button>
-											<ul id="astro-micro-filter-menu" class="yt-uix-button-menu yt-uix-button-menu-default goog-scrollbar hid rev-multistate-handler" state="all" role="menu" aria-haspopup="true">
-												<li id="astro-mc-all" role="menuitem" class="multistate" state-id="all">
-													<span class="yt-uix-button-menu-item">Show all settings</span>
-												</li>
-												<li id="astro-mc-locked" role="menuitem" class="multistate" state-id="locked">
-													<span class="yt-uix-button-menu-item">Locked settings</span>
-												</li>
-												<li id="astro-mc-unlocked" role="menuitem" class="multistate" state-id="unlocked">
-													<span class="yt-uix-button-menu-item">Unlocked settings</span>
-												</li>
-											</ul>
-											<div id="astro-micro-filter-fence" class="hid st-fence">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="astro-scroller">
-									<div class="astro-scroller-inner">
-										<div id="startube-result-count" class="">
-											<span>Advanced configuration. If you change a setting here, you will most likely need to lock it, or else the setting will be overwritten.</span>
-										</div>
-										<div id="startube-microconfigs-dump">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    ${STH.astroSettings}
 `;
-	cont.insertBefore(nE,cont.children[1]);
+	conta.insertBefore(nE,conta.children[1]);
+    function createSetting(i,container,n,theSet){
+        let newE=document.createElement("div");
+        newE.classList="astro-setting astro-radio-setting";
+        newE.setAttribute("c",theSet);
+        newE.setAttribute("value",i.value);
+        newE.innerHTML=STH.astroSetting;
+        container.insertBefore(newE,container.children[n]);
+        newE.querySelector(".astro-setting-title span").textContent=i.name;
+        if(i.mText){
+            let mT=i.mText;
+            let aM=newE.querySelector(".astro-minitext");
+            aM.innerHTML=mT.text;
+            if(mT.color){
+                aM.classList.add("astro-"+mT.color);
+            }
+        }
+    }
+    function createSector(i,container,n,theSet,ix){
+        let newE=document.createElement("div");
+        newE.classList="astro-sector";
+        newE.innerHTML=STH.astroSector;
+        container.insertBefore(newE,container.children[n]);
+        newE.querySelector("h5").textContent=i.sectorTitle.text;
+        let settNumb=1;
+        i.opts.forEach(i=>{
+            if(i.opt){
+                createSetting(i.opt,newE,settNumb,theSet);
+            }else{
+                createSector(i.sector,newE,settNumb,theSet);
+            }
+            settNumb++;
+        });
+    }
+    function createSection(tab,ix,n){
+        let conta=$("[state-id='"+tab+"'] .astro-scroller-inner");
+        nE=document.createElement("div");
+        nE.id=ix.section.id;
+        nE.classList="astro-section";
+        nE.innerHTML=STH.astroSection;
+        conta.insertBefore(nE,conta.children[n]);
+        nE.querySelector("h4").textContent=ix.section.title.text;
+        if(ix.section.desc){
+            nE.querySelector(".astro-description span").innerHTML=ix.section.desc.text;
+        }
+        if(ix.section.cW){
+            nE.querySelector(".astro-cw-cont").innerHTML=ix.section.cW.text;
+        }
+        if(ix.section.new){
+          //  nE.querySelector(".astro-title");
+        }
+        let setNumb=2;
+        let theSet=ix.section.id;
+        ix.section.opts.forEach(i=>{
+            if(i.opt){
+                createSetting(i.opt,nE,setNumb,theSet);
+            }else{
+                createSector(i.sector,nE,setNumb,theSet);
+            }
+            setNumb++;
+        });
+    }
+    radioSets.pages.forEach(i=>{
+        let obj=i.page;
+        let tab=obj.tab;
+        let sectNumb=0;
+        obj.sections.forEach(ix=>{
+            createSection(tab,ix,sectNumb);
+            sectNumb++;
+        });
+    });
 	let dump = $("#startube-microconfigs-dump");
 	let number = 1;
 	ScF.forEach(i => {
@@ -19970,7 +19509,7 @@ filter: invert(1);
 			$("#astro-micro-filter-fence").classList.add("hid");
 		}
 	}
-	document.querySelectorAll(".astro-sidebar-item").forEach(i => {
+	document.querySelectorAll(".astro-sidebar-item:not(.astro-link)").forEach(i => {
         i.addEventListener("click", function(){
             $("#startube-settings-content > div").setAttribute("state",i.getAttribute("p"));
             $(".astro-sidebar-item.active").classList.remove("active");
@@ -20035,8 +19574,17 @@ filter: invert(1);
 			if(STS.ironSettings[item] != null){
 				i.setAttribute("iron", "true");
 			}
-		}
-	});
+        }
+    });
+        /*let FX=$("#st-fancy-fx");
+        html.addEventListener("mousemove",(e)=>{
+            var x=e.clientX;
+            var y=e.clientY;
+            x=x-10;
+            y=y-10;
+            FX.style.left=x+'px';
+            FX.style.top=y+'px';
+        });*/
 
 	doListen();
 	function doListen(){
@@ -20706,7 +20254,8 @@ html{
   --606060:#606060;
   --eee:#eee;
   --e2e2e2:#e2e2e2;
-  --link-color:#2793e6
+  --link-color:#2793e6;
+  --poly-link:#065fd4
 }
 [dark]{
   --000:#fff;
@@ -20719,6 +20268,16 @@ html{
 }
 [modern-styles]{
   --link-color:#167ac6
+}
+[layout^="star"],
+[layout^="aozora"]{
+  --link-color:#03c
+}
+[layout^="cos"]{
+  --link-color:#1c62b9
+}
+[layout^="sb"]{
+  --link-color:#06c
 }
 .v3{
   --padding:15px
@@ -20820,6 +20379,40 @@ html:not([exp-related-grid]) [rel-size="large"] .related-channel .yt-thumb-64 im
 html:not([exp-related-grid]) [rel-size="large"] .related-channel .yt-thumb-64{
 width:88px
 }
+.video-list-item .chan-name{
+  display:inline;
+  color:unset;
+  font-weight:var(--bold);
+  padding:0!important;
+  border:none!important
+}
+[layout^="sb"] .video-list-item .chan-name,
+[layout^="po"] .video-list-item .chan-name,
+[layout^="am"] .video-list-item .chan-name,
+[modern-styles] .video-list-item .chan-name,
+[layout^="ep"] .video-list-item .chan-name,
+[layout^="cos"] .video-list-item .chan-name,
+[layout^="star"] .video-list-item .chan-name,
+[layout^="aozora"] .video-list-item .chan-name{
+  font-weight:400
+}
+[layout^="star"] .video-list-item .chan-name{
+  color:var(--link-color)
+}
+.v3:not([layout^="poly"]):not([layout^="am"]) .video-list-item .chan-name:hover{
+  color:var(--link-color);
+  text-decoration:underline
+}
+[layout^="am"] .video-list-item .chan-name:hover,
+[layout^="poly"] .video-list-item .chan-name:hover{
+  color:var(--333)
+}
+[layout^="ep"] .video-list .video-list-item .description,
+[layout^="ep"] .video-list .video-list-item .stat,
+[layout^="cos"] .video-list .video-list-item .description,
+[layout^="cos"] .video-list .video-list-item .stat{
+  color:var(--666)
+}
 [poly-styles] .related-channel .yt-thumb-64 img,
 [poly-styles] .related-channel .yt-thumb-64{
 border-radius:50%
@@ -20901,7 +20494,7 @@ display: none;
 [exp-roboto] .video-list .video-list-item .title{
 font-weight:var(--bold)
 }
-[config-watch7-sidebar-card-shadow] .cardified-page.exp-individual-cards-watch #watch7-sidebar {
+[config-watch7-sidebar-card-shadow]:not([skybird]) .cardified-page.exp-individual-cards-watch #watch7-sidebar{
 box-shadow: 0 1px 2px rgba(0,0,0,.1);
 }
 [config-no-tab-top-border] #watch7-secondary-actions .yt-uix-button:focus {
@@ -21161,13 +20754,16 @@ margin-bottom:3px
 right:0;
 top:17px
 }
-[exp-related-grid] .watch-sidebar {
-max-width: 560px;
-width: 546px;
+[exp-related-grid][skybird] #watch7-sidebar{
+padding-bottom:40px
 }
-[exp-related-grid] .related-banner {
-width: 560px;
-width: 550px;
+[exp-related-grid] .watch-sidebar{
+max-width:560px;
+width:546px
+}
+[exp-related-grid] .related-banner{
+width:560px;
+width:550px
 }
 [exp-related-grid] .related-banner .related-banner-bg img {
 width: 550px;
@@ -21356,10 +20952,10 @@ background-color:rgb(6,95,212)
 [poly-styles] .yt-uix-checkbox-on-off input[type="checkbox"]:checked + label .checked{
 display:none
 }
-[exp-always-show-compact-date] .related-video .extra{
+[compact-date="on"] .related-video .extra{
 display:unset!important
 }
-[exp-never-show-compact-date] .related-video .extra{
+[compact-date="off"] .related-video .extra{
 display:none!important
 }
 [exp-two-column-search-results] .search .result-list {
@@ -21481,6 +21077,12 @@ background:linear-gradient(to top,#e62c22 0,red 100%)
 }
 [exp-invert-logo] .prominent-upload-button-styling #upload-btn{
 background:#e62c22
+}
+[exp-ringo2] .prominent-upload-button-styling #upload-btn{
+background:#e62c44
+}
+[ringo2-gradients] .prominent-upload-button-styling #upload-btn{
+background:linear-gradient(to right,#e62c44,#e61781)
 }
 [poly-styles] .oz_frame .yt-subscription-button-subscriber-count-branded-horizontal,
 [modern-styles] .oz_frame .yt-subscription-button-subscriber-count-branded-horizontal,
@@ -21865,13 +21467,13 @@ background:#d90026
 [ringo2]:not([exp-polymer-shell]) #yt-masthead-user .sb-notif-on .yt-uix-button-content{
 background:#f03!important
 }
-[ringo2] .player-api > #movie_player .ytp-play-progress{
+[ringo2] body .v3 .player-api > #movie_player .ytp-play-progress{
 background:#f03!important
 }
-[ringo2-gradients] .player-api > #movie_player .ytp-play-progress{
+[ringo2-gradients] body .v3 .player-api > #movie_player .ytp-play-progress{
 background:linear-gradient(to right,#f03 80%,#ff2791 100%)!important
 }
-[ringo2] body [player-ver^="m"] .player-api > #movie_player .html5-scrubber-button{
+[ringo2][pl-ver^="m"] body .player-api > #movie_player .html5-scrubber-button{
 background:#f03!important
 }
 
@@ -22236,6 +21838,21 @@ height: 15px;
 [modern-styles] #channel-search .search-button {
 display: none;
 }
+html body [poly-layout="true"] #channel-search label,
+html body [poly-layout="true"] #channel-search form{
+  line-height:26px!important;
+  border-bottom:none!important;
+  height:44px!important;
+  align-items:center!important;
+  display:flex!important;
+  padding-inline:12px
+}
+html body [poly-layout="true"] #channel-search .search-form{
+  padding:0
+}
+html body [poly-layout="true"] #channel-search .epic-nav-item-heading-icon{
+  display:none
+}
 [modern-styles] #page.search .branded-page-v2-secondary-col {
 display: none;
 }
@@ -22424,13 +22041,15 @@ html body .v3 .startube-hide-svgs .st-svg svg,
 html body .v3 .startube-hide-svgs .st-svg{
 display:none
 }
+[create-btn] #upload-btn,
 [upload-icon] #upload-btn,
-[create-icon] #upload-btn {
-display: none;
+[create-icon] #upload-btn{
+display:none
 }
+#startube-create-btn,
 #startube-youtube-apps,
 #startube-upload-icon,
-#startube-create-icon {
+#startube-create-icon{
 float: right;
 height: 28px;
 padding: 0 10px;
@@ -22671,6 +22290,8 @@ background:linear-gradient(to bottom,#444 0,#333 100%)
 background:none!important;
 border:none!important
 }
+[poly-styles] #content-container,
+[poly-styles] #body-container,
 [static] #content-container,
 [static] #body-container{
 padding-bottom:0
@@ -25748,18 +25369,21 @@ font-size: 13px;
 [poly-styles] .video-list .video-list-item .stat b:hover {
 color: #0a0a0a;
 }
-[exp-polymer-tooltips] .yt-uix-tooltip-tip-content {
-background: #616161;
-padding: 8px;
-border-radius: 2px;
-font-size: 12px;
-font-weight: 400;
-line-height: 18px;
-box-shadow: none;
-opacity: 0.85;
+/*[exp-polymer-tooltips]*/
+[ly^="amst"] .yt-uix-tooltip-tip-content,
+[ly^="poly"] .yt-uix-tooltip-tip-content{
+background:#616161;
+padding:8px;
+border-radius:2px;
+font-size:12px;
+font-weight:400;
+line-height:18px;
+box-shadow:none;
+opacity:.85
 }
-[exp-polymer-tooltips] .yt-uix-tooltip-tip-arrow {
-display: none;
+[ly^="amst"] .yt-uix-tooltip-tip-arrow,
+[ly^="poly"] .yt-uix-tooltip-tip-arrow{
+display:none
 }
 
 [modern-styles] .distiller_yt_headline {
@@ -26014,10 +25638,16 @@ background:#f9f9f9
 [poly-g2-colors][exp-polymer-subscribe] #page:not(.watch) .with-preferences.yt-uix-button-subscription-container:has(.yt-uix-button-subscribe-branded){
 background:#c00!important
 }
+[skybird] body .v3 #page.channel .yt-subscription-button-subscriber-count-branded-horizontal::after,
+[skybird] body .v3 #page.channel .yt-subscription-button-subscriber-count-branded-horizontal::before,
 [exp-polymer-gen2-subscribe] body .oz_frame .with-preferences .yt-subscription-button-subscriber-count-branded-horizontal,
 .st-poly-g2-sub .with-preferences .yt-subscription-button-subscriber-count-branded-horizontal,
 [exp-polymer-gen2-subscribe] body #page:not(.watch) .with-preferences .yt-subscription-button-subscriber-count-branded-horizontal{
 display:none!important
+}
+[skybird] body .v3 #page.channel .yt-subscription-button-subscriber-count-branded-horizontal{
+display:inline-block!important;
+color:var(--666)!important
 }
 [poly-styles] .yt-lockup-title a,
 [poly-styles] .context-data-item .title{
@@ -26502,6 +26132,7 @@ font-size:13px;
 background:#111;
 opacity:.8;
 }
+[typography-spacing] .st-poly-btn,
 [typography-spacing] button,
 [typography-spacing] .reply-button,
 /*[typography-spacing] #masthead-search-term,*/
@@ -26658,37 +26289,42 @@ padding-left: 12px;
 font-size: 14px;
 font-weight: 400 !important;
 }
+body .v3 .yt-rich-lockup-item .context-data-item .yt-lockup-title > a,
+body .v3 .yt-rich-lockup-item .context-data-item .yt-lockup-title > a span,
 [exp-rich-grid-home][exp-modern-home][location="feed-recs"] .yt-lockup-title a,
-[exp-rich-grid-home][exp-modern-home][location="home"] .yt-lockup-title a {
-font-size: 16px !important;
-line-height: 22px;
-max-height: 44px;
+[exp-rich-grid-home][exp-modern-home][location="home"] .yt-lockup-title a{
+font-size:16px!important;
+line-height:22px;
+max-height:44px
 }
+.yt-rich-lockup-item .yt-lockup-meta span,
+.yt-rich-lockup-item a,
+.yt-rich-lockup-item li,
 [exp-rich-grid-home][exp-modern-home][location="feed-recs"] .yt-lockup-meta span,
 [exp-rich-grid-home][exp-modern-home][location="feed-recs"] .yt-lockup-meta a,
 [exp-rich-grid-home][exp-modern-home][location="feed-recs"] .yt-lockup-meta li,
 [exp-rich-grid-home][exp-modern-home][location="home"] .yt-lockup-meta span,
 [exp-rich-grid-home][exp-modern-home][location="home"] .yt-lockup-meta a,
-[exp-rich-grid-home][exp-modern-home][location="home"] .yt-lockup-meta li {
-font-size: 14px !important;
+[exp-rich-grid-home][exp-modern-home][location="home"] .yt-lockup-meta li{
+font-size:14px!important
 }
-.yt-rich-grid .yt-rich-lockup-item .yt-lockup-content {
-display: flex;
+.yt-rich-grid .yt-rich-lockup-item .yt-lockup-content{
+display:flex
 }
-.yt-rich-grid .yt-lockup-user-photo {
-display: block;
-height: 36px;
-margin-top: 12px;
-margin-right: 12px;
-width: 36px;
-background: #ccc;
-border-radius: 50%;
+.yt-rich-grid .yt-lockup-user-photo{
+display:block;
+height:36px;
+margin-top:12px;
+margin-right:12px;
+width:36px;
+background:#ccc;
+border-radius:50%
 }
-.yt-rich-grid .yt-lockup-user-photo img {
-width: 36px;
-height: 36px;
-border-radius: 50%;
-background: #ccc;
+.yt-rich-grid .yt-lockup-user-photo img{
+width:36px;
+height:36px;
+border-radius:50%;
+background:#ccc
 }
 
 .yt-rich-grid .yt-lockup-title {
@@ -26978,19 +26614,19 @@ backdrop-filter:blur(48px);
 backdrop-filter:none;
 background:none!important
 }
-[dark][frosted-glass] #yt-masthead-container{
+[dark] [frosted-glass] #yt-masthead-container{
 background:rgba(15,15,15,0.8)!important;
 background:none!important
 }
 /* expPolymerGen3Colors */
 [poly-g3-colors]:not([dark]) #page.channel,
-[poly-g3-colors] #yt-masthead-container,
+[poly-g3-colors] .v3:not([frosted-glass]) #yt-masthead-container,
 [poly-g3-colors] body{
-background:#fff
+background:#fff!important
 }
 [poly-g3-colors][dark] #page.channel,
-[poly-g3-colors][dark] #yt-masthead-container{
-background:#0f0f0f
+[poly-g3-colors][dark] .v3:not([frosted-glass]) #yt-masthead-container{
+background:#0f0f0f!important
 }
 [poly-g3-colors][dark] body,
 [poly-g3-colors][dark],
@@ -28119,7 +27755,7 @@ height: 5px !Important;
 html[data-player-size="fullscreen"][pl-ver^="m"] .player-api > #movie_player .ytp-progress-bar-container:hover .ytp-progress-list {
 height: 8px !Important;
 }
-[pl-ver^="m"] .player-api > #movie_player .html5-scrubber-button {
+[pl-ver^="m"] .player-api > #movie_player .html5-scrubber-button{
 background: #f12b24 !important;
 border: none;
 height: 0px !important;
@@ -29512,8 +29148,9 @@ background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr
 background:no-repeat url(data:image/png;base64,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) 1px 1px, linear-gradient(to top, #fee732, #fef885 80%, #fee732);
 background-size:30px 30px
 }
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribe-branded,
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribed-branded,
+/*[exp-aozora-subscribe]*/
+[aozora-styles] .oz_frame .yt-uix-button-subscribe-branded,
+[aozora-styles] .oz_frame .yt-uix-button-subscribed-branded,
 [aozora-styles] .distiller-standard-button,
 [aozora-styles] .yt-uix-pager .yt-uix-button,
 [aozora-styles] .continuation_item_wrapper button,
@@ -29522,8 +29159,8 @@ background-size:30px 30px
 .st-aozora-sub .yt-uix-button-subscribed-branded,
 .aozora-button,
 html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribe-branded,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribed-branded{
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribe-branded,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded{
 padding:0 6px!important;
 height:25px!important;
 border:1px solid #ccc!important;
@@ -29535,29 +29172,29 @@ font-size:12px;
 box-shadow:none;
 opacity:1
 }
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribe-branded,
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribed-branded,
+[aozora-styles] .oz_frame .yt-uix-button-subscribe-branded,
+[aozora-styles] .oz_frame .yt-uix-button-subscribed-branded,
 .st-aozora-sub .yt-uix-button-subscribe-branded,
 .st-aozora-sub .yt-uix-button-subscribed-branded,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribe-branded,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribed-branded{
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribe-branded,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded{
 padding:0!important
 }
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribe-branded .yt-uix-button-content span,
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribed-branded .yt-uix-button-content span,
+[aozora-styles] .oz_frame .yt-uix-button-subscribe-branded .yt-uix-button-content span,
+[aozora-styles] .oz_frame .yt-uix-button-subscribed-branded .yt-uix-button-content span,
 [aozora-styles] .distiller-standard-button span,
 .st-aozora-sub .yt-uix-button-subscribe-branded .yt-uix-button-content span,
 .st-aozora-sub .yt-uix-button-subscribed-branded .yt-uix-button-content span,
 .aozora-button,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribe-branded .yt-uix-button-content span,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribed-branded .yt-uix-button-content span,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribe-branded .yt-uix-button-content span,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded .yt-uix-button-content span,
 html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button span{
 color:#000!important;
 font-size:12px!important;
 font-weight:normal!important;
 }
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribe-branded:hover,
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribed-branded:hover,
+[aozora-styles] .oz_frame .yt-uix-button-subscribe-branded:hover,
+[aozora-styles] .oz_frame .yt-uix-button-subscribed-branded:hover,
 [aozora-styles] .distiller-standard-button:hover,
 [aozora-styles] .yt-uix-pager .yt-uix-button:hover,
 [aozora-styles] .continuation_item_wrapper button:hover,
@@ -29565,15 +29202,15 @@ font-weight:normal!important;
 .st-aozora-sub .yt-uix-button-subscribe-branded:hover,
 .st-aozora-sub .yt-uix-button-subscribed-branded:hover,
 .aozora-button:hover,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribe-branded:hover,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribed-branded:hover,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribe-branded:hover,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded:hover,
 html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button:hover{
 box-shadow:rgb(153,153,153) 0px 0px 3px 0px;
 border-color:#999!important;
 background-image:linear-gradient(rgb(255,255,255) 0%, rgb(235,235,235) 100%)!important
 }
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribe-branded:active,
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscribed-branded:active,
+[aozora-styles] .oz_frame .yt-uix-button-subscribe-branded:active,
+[aozora-styles] .oz_frame .yt-uix-button-subscribed-branded:active,
 [aozora-styles] .distiller-standard-button:active,
 [aozora-styles] .yt-uix-pager .yt-uix-button:active,
 [aozora-styles] .continuation_item_wrapper button:active,
@@ -29583,8 +29220,8 @@ background-image:linear-gradient(rgb(255,255,255) 0%, rgb(235,235,235) 100%)!imp
 .st-aozora-sub .yt-uix-button-subscribed-branded:active,
 .aozora-button:active,
 .aozora-button.active,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribe-branded:active,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscribed-branded:active,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribe-branded:active,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded:active,
 html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button:active{
 background-image:linear-gradient(rgb(204,204,204) 0%, rgb(255,255,255) 100%)!important;
 border-color:#999
@@ -29667,12 +29304,12 @@ border-top-color: #767676;
 border-width: 5px 5px 0;
 margin-left: 2px;
 }
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscription-container .yt-uix-subscription-preferences-button,
-[exp-aozora-subscribe] .oz_frame .yt-uix-button-subscription-container .yt-uix-button-icon-wrapper,
+[aozora-styles] .oz_frame .yt-uix-button-subscription-container .yt-uix-subscription-preferences-button,
+[aozora-styles] .oz_frame .yt-uix-button-subscription-container .yt-uix-button-icon-wrapper,
 .st-aozora-sub .yt-uix-button-subscription-container .yt-uix-subscription-preferences-button,
 .st-aozora-sub .yt-uix-button-subscription-container .yt-uix-button-icon-wrapper,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscription-container .yt-uix-subscription-preferences-button,
-[exp-aozora-subscribe] #page:not(.watch) .yt-uix-button-subscription-container .yt-uix-button-icon-wrapper{
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscription-container .yt-uix-subscription-preferences-button,
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscription-container .yt-uix-button-icon-wrapper{
 display:none
 }
 /*c*/
@@ -30665,6 +30302,10 @@ border:2px solid #c03636
 [exp-modern-playlists] #watch7-playlist-tray .playlist-bar-item-playing .count{
 color:#c03636
 }
+[exp-modern-playlists] .watch7-playlist-bar-right{
+  max-width:400px!important;
+  min-width:400px!important
+}
 [exp-modern-playlists][exp-related-grid] .watch7-playlist-bar-right{
 max-width:627px!important;
 min-width:540px!important;
@@ -30749,7 +30390,7 @@ color:#167ac6
 
 
 .site-center-aligned #page.watch #guide{
-z-index:941
+z-index:11111111941
 }
 
 .st-svg{
@@ -30762,9 +30403,15 @@ width:calc(100% - 40px)
 }
 [modern-styles] .appbar-flexwatch-mini .action-panel-content,
 [modern-styles] .appbar-flexwatch-mini #watch7-creator-bar{
+width:100%;
 width:calc(100% - 40px);
-width:100%
+width:calc(100% - 30px)
 }
+[modern-styles] .appbar-flexwatch-mini .action-panel-content{
+  width:100%
+}
+[startube] [wl^="w11"] .action-panel-content,
+[startube] [wl^="w11"] #watch7-creator-bar,
 [startube] [wl^="w10"] .action-panel-content,
 [startube] [wl^="w10"] #watch7-creator-bar,
 [startube] [wl^="w9"] .action-panel-content,
@@ -30899,11 +30546,74 @@ display: none;
   border-left:none;
   border-radius:0 4px 4px 0
 }
+[skybird] #yt-masthead #startube-create-btn:hover,
+[skybird] #st-comment-sort:hover,
 [skybird] #yt-masthead #search-btn:hover{
   background:#e3e3e3
 }
+[skybird] #yt-masthead #startube-create-btn:active,
+[skybird] #st-comment-sort:active,
 [skybird] #yt-masthead #search-btn:active{
   background:#ddd
+}
+[skybird] #st-comment-sort{
+  background:#eee;
+  border:1px solid #aaa;
+  font-weight:400;
+  border-radius:4px;
+  padding:0 10px;
+  height:28px;
+  margin-left:12px
+}
+[skybird] #st-comment-sort span{
+  text-transform:none!important;
+  margin:0
+}
+[skybird] #watch-discussion #st-comment-sort .st-svg{
+  display:none
+}
+[skybird] #st-comment-sort .oz-sprite{
+  display:block;
+  margin-top:0;
+  margin-left:5px;
+  border:1px solid transparent;
+  border-top-color:#333;
+  border-width:4px 4px 0;
+  width:0;
+  height:0;
+  background:none;
+  opacity:1
+}
+[skybird] .distiller_yt-sb-standin .box{
+  border:1px solid #c8c8c8;
+  margin-left:60px!important;
+  padding:12px;
+  background:var(--fff);
+  padding-bottom:14px;
+  padding-top:10px
+}
+[skybird] .distiller_yt-sb .sb_text_input{
+  border:1px solid #c8c8c8;
+  margin-left:60px!important;
+  margin-top:0;
+  padding:12px;
+  background:var(--fff)
+}
+[skybird] .st-poly-btn{
+  text-transform:none;
+  font-weight:400;
+  padding:0 12px;
+  height:36px;
+  border-radius:4px;
+  border:1px solid #06c;
+  font-size:16px;
+  background:#2793e6;
+}
+[skybird] .st-poly-btn:hover{
+  background:#1f85d4;
+}
+[skybird] .st-poly-btn:active{
+  background:#1879c3;
 }
 [skybird] #startube-search-icon{
   display:block
@@ -30930,7 +30640,73 @@ display: none;
 [skybird] #sb-button-notify.startube-has-icon img{
   display:none
 }
+[skybird] .exp-top-guide .branded-page-v2-has-top-row .branded-page-v2-secondary-col .branded-page-box{
+  border:1px solid #c8c8c8;
+  box-shadow:none!important;
+  margin-left:15px!important
+}
 
+[skybird] #page.search #gh-activityfeed > .yt-card{
+  margin-top:0
+}
+
+
+[exp-invert-logo][skybird][exp-polymer-subscribe] .v3 .oz_frame .yt-uix-button-subscribe-branded,
+[exp-invert-logo][skybird][exp-polymer-subscribe] .v3 #page:not(.watch) .yt-uix-button-subscribe-branded,
+[exp-invert-logo][skybird] .v3 .st-sub-button .st-poly-sub .yt-uix-button-subscribe-branded{
+  background:#f00!important;
+  border-color:#c10000
+}
+[ringo2][skybird][exp-polymer-subscribe] .v3 .oz_frame .yt-uix-button-subscribe-branded,
+[ringo2][skybird][exp-polymer-subscribe] .v3 #page:not(.watch) .yt-uix-button-subscribe-branded,
+[ringo2][skybird] .v3 .st-sub-button .st-poly-sub .yt-uix-button-subscribe-branded{
+  background:#f03!important;
+  border-color:#c10031
+}
+[exp-invert-logo][skybird][exp-polymer-subscribe] .v3 .oz_frame .yt-uix-button-subscribe-branded:hover,
+[exp-invert-logo][skybird][exp-polymer-subscribe] .v3 #page:not(.watch) .yt-uix-button-subscribe-branded:hover,
+[exp-invert-logo][skybird] .v3 .st-sub-button .st-poly-sub .yt-uix-button-subscribe-branded:hover{
+  background:#d00!important
+}
+[ringo2][skybird][exp-polymer-subscribe] .v3 .oz_frame .yt-uix-button-subscribe-branded:hover,
+[ringo2][skybird][exp-polymer-subscribe] .v3 #page:not(.watch) .yt-uix-button-subscribe-branded:hover,
+[ringo2][skybird] .v3 .st-sub-button .st-poly-sub .yt-uix-button-subscribe-branded:hover{
+  background:#e60030!important
+}
+[exp-invert-logo][skybird][exp-polymer-subscribe] .v3 .oz_frame .yt-uix-button-subscribe-branded:active,
+[exp-invert-logo][skybird][exp-polymer-subscribe] .v3 #page:not(.watch) .yt-uix-button-subscribe-branded:active,
+[exp-invert-logo][skybird] .v3 .st-sub-button .st-poly-sub .yt-uix-button-subscribe-branded:active{
+  background:#c00!important
+}
+[ringo2][skybird][exp-polymer-subscribe] .v3 .oz_frame .yt-uix-button-subscribe-branded:active,
+[ringo2][skybird][exp-polymer-subscribe] .v3 #page:not(.watch) .yt-uix-button-subscribe-branded:active,
+[ringo2][skybird] .v3 .st-sub-button .st-poly-sub .yt-uix-button-subscribe-branded:active{
+  background:#d90026!important
+}
+[exp-invert-logo][skybird] #appbar-guide-menu .guide-section h3,
+[exp-invert-logo][skybird] .guide-section h3 a{
+  color:#f00!important
+}
+[ringo2][skybird] #appbar-guide-menu .guide-section h3,
+[ringo2][skybird] .guide-section h3 a{
+  color:#f03!important
+}
+[exp-invert-logo][skybird] #appbar-guide-menu .guide-channel .guide-item-selected,
+[exp-invert-logo][skybird] #appbar-guide-menu .guide-channel .guide-item-selected:hover{
+  background:#f00!important;
+  border-color:#c10000
+}
+[ringo2][skybird] #appbar-guide-menu .guide-channel .guide-item-selected,
+[ringo2][skybird] #appbar-guide-menu .guide-channel .guide-item-selected:hover{
+  background:#f03!important;
+  border-color:#c10031
+}
+[exp-invert-logo][skybird] .sub-icon-arrow{
+  fill:#f00
+}
+[ringo2][skybird] .sub-icon-arrow{
+  fill:#f03
+}
 
 
 [skybird] #watch-like-dislike-buttons img{
@@ -31150,7 +30926,8 @@ html:not([static])[skybird] #watch7-sidebar{
   padding:15px;
   box-shadow:none;
   width:calc(100% + 32px);
-  margin-top:15px
+  margin-top:15px;
+  background:#fff
 }
 [skybird] .yt-spinner-message{
   font-size:14px;
@@ -31210,6 +30987,7 @@ html:not([static])[skybird] #watch7-sidebar{
   padding:0 6px;
   height:36px;
 }
+[skybird] [wl^="w11"] .st-ltod-bar,
 [skybird] [wl^="w10"] .st-ltod-bar,
 [skybird] [wl^="w9"] .st-ltod-bar{
   bottom:-37px;
@@ -31244,7 +31022,8 @@ html:not([static])[skybird] #watch7-sidebar{
   background:none;
   padding:0;
   box-shadow:none;
-  border:none!important
+  border:none!important;
+  margin-top:15px
 }
 [skybird-cards] .branded-page-v2-primary-col{
   border:none!important
@@ -31353,7 +31132,12 @@ html:not([static])[skybird] #watch7-sidebar{
   fill:#767676
 }
 [skybird] .exp-top-guide .guide-item .st-svg{
-  margin:-5px 0 0 0
+  margin:-5px 0 0 0;
+  margin:0
+}
+[skybird] .exp-top-guide .guide-item svg{
+  width:20px!important;
+  height:20px!important
 }
 [skybird] .guide-item .st-svg svg{
   fill:#767676
@@ -31930,7 +31714,7 @@ background:#282828
   backdrop-filter:none;
   background:none!important
 }
-[frosted-glass] .dark-mode .st-chip-bar-container{
+.dark-mode [frosted-glass] .st-chip-bar-container{
   background:rgba(15,15,15,0.8) !important;
   background:none!important
 }
@@ -32120,10 +31904,16 @@ background:#282828
   width:100%;
   color:var(--666)
 }
-.v3:not([wl^="w7"]) #watch7-content > .yt-uix-button-panel{
+.v3:not([wl^="w7"]) #watch7-content > .yt-uix-button-panel #watch7-action-panels,
+.v3:not([wl^="w7"]) #watch7-content > .yt-uix-button-panel div:not(#watch7-creator-bar):not(.yt-card),
+.v3:not([wl^="w7"]) #watch7-content > .yt-uix-button-panel .yt-card > div:not(#watch7-creator-bar){
   position:absolute;
   pointer-events:none;
   opacity:0
+}
+.cardified-page .v3:not([wl^="w7"]) .yt-card #watch7-creator-bar{
+  margin-top:0;
+  padding-inline:15px
 }
 html[hide-appbar] .v3:not([wl^="w7"]) #watch7-content > .yt-uix-button-panel{
   display:none
@@ -32206,6 +31996,7 @@ html:not([exp-watch8-no-more]) [wl="w8"] #st-transcript-button{
 [exp-sharrow] [wl="w8"] #st-share-button .st-btn-icon{
   background:no-repeat url(https://s.ytimg.com/yts/imgbin/www-hitchhiker-vfljEooDy.png)-21px -1679px
 }
+[wl^="w11"] #watch7-sentiment-actions,
 [wl^="w10"] #watch7-sentiment-actions,
 [wl^="w9"] #watch7-sentiment-actions,
 [wl="w8"] #watch7-sentiment-actions{
@@ -32504,6 +32295,7 @@ html:not([exp-outline-icons]) [wl="w9a"] .st-btn svg{
   width:20px!important;
   height:20px!important
 }
+[wl^="w11"] .st-floater .st-svg,
 [wl^="w10"] .st-floater .st-svg,
 [wl^="w9"] .st-floater .st-svg{
   display:block
@@ -32511,10 +32303,13 @@ html:not([exp-outline-icons]) [wl="w9a"] .st-btn svg{
 [poly-styles] #watch-headline-title{
 font-size:18px
 }
+[wl^="w11"][layout^="cosmic"] .st-btn-icon svg,
 [wl^="w10"][layout^="cosmic"] .st-btn-icon svg,
 [wl^="w9"][layout^="cosmic"] .st-btn-icon svg,
+[wl^="w11"][layout^="aozora"] .st-btn-icon svg,
 [wl^="w10"][layout^="aozora"] .st-btn-icon svg,
 [wl^="w9"][layout^="aozora"] .st-btn-icon svg,
+[wl^="w11"][layout^="stargazer"] .st-btn-icon svg,
 [wl^="w10"][layout^="stargazer"] .st-btn-icon svg,
 [wl^="w9"][layout^="stargazer"] .st-btn-icon svg{
   width:24px!important;
@@ -32560,21 +32355,25 @@ font-size:18px
   border-bottom:none
 }
 [wl^="w5"] #watch-uploader-info,
+[wl^="w11"] #watch-uploader-info,
 [wl^="w10"] #watch-uploader-info,
 [wl^="w9"] #watch-uploader-info{
   display:none
 }
+[wl^="w11"] .st-desc-content .run,
 [wl^="w10"] .st-desc-content .run,
 [wl^="w9"] .st-desc-content .run{
   color:var(--030303);
   font-size:14px;
   line-height:21px
 }
+[wl^="w11"] .st-desc-content .run-link,
 [wl^="w10"] .st-desc-content .run-link,
 [wl^="w9"] .st-desc-content .run-link{
-  color:var(--poly-link,#065fd4);
+  color:var(--poly-link);
   text-decoration:none
 }
+[wl^="w11"] #watch-description-extras .title,
 [wl^="w10"] #watch-description-extras .title,
 [wl^="w9"] #watch-description-extras .title{
   font-size:14px;
@@ -32582,14 +32381,18 @@ font-size:18px
   color:var(--030303);
   line-height:21px
 }
+[wl^="w11"] #watch-description-toggle,
 [wl^="w10"] #watch-description-toggle,
 [wl^="w9"] #watch-description-toggle,
+[wl^="w11"] #watch-description-collapse,
+[wl^="w11"] #watch-description-expand,
 [wl^="w10"] #watch-description-collapse,
 [wl^="w10"] #watch-description-expand,
 [wl^="w9"] #watch-description-collapse,
 [wl^="w9"] #watch-description-expand{
   width:fit-content;
 }
+[wl^="w11"] #watch-description-toggle button,
 [wl^="w10"] #watch-description-toggle button,
 [wl^="w9"] #watch-description-toggle button{
   background:none!important;
@@ -32597,18 +32400,23 @@ font-size:18px
   border:none!important;
   padding:0
 }
+[wl^="w11"] #watch-like-dislike-buttons .yt-uix-button .run,
 [wl^="w10"] #watch-like-dislike-buttons .yt-uix-button .run,
 [wl^="w9"] #watch-like-dislike-buttons .yt-uix-button .run,
+html:not([exp-wmr-buttons-lowercase]) [wl^="w11"] #watch-description-toggle button .run,
 html:not([exp-wmr-buttons-lowercase]) [wl^="w10"] #watch-description-toggle button .run,
 [wl^="w9"] #watch-description-toggle button .run{
   color:var(--606060, #606060);
   font-size:13px;
   text-transform:uppercase
 }
+[exp-wmr-buttons-lowercase] [wl^="w11"] #watch-description-toggle button .run,
 [exp-wmr-buttons-lowercase] [wl^="w10"] #watch-description-toggle button .run{
   color:var(--030303);
   font-size:14px
 }
+[exp-outline-icons] [wl^="w11"] #watch7-sentiment-actions .yt-uix-button .run,
+[exp-outline-icons] [wl^="w11"] .st-btn,
 [exp-outline-icons] [wl^="w10"] #watch7-sentiment-actions .yt-uix-button .run,
 [exp-outline-icons] [wl^="w10"] .st-btn,
 [exp-outline-icons] [wl^="w9"] #watch7-sentiment-actions .yt-uix-button .run,
@@ -32619,24 +32427,30 @@ html:not([exp-wmr-buttons-lowercase]) [wl^="w10"] #watch-description-toggle butt
 html:not([exp-outline-icons]) [wl^="w9"] #watch-like.yt-uix-button-toggled .run,
 html:not([exp-outline-icons]) [wl^="w9"] #watch-like.yt-uix-button-toggled svg,
 html:not([exp-outline-icons]) [wl^="w10"] #watch-like.yt-uix-button-toggled .run,
-html:not([exp-outline-icons]) [wl^="w10"] #watch-like.yt-uix-button-toggled svg{
+html:not([exp-outline-icons]) [wl^="w10"] #watch-like.yt-uix-button-toggled svg,
+html:not([exp-outline-icons]) [wl^="w11"] #watch-like.yt-uix-button-toggled .run,
+html:not([exp-outline-icons]) [wl^="w11"] #watch-like.yt-uix-button-toggled svg{
   color:#1b7fcc;
   fill:#1b7fcc;
 }
 html:not([exp-outline-icons])[poly-g2-colors] [wl^="w9"] #watch-like.yt-uix-button-toggled .run,
 html:not([exp-outline-icons])[poly-g2-colors] [wl^="w9"] #watch-like.yt-uix-button-toggled svg,
 html:not([exp-outline-icons])[poly-g2-colors] [wl^="w10"] #watch-like.yt-uix-button-toggled .run,
-html:not([exp-outline-icons])[poly-g2-colors] [wl^="w10"] #watch-like.yt-uix-button-toggled svg{
-  fill:var(--poly-link,#065fd4);
-  color:var(--poly-link,#065fd4)
+html:not([exp-outline-icons])[poly-g2-colors] [wl^="w10"] #watch-like.yt-uix-button-toggled svg,
+html:not([exp-outline-icons])[poly-g2-colors] [wl^="w11"] #watch-like.yt-uix-button-toggled .run,
+html:not([exp-outline-icons])[poly-g2-colors] [wl^="w11"] #watch-like.yt-uix-button-toggled svg{
+  fill:var(--poly-link);
+  color:var(--poly-link)
 }
 html:not([exp-outline-icons])[poly-g2-colors] .video-extras-sparkbar-likes{
-  background:var(--poly-link,#065fd4)
+  background:var(--poly-link)
 }
 html:not([exp-outline-icons]) [wl^="w9"] #watch-dislike.yt-uix-button-toggled .run,
 html:not([exp-outline-icons]) [wl^="w9"] #watch-dislike.yt-uix-button-toggled svg,
 html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled .run,
-html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled svg{
+html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled svg,
+html:not([exp-outline-icons]) [wl^="w11"] #watch-dislike.yt-uix-button-toggled .run,
+html:not([exp-outline-icons]) [wl^="w11"] #watch-dislike.yt-uix-button-toggled svg{
   fill:var(--030303);
   color:var(--030303)
 }
@@ -32645,6 +32459,7 @@ html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled s
 }
 [wl="w9a"] .st-owner .st-video-count,
 [wl="w9b"] .st-owner .st-video-count,
+[wl^="w11"] .st-owner .st-video-count,
 [wl^="w10"] .st-owner .st-video-count,
 [wl="w9b"] .st-owner .st-pub-date,
 [wl="w9a"] .st-dot,
@@ -32653,7 +32468,7 @@ html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled s
 .st-polymer-owner .st-owner-title .st-video-count{
   display:none
 }
-.st-polymer-owner .st-sub-button{
+.st-polymer-owner .st-sub-area{
   margin-left:auto
 }
 .st-polymer-owner .st-pfp img{
@@ -32682,6 +32497,7 @@ html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled s
   text-decoration:none;
   width:fit-content
 }
+[wl^="w11"] .st-polymer-owner .st-owner-name a,
 [wl^="w10final"] .st-polymer-owner .st-owner-name a{
   font-size:16px;
   margin-bottom:4px;
@@ -32690,6 +32506,7 @@ html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled s
   margin-left:16px;
   width:fit-content
 }
+[wl^="w11"] .st-polymer-owner .st-owner-info,
 [wl^="w10final"] .st-polymer-owner .st-owner-info{
   margin-left:12px
 }
@@ -32697,6 +32514,7 @@ html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled s
   color:var(--606060, #606060);
   font-size:13px
 }
+[wl^="w1l"] .st-polymer-owner .st-owner-subtitle,
 [wl^="w10final"] .st-polymer-owner .st-owner-subtitle{
   font-size:12px
 }
@@ -32718,6 +32536,7 @@ html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled s
   padding-bottom:12px;
   padding-top:16px
 }
+[wl^="w11"] .st-btn,
 [wl^="w10"] .st-btn,
 [wl^="w9"] .st-btn{
   padding-right:8px;
@@ -32727,32 +32546,39 @@ html:not([exp-outline-icons]) [wl^="w10"] #watch-dislike.yt-uix-button-toggled s
   font-weight:var(--bold);
   color:var(--606060)
 }
+[exp-outline-icons] [wl^="w11"] .st-btn,
 [exp-outline-icons] [wl^="w10"] .st-btn,
 [exp-outline-icons] [wl^="w9"] .st-btn{
   color:var(--030303)
 }
+[wl^="w11"] .st-btn-icon,
 [wl^="w10"] .st-btn-icon,
 [wl^="w9"] .st-btn-icon{
   padding:8px
 }
+[exp-wmr-buttons-lowercase] [wl^="w11"] .st-btn,
 [exp-wmr-buttons-lowercase] [wl^="w10"] .st-btn,
 [exp-wmr-buttons-lowercase] [wl^="w9"] .st-btn{
   text-transform:none
 }
+[wl^="w11"] #watch-like-dislike-buttons .yt-uix-button-icon-wrapper,
 [wl^="w10"] #watch-like-dislike-buttons .yt-uix-button-icon-wrapper,
 [wl^="w9"] #watch-like-dislike-buttons .yt-uix-button-icon-wrapper{
 margin-right:8px
 }
+[wl^="w11"] #watch-like-dislike-buttons svg,
 [wl^="w10"] #watch-like-dislike-buttons svg,
 [wl^="w9"] #watch-like-dislike-buttons svg{
 width:20px!important;
 height:20px!important
 }
+[exp-outline-icons] [wl^="w11"] #watch-like-dislike-buttons svg,
 [exp-outline-icons] [wl^="w10"] #watch-like-dislike-buttons svg,
 [exp-outline-icons] [wl^="w9"] #watch-like-dislike-buttons svg{
 width:24px!important;
 height:24px!important
 }
+[wl^="w11"] #watch7-sentiment-actions .yt-uix-button,
 [wl^="w10"] #watch7-sentiment-actions .yt-uix-button,
 [wl^="w9"] #watch7-sentiment-actions .yt-uix-button{
   padding:0 8px;
@@ -32764,38 +32590,51 @@ height:24px!important
   border:none!important;
   opacity:1!important
 }
+[wl^="w11"] #watch-like.yt-uix-button,
 [wl^="w10"] #watch-like.yt-uix-button,
 [wl^="w9"] #watch-like.yt-uix-button{
   margin-left:0
 }
+html:not([exp-wmr-addto]) [wl^="w11"] #st-addto-button,
 html:not([exp-wmr-addto]) [wl^="w10"] #st-addto-button,
 html:not([exp-wmr-addto]) [wl^="w9"] #st-addto-button,
+[exp-wmr-addto] [wl^="w11"] #st-save-button,
 [exp-wmr-addto] [wl^="w10"] #st-save-button,
 [exp-wmr-addto] [wl^="w9"] #st-save-button,
+[exp-wmr-no-save-text] [wl^="w11"] #st-addto-button .st-btn-text,
+[exp-wmr-no-save-text] [wl^="w11"] #st-save-button .st-btn-text,
 [exp-wmr-no-save-text] [wl^="w10"] #st-addto-button .st-btn-text,
 [exp-wmr-no-save-text] [wl^="w10"] #st-save-button .st-btn-text,
 [exp-wmr-no-save-text] [wl^="w9"] #st-addto-button .st-btn-text,
 [exp-wmr-no-save-text] [wl^="w9"] #st-save-button .st-btn-text,
+[exp-wmr-no-share-text] [wl^="w11"] #st-share-button .st-btn-text,
 [exp-wmr-no-share-text] [wl^="w10"] #st-share-button .st-btn-text,
 [exp-wmr-no-share-text] [wl^="w9"] #st-share-button .st-btn-text,
+[wl^="w11"] #st-more-button .st-btn-text,
 [wl^="w10"] #st-more-button .st-btn-text,
 [wl^="w9"] #st-more-button .st-btn-text,
+[wl^="w11"] #watch-like-dislike-buttons img,
 [wl^="w10"] #watch-like-dislike-buttons img,
 [wl^="w9"] #watch-like-dislike-buttons img{
   display:none!important
 }
+[exp-wmr-no-save-text] [wl^="w11"] #st-addto-button,
+[exp-wmr-no-save-text] [wl^="w11"] #st-save-button,
 [exp-wmr-no-save-text] [wl^="w10"] #st-addto-button,
 [exp-wmr-no-save-text] [wl^="w10"] #st-save-button,
 [exp-wmr-no-save-text] [wl^="w9"] #st-addto-button,
 [exp-wmr-no-save-text] [wl^="w9"] #st-save-button,
+[exp-wmr-no-share-text] [wl^="w11"] #st-share-button,
 [exp-wmr-no-share-text] [wl^="w10"] #st-share-button,
 [exp-wmr-no-share-text] [wl^="w9"] #st-share-button{
   padding-right:0
 }
+[wl^="w11"] .st-ltod,
 [wl^="w10"] .st-ltod,
 [wl^="w9"] .st-ltod{
   position:relative;
 }
+[wl^="w11"] .st-ltod-bar,
 [wl^="w10"] .st-ltod-bar,
 [wl^="w9"] .st-ltod-bar{
   width:100%;
@@ -32804,10 +32643,12 @@ html:not([exp-wmr-addto]) [wl^="w9"] #st-addto-button,
   height:2px;
   bottom:-14px
 }
+html:not([poly-styles]):not([skybird]) [wl^="w11"] .st-ltod-bar,
 html:not([poly-styles]):not([skybird]) [wl^="w10"] .st-ltod-bar,
 html:not([poly-styles]):not([skybird]) [wl^="w9"] .st-ltod-bar{
   bottom:-14px
 }
+[round-styles] [wl^="w11"] .st-ltod-bar,
 [round-styles] [wl^="w9"] .st-ltod-bar,
 [round-styles] [wl="w10beta"] .st-ltod-bar,
 [wl^="w10final"] .st-ltod-bar{
@@ -32817,6 +32658,7 @@ html:not([poly-styles]):not([skybird]) [wl^="w9"] .st-ltod-bar{
 [round-styles] [wl^="w9"] .st-ltod-bar{
   bottom:-8px
 }
+[wl^="w11"] .video-extras-sparkbars,
 [wl^="w10"] .video-extras-sparkbars,
 [wl^="w9"] .video-extras-sparkbars{
   width:100%;
@@ -32826,14 +32668,17 @@ html:not([poly-styles]):not([skybird]) [wl^="w9"] .st-ltod-bar{
 #st-desc-actions-row .st-actions{
   margin-left:auto
 }
+[wl^="w11"] .yt-uix-expander-collapsed #watch-description-extra-info,
 [wl^="w10"] .yt-uix-expander-collapsed #watch-description-extra-info,
 [wl^="w9"] .yt-uix-expander-collapsed #watch-description-extra-info{
   display:none
 }
+[poly-g2-colors]:not([exp-outline-icons]) [wl^="w11"] .st-ltod:not(:has(#watch-like.yt-uix-button-toggled)) .video-extras-sparkbar-likes,
 [poly-g2-colors]:not([exp-outline-icons]) [wl^="w10"] .st-ltod:not(:has(#watch-like.yt-uix-button-toggled)) .video-extras-sparkbar-likes,
 [poly-g2-colors]:not([exp-outline-icons]) [wl^="w9"] .st-ltod:not(:has(#watch-like.yt-uix-button-toggled)) .video-extras-sparkbar-likes{
   background:#909090
 }
+[poly-g2-colors]:not([exp-outline-icons]) [wl^="w11"] .st-ltod:has(#watch-dislike.yt-uix-button-toggled) .video-extras-sparkbar-dislikes,
 [poly-g2-colors]:not([exp-outline-icons]) [wl^="w10"] .st-ltod:has(#watch-dislike.yt-uix-button-toggled) .video-extras-sparkbar-dislikes,
 [poly-g2-colors]:not([exp-outline-icons]) [wl^="w9"] .st-ltod:has(#watch-dislike.yt-uix-button-toggled) .video-extras-sparkbar-dislikes{
   background:var(--030303)
@@ -32841,16 +32686,19 @@ html:not([poly-styles]):not([skybird]) [wl^="w9"] .st-ltod-bar{
 
 
 /* watch10 */
+[wl^="w11"] #st-more-button,
 [wl^="w10"] #st-more-button,
 [wl^="w9"] #st-more-button{
   margin-right:0;
   padding:0 6px!important;
   padding:0!important
 }
+[round-styles] [wl^="w11"] #st-more-button,
 [round-styles] [wl^="w10"] #st-more-button,
 [round-styles] [wl^="w9"] #st-more-button{
   padding:0 6px!important
 }
+[wl^="w11"] #st-more-button .st-btn-icon,
 [wl^="w10"] #st-more-button .st-btn-icon,
 [wl^="w9"] #st-more-button .st-btn-icon{
   margin:0
@@ -32914,18 +32762,25 @@ html:not([comment-teaser]) .st-polymer-owner .st-owner-info{
   margin-right:24px
 }
 html:not([comment-teaser]) .st-teaser,
+[wl^="w11"] .st-pub-date,
 [wl^="w10"] .st-pub-date,
 [wl="w10beta"] .st-relative-date,
 [wl="w10beta"] .st-short-view-count,
+[wl^="w11"] .st-desc.expanded .st-short-view-count,
+[wl^="w11"] .st-desc.expanded .st-relative-date,
+[wl^="w11"] .st-desc:not(.expanded) .st-view-count,
+[wl^="w11"] .st-desc:not(.expanded) .st-upload-date,
 [wl^="w10final"] .st-desc.expanded .st-short-view-count,
 [wl^="w10final"] .st-desc.expanded .st-relative-date,
 [wl^="w10final"] .st-desc:not(.expanded) .st-view-count,
 [wl^="w10final"] .st-desc:not(.expanded) .st-upload-date{
   display:none
 }
+[round-styles] [wl^="w11"] .st-btn,
 [round-styles] [wl^="w10final"] .st-btn,
 [round-styles] [wl="w10beta"] .st-btn,
 [round-styles] [wl^="w9"] .st-btn,
+[round-styles] [wl^="w11"] #watch-like-dislike-buttons .yt-uix-button,
 [round-styles] [wl^="w10final"] #watch-like-dislike-buttons .yt-uix-button,
 [round-styles] [wl="w10beta"] #watch-like-dislike-buttons .yt-uix-button,
 [round-styles] [wl^="w9"] #watch-like-dislike-buttons .yt-uix-button{
@@ -32934,27 +32789,33 @@ html:not([comment-teaser]) .st-teaser,
   height:36px;
   padding:0 12px
 }
+[round-styles] [wl^="w11"] .st-btn,
 [round-styles] [wl^="w10final"] .st-btn,
 [round-styles] [wl="w10beta"] .st-btn,
 [round-styles] [wl^="w9"] .st-btn{
   padding:0 12px
 }
+[round-styles] [wl^="w11"] .st-btn:hover,
 [round-styles] [wl^="w10final"] .st-btn:hover,
 [round-styles] [wl="w10beta"] .st-btn:hover,
 [round-styles] [wl^="w9"] .st-btn:hover,
+[round-styles] [wl^="w11"] #watch-like-dislike-buttons .yt-uix-button:hover,
 [round-styles] [wl^="w10final"] #watch-like-dislike-buttons .yt-uix-button:hover,
 [round-styles] [wl="w10beta"] #watch-like-dislike-buttons .yt-uix-button:hover,
 [round-styles] [wl^="w9"] #watch-like-dislike-buttons .yt-uix-button:hover{
   background:var(--tpl)!important;
 }
+[round-styles] [wl^="w11"] .st-btn:active,
 [round-styles] [wl^="w10final"] .st-btn:active,
 [round-styles] [wl="w10beta"] .st-btn:active,
 [round-styles] [wl^="w9"] .st-btn:active,
+[round-styles] [wl^="w11"] #watch-like-dislike-buttons .yt-uix-button:active,
 [round-styles] [wl^="w10final"] #watch-like-dislike-buttons .yt-uix-button:active,
 [round-styles] [wl="w10beta"] #watch-like-dislike-buttons .yt-uix-button:active,
 [round-styles] [wl^="w9"] #watch-like-dislike-buttons .yt-uix-button:active{
   background:var(--ftpl)!important;
 }
+[round-styles] [wl^="w11"] .st-btn-icon,
 [round-styles] [wl^="w10final"] .st-btn-icon,
 [round-styles] [wl="w10beta"] .st-btn-icon,
 [round-styles] [wl^="w9"] .st-btn-icon{
@@ -32977,7 +32838,8 @@ html:not([comment-teaser]) .st-teaser,
   padding-bottom:10px
 }
 /* end lss */
-[wl^="w10final"] #st-more-button,
+[round-styles] [wl="w11"] #st-more-button,
+[round-styles] [wl^="w10final"] #st-more-button,
 [round-styles] [wl="w10beta"] #st-more-button,
 [round-styles] [wl^="w9"] #st-more-button{
   padding-left:8px
@@ -33005,6 +32867,7 @@ position:absolute
 .st-comment-teaser{
   cursor:pointer
 }
+[wl^="w11"] .st-desc-views-info,
 [wl^="w10final"] .st-teaser-header,
 [wl^="w10"] .st-desc-views-info{
   color:var(--030303);
@@ -33035,6 +32898,8 @@ position:absolute
 [wl^="w10final"] .st-teaser-header{
   margin-bottom:10px
 }
+[wl^="w11"] .st-desc-views-info .st-short-view-count,
+[wl^="w11"] .st-desc-views-info .st-view-count,
 [wl^="w10"] .st-desc-views-info .st-short-view-count,
 [wl^="w10"] .st-desc-views-info .st-view-count{
   margin-right:7px
@@ -33042,6 +32907,7 @@ position:absolute
 [wl^="w10final"] .st-comments-text{
   margin-right:1px
 }
+[wl^="w11"] .st-desc-views-info .st-dot,
 [wl^="w10"] .st-desc-views-info .st-dot{
   display:none
 }
@@ -33068,6 +32934,7 @@ position:absolute
 [wl^="w10final"] .st-comment-teaser{
   padding:15px
 }
+[wl^="w11"] #watch-description.yt-uix-expander-collapsed #watch-description-content,
 [wl^="w10"] #watch-description.yt-uix-expander-collapsed #watch-description-content{
   max-height:58px!important;
   height:58px;
@@ -33191,6 +33058,7 @@ background:var(--tpl);
 .st-floater svg{
   width:24px!important
 }
+[wl^="w11"] .st-stats-trigger-2,
 [wl^="w9"] .st-stats-trigger-2,
 [wl^="w10"] .st-stats-trigger-2{
   display:none!important
@@ -33209,6 +33077,7 @@ background:var(--tpl);
   box-shadow:0 2px 4px rgba(0,0,0,.2);
   padding:10px 0
 }
+[wl^="w11"] .st-floater,
 [wl^="w10"] .st-floater,
 [wl^="w9"] .st-floater{
   background:var(--spec-menu-bg);
@@ -33244,6 +33113,7 @@ background:var(--tpl);
 [wl^="w8"] .st-floater-menuitem:hover:active .st-floater-icon{
   opacity:1
 }
+[wl^="w11"] .st-floater-menuitem,
 [wl^="w10"] .st-floater-menuitem,
 [wl^="w9"] .st-floater-menuitem{
   height:36px;
@@ -33255,6 +33125,7 @@ background:var(--tpl);
 .st-floater-menuitem:hover{
   background:var(--eee)
 }
+[wl^="w11"] .st-floater-menuitem:hover,
 [wl^="w10"] .st-floater-menuitem:hover,
 [wl^="w9"] .st-floater-menuitem:hover{
   background:var(--tpl)
@@ -33262,6 +33133,7 @@ background:var(--tpl);
 .st-floater-icon{
   margin-right:10px
 }
+[wl^="w11"] .st-floater-icon,
 [wl^="w10"] .st-floater-icon,
 [wl^="w9"] .st-floater-icon{
   margin-right:16px
@@ -33678,6 +33550,7 @@ background:var(--tpl);
 .v3:not([wl^="w4"]) #st-side-owner-row .st-pfp,
 [wl^="w9"] .st-side-panel-expander,
 [wl^="w10"] .st-side-panel-expander,
+[wl^="w11"] .st-side-panel-expander,
 [show] .st-side-panel-expander,
 [show="channel-about"] #st-videos-panel,
 [show="channel-about"] > .watch-sidebar-section,
@@ -34651,7 +34524,14 @@ display:none
   background:rgba(255,255,255,0.88)!important;
   backdrop-filter:blur(48px);
   width:100vw;
-  z-index:1
+  z-index:23
+}
+[exp-rich-grid-home][location^="feed-recs"] #st-frosted-glass{
+  z-index:1;
+  height:112px
+}
+[layout^="hh"] #st-frosted-glass{
+  height:50px
 }
 [location="watch"] #st-frosted-glass{
   z-index:1928
@@ -34659,10 +34539,7 @@ display:none
 .dark-mode #st-frosted-glass{
   background:rgba(15,15,15,0.8)!important
 }
-[location^="feed-recs"] #st-frosted-glass{
-  height:112px
-}
-[location^="feed-recs"][frosted-glass] #guide{
+[location^="feed-recs"] [frosted-glass] #guide{
   position:relative;
   z-index:4
 }
@@ -34820,6 +34697,144 @@ border-color:#484851
   max-width:437px!important;
   margin-right:15px
 }
+.gecko .ytp-button-watch-later:not([class*="html5-"])::after, .gecko .ytp-button-prev::after, .gecko .ytp-button-next::after, .gecko .ytp-button-playlist::after{
+  top:0
+}
+.feed-list .top-row-alignment{
+  display:none
+}
+/* create button and poly buttons */
+.v3:not([is-owner]) .st-polymer-owner .st-owner-buttons,
+[is-owner] .st-polymer-owner .st-sub-button{
+  display:none!important
+}
+[poly-layout] .st-poly-btn{
+  background:var(--poly-link);
+  color:#fff;
+  height:36px;
+  text-transform:uppercase;
+  border-radius:2px;
+  padding:0 16px;
+  margin-left:8px;
+  font-weight:var(--bold);
+  font-size:14px;
+  text-decoration:none!important
+}
+[layout^="polyE2017"] .st-poly-btn,
+[layout^="poly201"]:not([layout^="poly2019"]) .st-poly-btn{
+  background:#2793e6
+}
+[round-styles] .st-poly-btn{
+  text-transform:none;
+  border-radius:24px
+}
+#st-analytics{
+  margin-left:0
+}
+#startube-create-btn{
+  opacity:1
+}
+[poly-layout] #yt-masthead #startube-create-btn{
+  margin-top:2px;
+  height:36px;
+  padding:0 16px 0 10px;
+  background:none;
+  color:var(--000);
+  box-shadow:none;
+  border:1px solid var(--twpl);
+  border-radius:2px
+}
+[skybird] #yt-masthead #startube-create-btn{
+  margin-top:3px;
+  text-transform:none;
+  font-weight:400;
+  border-radius:4px;
+  font-size:16px;
+  background:#eee;
+  border:1px solid #aaa;
+  height:36px;
+  color:var(--333)
+}
+[exp-big-search] #yt-masthead #startube-create-btn{
+  margin-top:6px;
+}
+[round-styles] [poly-layout] #yt-masthead #startube-create-btn:hover{
+  background:var(--tpl)
+}
+[round-styles] [poly-layout] #yt-masthead #startube-create-btn:active{
+  background:var(--twpl)
+}
+[round-styles] #yt-masthead #startube-create-btn{
+  background:var(--fpl);
+  border:none;
+  border-radius:24px
+}
+#startube-create-btn .poly-btn-arrow{
+  margin:4px 0 0 0
+}
+[poly-layout] #startube-create-btn .poly-btn-arrow{
+  display:none
+}
+[layout^="poly201"] #yt-masthead #startube-create-btn{
+  border:none;
+  color:#f00;
+  margin-right:-8px
+}
+[layout^="poly2019"] #yt-masthead #startube-create-btn{
+  color:#c00
+}
+[layout^="polyE2017"] #yt-masthead #startube-create-btn,
+[layout^="poly2016"] #yt-masthead #startube-create-btn{
+  border:none;
+  color:#e62117;
+  margin-right:-8px
+}
+[ringo2] [layout^="poly201"] #yt-masthead #startube-create-btn{
+  color:#f03
+}
+[poly-layout] #startube-create-btn .poly-btn-text{
+  margin-left:6px
+}
+[round-styles] [wl^="w11"] #watch-like-dislike-buttons button .run,
+[round-styles] [wl^="w10"] #watch-like-dislike-buttons button .run,
+[round-styles] [wl^="w9"] #watch-like-dislike-buttons button .run,
+[round-styles] [wl^="w11"] .st-btn,
+[round-styles] [wl^="w10"] .st-btn,
+[round-styles] [wl^="w9"] .st-btn{
+  color:var(--000);
+  font-size:14px
+}
+[poly-layout] #startube-create-btn .filled-icon svg{
+  fill:#e62117
+}
+[exp-invert-logo] [poly-layout] #startube-create-btn .filled-icon svg{
+  fill:#f00
+}
+[poly-g2-colors] [poly-layout] #startube-create-btn .filled-icon svg{
+  fill:#c00
+}
+[ringo2] [poly-layout] #startube-create-btn .filled-icon svg{
+  fill:#f03
+}
+[layout^="hh"] .poly-btn-icon > div{
+  display:none
+}
+[layout^="hh"] .poly-btn-icon{
+  background:no-repeat url(https://s.ytimg.com/yt/imgbin/www-refresh-vflBOSsv4.png)-29px -263px;
+  width:8px;
+  height:9px;
+  margin-right:6px;
+  margin-top:1px
+}
+/* stargazer fix */
+.distiller_yt-sb-container{
+  z-index:1
+}
+/* poly grid fix */
+[poly-styles] #page.channel .channels-browse-content-grid .channels-content-item{
+  margin-bottom:0
+}
+
 </style>
 `;
 html.insertBefore(nE,html.children[0]);
@@ -34913,7 +34928,7 @@ function doBanner(){
 	}
 });
 }
-function downloadFile(file){
+    function downloadFile(file){
 	const link = document.createElement('a');
 	link.style.display = 'none';
 	link.href = URL.createObjectURL(file);
