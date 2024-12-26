@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0.3
+// @version      2.4.0.31
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,9 +128,9 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer = "2.4.0 Beta 2";
+let currStarVer = "2.4.0 Beta 2 Patch 1";
 let currStarChan = "beta"
-let STUID="st2402b";
+let STUID="st2402b1p";
 let STDELAY=300;
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
@@ -6376,13 +6376,14 @@ function getVideoSize(){
 }
 function finishVideoSize(){
 	if($("#page.watch")){
+        let additive=0;
 		if($("#st-sizerule-style-2")){
 			$("#st-sizerule-style-2").remove();
 		}
 		let container2 = $("html");
 		let newElem2 = document.createElement("div");
 		let sideWidth = $("#watch7-sidebar").getBoundingClientRect();
-        if(STS.sbStyles==true){
+        if($("[layout^='sb']")){
             sideWidth = sideWidth.width + 60;
         }else{
             sideWidth = sideWidth.width;
