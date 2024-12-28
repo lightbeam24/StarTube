@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0.32
+// @version      2.4.0.40
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,9 +128,9 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer = "2.4.0 Beta 2 Patch 2";
+let currStarVer = "2.4.0 Beta 3";
 let currStarChan = "beta"
-let STUID="st2402b2p";
+let STUID="st24030p";
 let STDELAY=300;
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
@@ -2619,7 +2619,7 @@ let ScFa={
 	},
 	"expAdaptiveLayout2024HH":{
 		name:"expAdaptiveLayout2024HH",
-		desc:"(For the adaptive layout) Use 2024 Hitchhiker for videos uploaded in 2024."
+		desc:"(For the adaptive layout) Use 2024 Hitchhiker for videos uploaded in 2024 and 2025."
 	},
 	"show2point4":{
 		name:"show2point4",
@@ -5063,7 +5063,8 @@ function STAozoraSettings(){
     SRS.compactName.tValue="off";
     SRS.playerSpinner.tValue="classic";
     SRS.channelVersion.tValue="c3";
-	STS.expCosmicGuideLayout = true;
+	STS.expCosmicGuideLayout=true;
+    STS.expCosmicComments=false;
 
 	STS.expChannels3TimeVisible = false;
 	STS.expChannels3DateVisible = false;
@@ -6704,7 +6705,7 @@ function getWatchMetadata(x){
             nH=$(".st-title");
             nH.append(tM);
         }
-        if($(".st-ltod-bar")){
+        if($(".st-ltod-bar")&&$(".video-extras-likes-dislikes")){
             tM=$(".video-extras-sparkbars");
             nH=$(".st-ltod-bar");
             nH.append(tM);
@@ -8633,6 +8634,11 @@ function createYTC(){
 }
 let polyComment = false;
 function everyLoadNeo(x){
+    if(x==="x"&&$("#st-related-header")==null){
+        if(window.location.href.includes("/watch")||window.location.href.includes("/shorts/")){
+            $("body .v3").setAttribute("rel-head-added","false");
+        }
+    }
     var elm = "#yt-masthead";
     waitForElement10(elm).then(function(elm){
         if(canGo != false){
@@ -13768,12 +13774,127 @@ function deleteTitleOnTop(){
 			});
 		}
 	}
+    function toggleSetting(setting){
+        let ap=$("body .v3").getAttribute(setting);
+        let state="true";
+        if(ap=="true"){
+            ap=false;
+            state="false";
+        }else{
+            ap=true;
+        }
+        $("body .v3").setAttribute(setting,ap);
+        if($("[toggle='"+setting+"']")){
+            $("[toggle='"+setting+"']").setAttribute("state",state);
+        }
+        if(setting=="autoplay"){
+            //V3_SETTINGS_CONF.AUTOPLAY_ENABLED=ap;
+            $(".autoplay-bar .checkbox-on-off input").click();
+        }
+    }
+    function createAutoplay(){
+        if($(".autoplay-bar")&&$("#st-related-header")==null){
+            let conta=$(".autoplay-bar");
+            let nE=document.createElement("div");
+            nE.id="st-related-header";
+            nE.classList="flex-bar st-rh";
+            nE.innerHTML=`
+            <div class="st-rh-left flex-bar watch-sidebar-head">
+                <div id="st-un-label" class="st-rh-label">
+                    <span>Up next</span>
+                </div>
+                <div id="st-s-label" class="st-rh-label none">
+                    <span>Suggestions</span>
+                </div>
+                <div id="st-r-label" class="st-rh-label none">
+                    <span>Related</span>
+                </div>
+                <div id="st-rv-label" class="st-rh-label none">
+                    <span>Related videos</span>
+                </div>
+                <div id="st-mv-label" class="st-rh-label none">
+                    <span>More videos</span>
+                </div>
+            </div>
+            <div class="st-rh-middle flex-bar">
+            </div>
+            <div class="st-rh-right flex-bar">
+                <div id="st-ap-toggle-cont" class="st-rh-content flex-bar" show-card="false">
+                    <div class="st-m-toggle-cont flex-bar">
+                        <div class="st-m-toggle-label" id="st-ap-label">
+                            <span>Autoplay</span>
+                        </div>
+                        <div class="st-m-toggle-info">
+                            <div id="st-ap-hover">
+                                <div class="st-svg">${STH0.SVG}</div>
+                            </div>
+                            <div id="st-ap-card-holder" class="st-m-toggle-card-outer">
+                                <div class="st-fence" id="st-ap-fence"></div>
+                                <div id="st-ap-card" class="yt-uix-hovercard-card yt-uix-hovercard-card-flip yt-uix-kbd-nav yt-uix-hovercard-card-reverse" data-kbd-nav-move-out="body" tabindex="-1"><div class="yt-uix-card-border-arrow yt-uix-card-border-arrow-vertical" style="right:6px;"></div><div class="yt-uix-hovercard-card-border"><div class="yt-uix-card-body-arrow yt-uix-card-body-arrow-vertical" style="right:6px;"></div><div class="yt-uix-hovercard-card-body"><span class="yt-uix-hovercard-card-content">When autoplay is enabled, a suggested video will automatically play next.</span></div></div></div>
+                            </div>
+                        </div>
+                        <div class="st-m-toggle flex-bar" id="st-ap-tog">
+                            <div class="st-m-toggle-inner flex-bar">
+                                <div id="toggleBar"></div>
+                                <div id="toggleButton"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="st-rg-toggle-cont" class="st-rh-content none">
+                </div>
+            </div>
+            `;
+            conta.insertBefore(nE,conta.children[0]);
+            $("body .v3").setAttribute("rel-head-added","true");
+            setTimeout(function(){
+                let ap=false;
+                if($(".autoplay-bar .checkbox-on-off input[checked]")){
+                    ap=true;
+                }
+                $("body .v3").setAttribute("autoplay",ap);
+                if($("[toggle='autoplay']")){
+                    $("[toggle='autoplay']").setAttribute("state",ap);
+                }
+            },10);
+            setTimeout(function(){
+                let ap=false;
+                if($(".autoplay-bar .checkbox-on-off input[checked]")){
+                    ap=true;
+                }
+                $("body .v3").setAttribute("autoplay",ap);
+                if($("[toggle='autoplay']")){
+                    $("[toggle='autoplay']").setAttribute("state",ap);
+                }
+            },500);
+            $("#st-ap-tog").addEventListener("click",function(){
+                toggleSetting("autoplay");
+            });
+            $("#st-ap-label").addEventListener("click",function(){
+                toggleSetting("autoplay");
+            });
+            $("#st-ap-hover").addEventListener("mouseenter",function(){
+                $("#st-ap-toggle-cont").setAttribute("show-card","true");
+            });
+            $("#st-ap-fence").addEventListener("mouseenter",function(){
+                $("#st-ap-toggle-cont").setAttribute("show-card","false");
+            });
+            if($("[poly-layout]")){
+                $("#st-ap-tog").classList.add("yt-uix-tooltip");
+                $("#st-ap-tog").title="When autoplay is enabled, a suggested video will automatically play next.";
+            }
+            if($("[layout^='aoz']")){
+                $("#st-un-label").classList.add("none");
+                $("#st-s-label").classList.remove("none");
+            }
+        }
+    }
 	function createMaterialSpinner(){
-		if($("#st-material-spinner") == null && $("#movie_player")){
-			let container = $("#movie_player");
-			let newElem = document.createElement("div");
-			newElem.id = "st-material-spinner";
-			newElem.innerHTML = `
+		if($("#st-material-spinner")==null&&$("#movie_player")){
+			let conta=$("#movie_player");
+			let nE=document.createElement("div");
+			nE.id="st-material-spinner";
+			nE.innerHTML=`
 			<style>
 			.ytp-spinner {
 position: absolute;
@@ -13978,7 +14099,7 @@ border-width: 12px;
 			</style>
 			<div class="ytp-spinner" data-layer="4"><div><div class="ytp-spinner-container"><div class="ytp-spinner-rotator"><div class="ytp-spinner-left"><div class="ytp-spinner-circle"></div></div><div class="ytp-spinner-right"><div class="ytp-spinner-circle"></div></div></div></div></div><div class="ytp-spinner-message" style="display: none;">If playback doesn't begin shortly, try restarting your device.</div></div>
 			`;
-			container.insertBefore(newElem, container.children[0]);
+			conta.insertBefore(nE,conta.children[0]);
 		}
 	}
 	function doModernPlayer(){
@@ -14236,8 +14357,264 @@ border-width: 12px;
 						}
 					}
 				});
+                var elm=".ytp-menu-container .ytp-menu";
+				waitForElement10(elm).then(function(elm){
+					if(canGo!=false&&$("#st-pl-settings")==null){
+                        $(".ytp-menu-container").classList.add("scrawl");
+                        let conta=$(".ytp-menu-container");
+                        //let conta=$(".ytp-menu-container .ytp-menu .ytp-menu-content");
+                        let nE=document.createElement("div");
+                        nE.classList="st-plm-container st-show-svgs  multistate-handler";
+                        nE.setAttribute("state","main");
+                        nE.id="st-pl-settings";
+                        nE.innerHTML=`
+                        <div class="st-plm">
+                            <div class="st-plm-inner flex">
+                                <div id="st-main-page" class="st-plm-page">
+                                    <div class="st-plm-page-inner">
+                                        <div class="st-plm-content">
+                                            <button class="st-pl-menuitem st-pl-autoplay flex-bar st-pl-toggle st-valid-tog flex-bar" toggle="autoplay">
+                                                <span class="ytp-menu-cell ytp-menu-title st-valid-tog">Autoplay</span>
+                                                <div class="st-m-toggle flex-bar st-valid-tog" id="st-pl-ap-tog">
+                                                    <div class="st-m-toggle-inner flex-bar st-valid-tog">
+                                                        <div id="toggleBar" class="st-valid-tog"></div>
+                                                        <div id="toggleButton" class="st-valid-tog"></div>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                            <button class="st-pl-menuitem st-pl-annotations flex-bar st-pl-toggle st-valid-tog flex-bar" toggle="annotations">
+                                                <span class="ytp-menu-cell ytp-menu-title st-valid-tog">Annotations</span>
+                                                <div class="st-m-toggle flex-bar st-valid-tog" id="st-pl-an-tog">
+                                                    <div class="st-m-toggle-inner flex-bar st-valid-tog">
+                                                        <div id="toggleBar" class="st-valid-tog"></div>
+                                                        <div id="toggleButton" class="st-valid-tog"></div>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                            <button class="st-pl-menuitem st-pl-submenu-btn st-pl-speed st-pl-trigger flex-bar" trigger="speed">
+                                            </button>
+                                            <button class="st-pl-menuitem st-pl-submenu-btn st-pl-subtitles st-pl-trigger flex-bar" trigger="subtitles">
+                                            </button>
+                                            <button class="st-pl-menuitem st-pl-submenu-btn st-pl-quality st-pl-trigger flex-bar" trigger="quality">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="st-speed-page" class="st-plm-page">
+                                    <div class="st-plm-page-inner">
+                                        <div class="st-plm-header flex-bar">
+                                            <button class="st-plm-back st-pl-trigger flex-bar" trigger="main">
+                                                <div class="st-pl-back-icon">${STH2.ST_SVG}</div>
+                                                <span class="st-plm-text">Playback speed</span>
+                                            </button>
+                                        </div>
+                                        <div class="st-plm-content">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="st-quality-page" class="st-plm-page">
+                                    <div class="st-plm-page-inner">
+                                        <div class="st-plm-header flex-bar">
+                                            <button class="st-plm-back st-pl-trigger flex-bar" trigger="main">
+                                                <div class="st-pl-back-icon">${STH2.ST_SVG}</div>
+                                                <span class="st-plm-text">Quality</span>
+                                            </button>
+                                        </div>
+                                        <div class="st-plm-content">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="st-subtitles-page" class="st-plm-page">
+                                    <div class="st-plm-page-inner">
+                                        <div class="st-plm-header flex-bar">
+                                            <button class="st-plm-back st-pl-trigger flex-bar" trigger="main">
+                                                <div class="st-pl-back-icon">${STH2.ST_SVG}</div>
+                                                <span class="st-plm-text">Subtitles</span>
+                                            </button>
+                                        </div>
+                                        <div class="st-plm-content">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                        conta.append(nE);
+                        movePlayerMenuItems();
+                        setTimeout(movePlayerMenuItems,1500);
+                        setTimeout(movePlayerMenuItems,3000);
+                        let height=$("#st-main-page").offsetHeight;
+                        nE.style.height=height+"px";
+                        document.querySelectorAll(".st-pl-trigger").forEach(i=>{
+                            i.addEventListener("click",function(){
+                                let trig=i.getAttribute("trigger");
+                                nE.setAttribute("state",trig);
+                                setTimeout(function(){
+                                    let newHeight=$("#st-"+trig+"-page .st-plm-content").offsetHeight;
+                                    if(trig!="main"){
+                                        if($("[data-player-size='fullscreen']")){
+                                            newHeight=newHeight+49;
+                                        }else{
+                                            newHeight=newHeight+33;
+                                        }
+                                    }
+                                    nE.style.height=newHeight+"px";
+                                    nE.style.setProperty("--page-height",newHeight+"px");
+                                },10);
+                            });
+                        });
+                        if($(".st-pl-toggle.listening")==null){
+                            document.querySelectorAll(".st-pl-toggle").forEach(i=>{
+                                let tog=i.getAttribute("toggle");
+                                i.classList.add("listening");
+                                if(tog=="autoplay"){
+                                    i.addEventListener("click",function(e){
+                                        if(e.target.classList.contains("st-valid-tog")){
+                                            if($("[autoplay='true']")){
+                                                i.setAttribute("state","false");
+                                                toggleSetting(tog);
+                                            }else{
+                                                i.setAttribute("state","true");
+                                                toggleSetting(tog);
+                                            }
+                                        }
+                                    });
+                                }else{
+                                    var elm=".ytp-menu .ytp-menu-row:nth-child(2) .ytp-segmented-control div";
+                                    waitForElement10(elm).then(function(elm){
+                                        if(canGo != false){
+                                            let btn1=$(".ytp-menu .ytp-menu-row:nth-child(2) .ytp-segmented-control div");
+                                            let btn2=$(".ytp-menu .ytp-menu-row:nth-child(2) .ytp-segmented-control div:last-child");
+                                            if(btn1.getAttribute("aria-checked")=="true"){
+                                                i.setAttribute("state","true");
+                                                $("body .v3").setAttribute(tog,"true");
+                                            }else{
+                                                i.setAttribute("state","false");
+                                                $("body .v3").setAttribute(tog,"false");
+                                            }
+                                            i.addEventListener("click",function(e){
+                                                if(e.target.classList.contains("st-valid-tog")){
+                                                    if(btn1.getAttribute("aria-checked")=="true"){
+                                                        i.setAttribute("state","false");
+                                                        btn2.click();
+                                                        toggleSetting(tog);
+                                                    }else{
+                                                        i.setAttribute("state","true");
+                                                        btn1.click();
+                                                        toggleSetting(tog);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        setTimeout(function(){
+                            // Select the node that will be observed for mutations
+                            const targetNode=$("#st-main-page");
+
+                            // Options for the observer (which mutations to observe)
+                            const config = { attributes: true, childList: true, subtree: true };
+
+                            // Callback function to execute when mutations are observed
+                            const callback=(mutationList, observer)=>{
+                                for(const mutation of mutationList){
+                                    if(mutation.removedNodes[0]){
+                                        setTimeout(movePlayerMenuItems,200);
+                                        setTimeout(movePlayerMenuItems,2000);
+                                    }
+                                }
+                            };
+
+                            // Create an observer instance linked to the callback function
+                            const observer=new MutationObserver(callback);
+
+                            // Start observing the target node for configured mutations
+                            observer.observe(targetNode, config);
+                        },1000);
+                        $("#settings_button").addEventListener("click",function(){
+                            nE.setAttribute("state","main");
+                            //$("body .v3").setAttribute("opening-menu","true");
+                            setTimeout(function(){
+                                let newHeight=$("#st-main-page .st-plm-content").offsetHeight;
+                                //newHeight=newHeight-20;
+                                nE.style.setProperty("--page-height",newHeight+"px");
+                                nE.style.height=newHeight+"px";
+                            },10);
+                            /*setTimeout(function(){
+                                $("body .v3").setAttribute("opening-menu","false");
+                            },300);*/
+                        });
+                    }
+                });
 			}
 	}
+    function movePlayerMenuItems(){
+        let tM;
+        let nH;
+        if($(".ytp-menu .ytp-menu-row:nth-child(3)")){
+            let hasSubtitles=false;
+            if($(".ytp-menu .ytp-menu-row:nth-child(5)")){
+                hasSubtitles=true;
+            }
+            if($("#st-pl-settings .ytp-menu-row")){
+                document.querySelectorAll("#st-pl-settings .ytp-menu-row").forEach(i=>{
+                    i.remove();
+                });
+            }else{
+                if(hasSubtitles==true){
+                    // subtitles
+                    tM=$(".ytp-menu .ytp-menu-row:nth-child(4) .ytp-drop-down-menu");
+                    nH=$("#st-subtitles-page .st-plm-content");
+                    nH.append(tM);
+                    // quality
+                    tM=$(".ytp-menu .ytp-menu-row:nth-child(5) .ytp-drop-down-menu");
+                    nH=$("#st-quality-page .st-plm-content");
+                    nH.append(tM);
+                }else{
+                    // quality
+                    tM=$(".ytp-menu .ytp-menu-row:nth-child(4) .ytp-drop-down-menu");
+                    nH=$("#st-quality-page .st-plm-content");
+                    nH.append(tM);
+                }
+                tM=$(".ytp-menu .ytp-menu-row:nth-child(3) .ytp-drop-down-menu");
+                nH=$("#st-speed-page .st-plm-content");
+                nH.append(tM);
+            }
+            // autoplay
+            //tM=$(".ytp-menu .ytp-menu-row");
+            //nH=$("#st-main-page .st-pl-menuitem");
+            //nH.append(tM);
+            // annot
+            //tM=$(".ytp-menu .ytp-menu-row:nth-child(2)");
+            //nH=$("#st-main-page .st-pl-menuitem:nth-child(2)");
+            //nH.append(tM);
+            // speed
+            tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
+            nH=$("#st-main-page .st-pl-menuitem:nth-child(3)");
+            nH.append(tM);
+            if(hasSubtitles==true){
+                // subtitles
+                tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
+                nH=$("#st-main-page .st-pl-menuitem:nth-child(4)");
+                nH.append(tM);
+                // quality
+                tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
+                nH=$("#st-main-page .st-pl-menuitem:nth-child(5)");
+                nH.append(tM);
+                tM=$(".st-pl-subtitles .ytp-menu-cell:last-child");
+                nH=$("#st-subtitles-page .st-plm-header");
+                nH.append(tM);
+            }else{
+                // quality
+                tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
+                nH=$("#st-main-page .st-pl-menuitem:nth-child(5)");
+                nH.append(tM);
+                $("#st-main-page .st-pl-menuitem:nth-child(4)").classList.add("none");
+            }
+        }
+    }
 	function createGoogleApps(){
 		if(document.querySelector("#yt-masthead-content") != null){
 			if(document.querySelector("#google-apps") == null){
@@ -16805,10 +17182,14 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 			$("html").setAttribute("flexwatch-large","");
 		}
 		if($("#page.watch")&&SRS.layoutMode.tValue=="adaptive"){
-			let date = $("#watch-description-content").data.watchDescription.clip.videoDate.simpleText;
+			let date=$("#watch-description-content").data.watchDescription.clip.videoDate.simpleText;
 			if(
-				date.includes("2023")||
-				date.includes("2024")
+				date.includes("2024")||
+                date.includes("2025")||
+                date.includes("2026")||
+                date.includes("2027")||
+                date.includes("2028")||
+                date.includes("2029")
 			){
 				if(STS.expAdaptiveLayout2024HH==true){
 					if(SRS.layoutSelect.visValue!="hh2024"){
@@ -16829,6 +17210,21 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 				}else if(SRS.layoutSelect.visValue!="amst2024c"){
 					setAdaptiveLayout("amst2024c");
 				}
+			}
+            if(
+				date.includes("2023")
+			){
+				if(STS.expAdaptiveLayout2018Cap==true){
+					if(SRS.layoutSelect.visValue!="hh2018"){
+						setAdaptiveLayout("hh2018");
+					}
+				}else if(STS.expAdaptiveLayout2017Cap==true){
+					if(SRS.layoutSelect.visValue!="hh2017"){
+						setAdaptiveLayout("hh2017");
+					}
+                }else if(SRS.layoutSelect.visValue!="amst2023_1"){
+                    setAdaptiveLayout("amst2023_1");
+                }
 			}
 			if(
 				date.includes("2022")
@@ -16851,8 +17247,8 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                             setAdaptiveLayout("poly2022");
                         }
                     }else{
-                        if(SRS.layoutSelect.visValue!="amst2024c"){
-                            setAdaptiveLayout("amst2024c");
+                        if(SRS.layoutSelect.visValue!="amst2023_1"){
+                            setAdaptiveLayout("amst2023_1");
                         }
                     }
                 }else if(SRS.layoutSelect.visValue!="poly2022"){
@@ -18198,6 +18594,16 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
             createNewWatchPrep();
             if(SRS.compactName.tValue=="on"&&$("#page.watch")){
                 multiMod("related");
+            }
+            if(V3_SETTINGS_CONF.WATCH_AUTOPLAY_DELEGATION==true&&$("[location='watch']")){
+                var elm=".autoplay-bar";
+				waitForElement10(elm).then(function(elm){
+					if(canGo!=false){
+                        createAutoplay();
+                        setTimeout(createAutoplay,1500);
+                        setTimeout(createAutoplay,3000);
+					}
+				});
             }
         },theDelay);
 		var arraNum=0;
@@ -20490,6 +20896,7 @@ display: none;
 [exp-roboto] h4,
 [exp-roboto] h5,
 [exp-roboto] h6,
+.v3:not([poly-layout]) .watch-sidebar-head,
 [exp-roboto] .autoplay-bar .checkbox-on-off,
 [exp-roboto] #watch7-user-header .yt-user-name,
 [exp-roboto] .video-list .video-list-item .title{
@@ -20915,12 +21322,14 @@ margin-right: 6px;
 [poly-styles] .yt-uix-checkbox-on-off {
 overflow: visible;
 }
+[poly-layout] #st-ap-tog #toggleBar,
 [poly-styles] .yt-uix-checkbox-on-off label {
-background-color: #989898;
+background: #989898;
 overflow: visible;
 }
+[poly-layout] #st-ap-tog #toggleButton,
 [poly-styles] .yt-uix-checkbox-on-off label .toggle {
-background-color: #fafafa;
+background: #fafafa;
 height: 20px;
 width: 20px;
 position: absolute;
@@ -20931,24 +21340,30 @@ box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6);
 transition: transform linear .08s, background-color linear .08s;
 transform: translate(0, 0);
 }
+[poly-layout][autoplay="true"] #st-ap-tog #toggleBar,
 [poly-styles] .yt-uix-checkbox-on-off input[checked="True"]:checked + label {
-background-color: #92c8f2;
+background: #92c8f2;
 }
+[poly-layout][autoplay="true"] #st-ap-tog #toggleButton,
 [poly-styles] .yt-uix-checkbox-on-off input[checked="True"]:checked + label .toggle {
-background-color: #2793e6;
+background: #2793e6;
 transform: translate(16px, 0);
 }
+[poly-g2-colors] [poly-layout] #st-ap-tog #toggleBar,
 [poly-g2-colors] .yt-uix-checkbox-on-off label {
-background-color: #e2e2e2;
+background: #e2e2e2;
 }
+[poly-g2-colors] [poly-layout] #st-ap-tog #toggleButton,
 [poly-g2-colors] .yt-uix-checkbox-on-off label .toggle{
-background-color:rgb(144, 144, 144)
+background:rgb(144, 144, 144)
 }
+[poly-g2-colors] [poly-layout][autoplay="true"] #st-ap-tog #toggleBar,
 [poly-g2-colors] .yt-uix-checkbox-on-off input[checked="True"]:checked + label{
-background-color:#e2e2e2
+background:#e2e2e2
 }
+[poly-g2-colors] [poly-layout][autoplay="true"] #st-ap-tog #toggleButton,
 [poly-g2-colors] .yt-uix-checkbox-on-off input[checked="True"]:checked + label .toggle{
-background-color:rgb(6,95,212)
+background:rgb(6,95,212)
 }
 [poly-styles] .yt-uix-checkbox-on-off input[type="checkbox"]:checked + label .checked{
 display:none
@@ -25350,15 +25765,16 @@ color: #0a0a0a;
 font-weight: 400;
 font-size: 16px;
 }
-[poly-styles] .autoplay-bar .checkbox-on-off > label {
-text-transform: uppercase;
-color: #606060;
-font-weight: 500;
-font-size: 13px;
-letter-spacing: .007px;
+[poly-styles] .autoplay-bar .st-m-toggle-label,
+[poly-styles] .autoplay-bar .checkbox-on-off > label{
+text-transform:uppercase;
+color:#606060;
+font-weight:500;
+font-size:13px;
+letter-spacing:.007px
 }
-[poly-styles] .video-list-item {
-margin-bottom: 8px;
+[poly-styles] .video-list-item{
+margin-bottom:8px
 }
 [poly-styles] .video-list .video-list-item .description,
 [poly-styles] .video-list .video-list-item .stat,
@@ -26142,19 +26558,22 @@ opacity:.8;
 [typography-spacing] #watch-dislike span,
 [typography-spacing] .link_action_text,
 [typography-spacing] .video-time{
-letter-spacing:0.5px;
+letter-spacing:.5px
+}
+[typography-spacing] #st-pl-settings button{
+letter-spacing:unset
 }
 [typography-spacing] .content .run{
-letter-spacing:0.007px;
+letter-spacing:.007px
 }
 html:not([exp-wmr-addto]) #wmr-addto-text,
 html:not([exp-wmr-addto]) #wmr-addto-icon,
 [exp-wmr-addto] #wmr-save-text,
-[exp-wmr-addto] #wmr-save-icon {
-display: none;
+[exp-wmr-addto] #wmr-save-icon{
+display:none
 }
 
-}
+/*}*/
 [exp-polymer-channels] #c4-shelves-container{
 background:transparent
 }
@@ -27206,63 +27625,60 @@ box-shadow: 0 1px 2px #ccc;
 border-radius: 3px;
 }
 [exp-cosmic-comments][exp-epic-watch7] .distiller_yt-thread .comment:hover{
-background-color: #f2f2f2;
+background-color:#f2f2f2
 }
-[exp-aozora-comments] .distiller_yt-thread .comment:hover {
-background-color: #eee;
+[exp-aozora-comments] .distiller_yt-thread .comment:hover{
+background-color:#eee
 }
-[exp-cosmic-comments] #watch-discussion:hover .comment {
-transition: none;
+[exp-cosmic-comments] #watch-discussion:hover .comment{
+transition:none
 }
-[exp-legacy-comments] .distiller_yt-thread {
-padding-bottom: 10px;
+[exp-legacy-comments] .distiller_yt-thread{
+padding-bottom:10px
 }
-[exp-legacy-comments] .distiller_yt-post_comment_section {
-margin-top: 0px;
+[exp-legacy-comments] .distiller_yt-post_comment_section{
+margin-top:0
 }
-[exp-legacy-comments] .entries .distiller_yt-post-content {
-padding-top: 0px;
+[exp-legacy-comments] .entries .distiller_yt-post-content{
+padding-top:0
 }
-[exp-legacy-comments] .entries .comment {
-padding-left: 18px;
-padding-left: 30px;
-margin-left: 0;
-margin-top: 5px;
+[exp-legacy-comments] .entries .comment{
+padding-left:30px;
+margin-left:0;
+margin-top:5px
 }
-[exp-legacy-comments] .distiller_yt-post-content {
-position: relative;
+[exp-legacy-comments] .distiller_yt-post-content{
+position:relative
 }
-[exp-legacy-comments] .entries .distiller_yt-post-content::before {
-content: "";
-border-left: 1px solid #ccc;
-display: block;
-height: calc(100% - 8px);
-margin-top: 4px;
-left: -12px;
-left: -24px;
-min-height: 10px;
-width: 30px;
-position: absolute;
+[exp-legacy-comments] .entries .distiller_yt-post-content::before{
+content:"";
+border-left:1px solid #ccc;
+display:block;
+height:calc(100% - 8px);
+margin-top:4px;
+left:-24px;
+min-height:10px;
+width:30px;
+position:absolute
 }
-[exp-legacy-comments] .entries .distiller_yt-post_data {
-margin-left: 0;
+[exp-legacy-comments] .entries .distiller_yt-post_data{
+margin-left:0
 }
-
 /* cosmic style */
-[exp-cosmic-comments] .distiller_yt-thread_user-content .run-link {
-color: #1c62b9;
+[exp-cosmic-comments] .distiller_yt-thread_user-content .run-link{
+color:#1c62b9
 }
 [exp-legacy-comments] .distiller_yt-post_comment_section .entries .contents > .continuation_item_wrapper .jfk-button span,
-[exp-legacy-comments] .profileLink {
-color: #1c62b9;
-font-size: 11px;
-font-weight: normal;
+[exp-legacy-comments] .profileLink{
+color:#1c62b9;
+font-size:11px;
+font-weight:normal
 }
 [exp-legacy-comments] .distiller_yt-thread .author .donation,
 [exp-legacy-comments] .distiller_yt-thread .metadata,
-[exp-legacy-comments] .distiller_yt-thread .metadata .detail_link {
-color: #666;
-font-size: 11px;
+[exp-legacy-comments] .distiller_yt-thread .metadata .detail_link{
+color:#666;
+font-size:11px
 }
 [exp-legacy-comments] .distiller_yt-thread_user-content{
 color:var(--333text);
@@ -29638,10 +30054,11 @@ font-size:13px;
 font-weight:normal;
 color:#666;
 margin-top:0;
-margin-bottom:10px;
-padding-bottom:4px;
+/*margin-bottom:10px;*/
+padding-bottom:4px!important;
 border-bottom:1px solid #ccc;
-padding-left:0
+padding-left:0;
+width:100%
 }
 [aozora-styles] .yt-uix-shelfslider-body{
 border-top:1px solid #ccc;
@@ -31671,11 +32088,15 @@ background:#282828
   transition:transform linear .08s, background-color linear .08s;
   background:rgb(144,144,144)
 }
-[dark] #toggleBar{
+[dark] .st-acme #toggleBar{
   background:rgb(96,96,96);
   opacity:.5
 }
-[dark] #toggleButton{
+[dark] .st-acme #toggleButton{
+  background:rgb(0,153,255);
+  transform:translate(16px,0)
+}
+[autoplay="true"] #st-ap-tog #toggleButton{
   background:rgb(0,153,255);
   transform:translate(16px,0)
 }
@@ -34834,6 +35255,440 @@ border-color:#484851
 /* poly grid fix */
 [poly-styles] #page.channel .channels-browse-content-grid .channels-content-item{
   margin-bottom:0
+}
+/* modern player menu */
+html{
+  --st-plm-w:207px;
+  --st-plm-bottom:49px;
+  --st-plm-mi-h:33px;
+  --st-plm-title-fs:13px;
+  --st-plm-sub-fs:12px;
+  --st-plm-padding:0 15px;
+  --st-plm-header-fs:13px
+}
+[data-player-size="fullscreen"]{
+  --st-plm-w:284px;
+  --st-plm-bottom:70px;
+  --st-plm-mi-h:49px;
+  --st-plm-title-fs:20px;
+  --st-plm-sub-fs:17px;
+  --st-plm-padding:0 22px;
+  --st-plm-header-fs:19px
+}
+
+
+[pl-ver^="m"] .ytp-drop-down-menu,
+[pl-ver^="m"] .ytp-menu-container{
+  display:block!important
+}
+[pl-ver^="m"] .ytp-drop-down-menu,
+[pl-ver^="m"] .st-plm-content > div{
+  position:relative;
+  bottom:0!important
+}
+[pl-ver^="m"] #st-pl-settings:not([state="main"]) #st-main-page .st-plm-content,
+[pl-ver^="m"] #st-pl-settings:not([state="quality"]) #st-quality-page .st-plm-content,
+[pl-ver^="m"] #st-pl-settings:not([state="subtitles"]) #st-subtitles-page .st-plm-content,
+[pl-ver^="m"] #st-pl-settings:not([state="speed"]) #st-speed-page .st-plm-content{
+  max-height:0
+}
+[pl-ver^="m"] .ytp-menu-container .ytp-menu{
+  display:none
+}
+[pl-ver^="m"] .ytp-menu-container{
+  width:auto;
+  background:none;
+  bottom:var(--st-plm-bottom);
+  right:12px
+}
+[data-player-size="fullscreen"][pl-ver^="m"] .ytp-menu-container{
+  right:24px
+}
+[pl-ver^="m"] .ytp-menu-container .ytp-menu{
+  background:none
+}
+[pl-ver^="m"] #st-pl-settings{
+  background:rgba(28,28,28,.9);
+  overflow:hidden;
+  width:var(--st-plm-w);
+  padding:6px 0;
+  text-shadow:0 0 2px rgba(0,0,0,.5);
+  border-radius:2px
+}
+[pl-ver^="m"] #st-pl-settings{
+  transition-duration:.2s;
+}
+[pl-ver^="m"] .ytp-menu-container[style="display: none;"] #st-pl-settings{
+  opacity:0
+}
+[pl-ver^="m"] .ytp-menu-container[style="display: none;"]{
+  pointer-events:none
+}
+[pl-ver^="m"] #movie_player:has(.ytp-menu-container[style="display: block;"]) .html5-video-controls{
+  opacity:1
+}
+[pl-ver^="m"] .ytp-menu-container[style="display: block;"] #st-pl-settings{
+  opacity:1
+}
+[pl-ver^="m"] .st-pl-toggle .ytp-segmented-control:last-child{
+  opacity:0
+}
+[pl-ver^="m"] .st-plm-page{
+  width:var(--st-plm-w);
+  min-width:var(--st-plm-w);
+  position:relative;
+  bottom:0;
+  display: flex;
+  flex-direction: column-reverse;
+}
+/*#st-pl-settings[state="quality"] .st-plm-page,
+#st-pl-settings[state="quality"]{
+  width:106px;
+  min-width:106px;
+  max-width:106px;
+}*/
+[pl-ver^="m"] .ytp-drop-down-menu-button,
+[pl-ver^="m"] .st-pl-menuitem{
+  height:var(--st-plm-mi-h);
+  width:100%;
+  display:flex;
+  align-items:center;
+  padding:0;
+  position:relative
+}
+[pl-ver^="m"] .ytp-drop-down-menu-button:hover,
+[pl-ver^="m"] .st-pl-menuitem:hover{
+  background:rgba(255,255,255,.1)
+}
+
+[pl-ver^="m"] .ytp-drop-down-menu-button{
+  color:#eee;
+  font-weight:var(--bold);
+  font-size:var(--st-plm-title-fs);
+  position:relative;
+  /*display:flex;
+  flex-direction:row-reverse;*/
+  width:calc(100% - 40px);
+  padding-left:40px
+}
+[data-player-size="fullscreen"][pl-ver^="m"] .ytp-drop-down-menu-button{
+  width:calc(100% - 50px);
+  padding-left:50px
+}
+[pl-ver^="m"] .ytp-drop-down-label-content{
+  color:#eee
+}
+[pl-ver^="m"] .st-pl-menuitem > div{
+  display:flex;
+  align-items:center;
+  width:100%
+}
+[pl-ver^="m"] .st-pl-menuitem > .ytp-menu-row{
+  pointer-events:none
+}
+[pl-ver^="m"] .st-plm-inner{
+  transition:transform .3s, minWidth .1s
+}
+[pl-ver^="m"] [state="speed"] .st-plm-inner{
+  transform:translateX(-100%)
+}
+[pl-ver^="m"] [state="subtitles"] .st-plm-inner{
+  transform:translateX(-300%)
+}
+[pl-ver^="m"] [state="quality"] .st-plm-inner{
+  transform:translateX(-200%)
+}
+[pl-ver^="m"] .ytp-menu-title{
+  font-size:var(--st-plm-title-fs);
+  font-weight:var(--bold);
+  padding:var(--st-plm-padding)
+}
+[pl-ver^="m"] .ytp-menu-cell:last-child{
+  margin-left:auto;
+  padding:var(--st-plm-padding);
+  padding-left:0
+}
+[pl-ver^="m"] .ytp-drop-down-menu,
+[pl-ver^="m"] .ytp-drop-down-label{
+  background:none;
+  border:none;
+  color:#fff
+}
+[pl-ver^="m"] .ytp-drop-down[style="min-width: 100px;"],
+[pl-ver^="m"] .ytp-drop-down{
+  min-width:0!important;
+  margin-left:auto
+}
+
+[pl-ver^="m"] .st-plm-header{
+  border-bottom:1px solid rgba(255,255,255,.2);
+  white-space:nowrap;
+  font-size:var(--st-plm-header-fs)
+}
+[pl-ver^="m"] .st-plm-header button{
+  line-height:inherit;
+  padding-bottom:6px;
+  height:var(--st-plm-mi-h);
+  font-weight:var(--bold);
+  padding-right:24px
+}
+[pl-ver^="m"] .st-pl-back-icon{
+  padding:0 15px 0 0;
+  background-repeat:no-repeat;
+  background-position:left 3px center;
+  background-size:32px 32px;
+  background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTAwJSIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMzIgMzIiIHdpZHRoPSIxMDAlIj48cGF0aCBkPSJNIDE5LjQxLDIwLjA5IDE0LjgzLDE1LjUgMTkuNDEsMTAuOTEgMTgsOS41IGwgLTYsNiA2LDYgeiIgZmlsbD0iI2ZmZiIgLz48L3N2Zz4=);
+}
+[data-player-size="fullscreen"][pl-ver^="m"] .st-pl-back-icon{
+  background-size:48px 48px!important;
+  background-position:-7px -14px;
+  height:20px;
+  margin:0 8px;
+  padding:0 10px 0 0;
+}
+[pl-ver^="m"] .st-plm-header .st-plm-text{
+  color:#eee
+}
+
+
+[pl-ver^="m"] #st-pl-settings sup{
+  color:#f12b24
+}
+[pl-ver^="m"] .ytp-drop-down-menu-content{
+  max-height:280px
+}
+[data-player-size="fullscreen"][pl-ver^="m"] .ytp-drop-down-menu-content{
+  max-height:400px
+}
+[pl-ver^="m"] .ytp-drop-down-label{
+  padding-right:24px;
+  font-size:var(--st-plm-sub-fs)
+}
+[pl-ver^="m"] .ytp-drop-down-arrow{
+  border:none;
+  height:14px;
+  margin-top:-4px;
+  margin-right:-22px;
+  padding-right:38px;
+  background-repeat:no-repeat;
+  background-position:right 9px center;
+  background-size:32px 32px;
+  background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTAwJSIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMzIgMzIiIHdpZHRoPSIxMDAlIj48cGF0aCBkPSJtIDEyLjU5LDIwLjM0IDQuNTgsLTQuNTkgLTQuNTgsLTQuNTkgMS40MSwtMS40MSA2LDYgLTYsNiB6IiBmaWxsPSIjZmZmIiAvPjwvc3ZnPg==);
+}
+[data-player-size="fullscreen"][pl-ver^="m"] .ytp-drop-down-arrow{
+  background-size:48px 48px!important;
+  background-position:-7px -14px;
+  height:20px
+}
+[pl-ver^="m"] .st-pl-toggle .st-m-toggle{
+  position:absolute;
+  top:1px;
+  right:15px;
+  width:auto
+}
+[data-player-size="fullscreen"][pl-ver^="m"] .st-pl-toggle .st-m-toggle{
+  position:absolute;
+  top:9px;
+  right:20px;
+  width:auto
+}
+[pl-ver^="m"] .st-pl-toggle #toggleBar{
+  background:rgba(255,255,255,0.3);
+  opacity:1
+}
+[data-player-size="fullscreen"][pl-ver^="m"] .st-pl-toggle #toggleBar{
+  height:21px;
+  width:54px;
+  border-radius:21px
+}
+[pl-ver^="m"] .st-pl-toggle[state="true"] #toggleBar{
+  background:#f12b24;
+  opacity:1
+}
+[pl-ver^="m"] .st-pl-toggle #toggleButton{
+  box-shadow:1px 1px 5px 0 rgba(0,0,0,0.6);
+  opacity:1;
+  background:#bdbdbd
+}
+[data-player-size="fullscreen"][pl-ver^="m"] .st-pl-toggle #toggleButton{
+  height:30px;
+  width:30px;
+  border-radius:30px;
+  margin-top:-2px
+}
+[pl-ver^="m"] .st-pl-toggle[state="true"] #toggleButton{
+  background:#fff;
+  transform:translate(16px,0);
+  box-shadow:0 1px 5px 0 rgba(0,0,0,0.6)
+}
+[data-player-size="fullscreen"][pl-ver^="m"]  .st-pl-toggle[state="true"] #toggleButton{
+  transform:translateX(24px)
+}
+[exp-invert-logo][pl-ver^="m"] #st-pl-settings sup{
+  color:#f00
+}
+[exp-invert-logo][pl-ver^="m"] .st-pl-toggle[state="true"] #toggleBar{
+  background:#f00
+}
+[ringo2][pl-ver^="m"] #st-pl-settings sup{
+  color:#f03
+}
+[ringo2][pl-ver^="m"] .st-pl-toggle[state="true"] #toggleBar{
+  background:#f03
+}
+[pl-ver^="m"] #st-pl-settings .ytp-drop-down-menu-button-check{
+  position:absolute;
+  left:8px
+}
+[pl-ver^="m"] #st-pl-settings .ytp-drop-down-menu-button-checked .ytp-drop-down-menu-button-check{
+  background-image:url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTAwJSIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIxMDAlIj48cGF0aCBkPSJNOSAxNi4yTDQuOCAxMmwtMS40IDEuNEw5IDE5IDIxIDdsLTEuNC0xLjRMOSAxNi4yeiIgZmlsbD0iI2ZmZiIgLz48L3N2Zz4=);
+  background-repeat:no-repeat;
+  background-position:left 0 center;
+  background-size:18px 18px;
+  width:18px;
+  height:18px;
+  opacity:1
+}
+[data-player-size="fullscreen"][pl-ver^="m"] #st-pl-settings .ytp-drop-down-menu-button-checked .ytp-drop-down-menu-button-check{
+  background-size:27px 27px;
+  width:27px;
+  height:27px;
+  left:10px
+}
+
+[layout^="sta"] #st-related-header,
+/*[layout^="cos"] #st-ap-toggle-cont,*/
+[layout^="aoz"] #st-ap-toggle-cont,
+[layout^="sta"] #st-ap-toggle-cont{
+  display:none!important
+}
+#st-ap-hover{
+  z-index:2;
+  position:relative;
+  cursor:pointer;
+  margin-left:6px;
+  margin-right:6px;
+  margin-top:-1px;
+  background:no-repeat url(https://s.ytimg.com/yts/imgbin/www-hitchhiker-vfljEooDy.png) -125px -1093px;
+  width:16px;
+  height:16px;
+  opacity:.5
+}
+#st-ap-hover:hover{
+  opacity:.6
+}
+#st-ap-hover:active{
+  opacity:.8
+}
+#st-ap-hover:hover:active{
+  opacity:1
+}
+.dark-mode #st-ap-hover{
+  filter:invert(1)
+}
+#st-ap-card{
+  position:fixed!important;
+  z-index:2;
+  top:26px;
+  margin-left:0;
+  right:32px
+}
+.cardified-page #st-ap-card{
+  top:40px;
+  margin-left:-6px;
+  right:42px
+}
+.autoplay-bar{
+  overflow:visible
+}
+.autoplay-bar .st-m-toggle-label{
+  font-weight:var(--bold);
+  font-size:13px;
+  color:#777;
+  text-transform:none
+}
+.dark-mode .autoplay-bar .st-m-toggle-label{
+  color:#aaa
+}
+[rel-head-added="true"] .autoplay-bar .watch-sidebar-head,
+[rel-head-added="true"] .checkbox-on-off,
+[poly-layout] #st-ap-hover,
+[show-card="false"] #st-ap-card-holder{
+  display:none
+}
+.v3:not([poly-layout]) #st-related-header{
+  margin-bottom:4px
+}
+[layout^="ep"] #st-related-header,
+[layout^="hh"] #st-related-header{
+  margin-top:-8px
+}
+[poly-layout] #st-related-header{
+  margin-top:0px;
+  margin-bottom:8px;
+  padding-right:4px
+}
+.st-rh-left{
+  padding-bottom:0!important
+}
+.st-rh-right{
+  margin-left:auto
+}
+.v3:not([poly-layout]) #st-ap-toggle-cont{
+  height:31px
+}
+.v3:not([poly-layout]) #st-ap-tog #toggleBar{
+  background:#b8b8b8;
+  opacity:1
+}
+[poly-layout] #st-ap-tog #toggleBar{
+  opacity:1
+}
+.v3:not([poly-layout]) #st-ap-tog #toggleButton{
+  background:#fbfbfb;
+  width:12px;
+  height:12px;
+  box-shadow:none;
+  top:1px;
+  left:1px;
+  border-radius:13px
+}
+[autoplay="true"]:not([poly-layout]) #st-ap-tog #toggleButton{
+  background:#fbfbfb!important;
+  box-shadow:none;
+  left:7px;
+  border-radius:13px
+}
+[autoplay="true"]:not([poly-layout]) #st-ap-tog #toggleBar{
+  background:#167ac6
+}
+.dark-mode .v3:not([poly-layout]):not([autoplay="true"]) #st-ap-tog #toggleBar{
+  background:#666!important
+}
+.v3:not([poly-layout]) #st-ap-tog #toggleBar::after{
+  display:inline-block;
+  margin-top:5px;
+  background:no-repeat url(https://s.ytimg.com/yts/imgbin/www-hitchhiker-vflWUZm8y.png) -552px -66px;
+  width:10px;
+  height:7px;
+  position:relative;
+  top:-1px;
+  content:"";
+  opacity:0;
+  margin-left:0;
+  transition-duration:.1s
+}
+[autoplay="true"]:not([poly-layout]) #st-ap-tog #toggleBar::after{
+  opacity:1;
+  margin-left:6px;
+}
+[poly-layout] #st-ap-label{
+  margin-right:8px
+}
+
+[data-player-size="small"] .site-center-aligned [poly-layout="true"][rel-head-added="true"] #page.watch #watch7-sidebar{
+  margin-top:-4px!important;
+  transition:none
 }
 
 </style>
