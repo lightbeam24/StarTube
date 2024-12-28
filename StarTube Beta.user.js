@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0.40
+// @version      2.4.0.41
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,9 +128,9 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer = "2.4.0 Beta 3";
+let currStarVer = "2.4.0 Beta 3 Patch 1";
 let currStarChan = "beta"
-let STUID="st24030p";
+let STUID="st24031p";
 let STDELAY=300;
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
@@ -17116,7 +17116,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		}
 	}
 	function reconstructPlaylist(){
-		if(STS.expModernPlaylists == true){
+		if(sets.modernPlaylists==true){
 			if($("#watch7-playlist-data") && $(".watch7-playlist-bar-right .watch7-playlist-bar-left") == null){
 				var move = document.querySelector(".watch7-playlist-bar-left");
 				var newHome = document.querySelector('.watch7-playlist-bar-right');
@@ -29512,7 +29512,7 @@ display:none!important
 .st-contents,
 .startube-contents{
 display:contents
-}
+}f
 #guide-library-container::-webkit-scrollbar,
 #guide-subscriptions-container::-webkit-scrollbar{
 width:4px
@@ -35325,7 +35325,7 @@ html{
   pointer-events:none
 }
 [pl-ver^="m"] #movie_player:has(.ytp-menu-container[style="display: block;"]) .html5-video-controls{
-  opacity:1
+  opacity:1!important
 }
 [pl-ver^="m"] .ytp-menu-container[style="display: block;"] #st-pl-settings{
   opacity:1
