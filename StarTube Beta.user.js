@@ -8628,7 +8628,7 @@ function createYTC(){
     let nE=document.createElement("li");
     nE.id="st-yt-c";
     nE.innerHTML=`
-    <span class="copyright" dir="ltr">© 2024 YouTube, LLC</span>
+    <span class="copyright" dir="ltr">© 2025 YouTube, LLC</span>
     `;
     cont.append(nE);
 }
