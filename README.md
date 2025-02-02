@@ -8,9 +8,9 @@ StarTube is built to be used with Vorapis 2013 (V3), which is a YouTube client t
 
 [V3 Website](https://vorapis.pages.dev/#/)
 
-[Install StarTube Beta](https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js)
+[Install StarTube](https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js)
 
-[Install StarTube stable (from GreasyFork)](https://greasyfork.org/en/scripts/485622-startube)
+[Install StarTube Beta](https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js)
 
 <sub>Note that V3 is closed source. Also note that V3 and StarTube are separate projects with different developers.</sub>
 
@@ -34,11 +34,11 @@ If you try using StarTube without V3, a warning banner will appear on regular Yo
 
 ### Installing StarTube
 
-Simply click on the link below to install StarTube:
+Simply click one of the links below to install StarTube:
+
+[Install StarTube](https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js)
 
 [Install StarTube Beta](https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js)
-
-The stable version of StarTube is currently only available on GreasyFork. Once 2.4.0 releases, it will also be available on GitHub. Until then, the link is here: https://greasyfork.org/en/scripts/485622-startube
 
 ### Changing your layout (or accessing the settings in general)
 
