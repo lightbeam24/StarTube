@@ -12,8 +12,8 @@
 // @grant        GM_deleteValue
 // @grant        GM_registerMenuCommand
 // @license MIT
-// @downloadURL https://update.greasyfork.org/scripts/500060/StarTube%20Beta.user.js
-// @updateURL https://update.greasyfork.org/scripts/500060/StarTube%20Beta.meta.js
+// @downloadURL https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js
+// @updateURL https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js
 // ==/UserScript==
 var globalDataPoints = {
 "currWatchData":{}
