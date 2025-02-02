@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0.41
+// @version      2.4.0.50
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -12,8 +12,8 @@
 // @grant        GM_deleteValue
 // @grant        GM_registerMenuCommand
 // @license MIT
-// @downloadURL https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js
-// @updateURL https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js
+// @downloadURL https://update.greasyfork.org/scripts/500060/StarTube%20Beta.user.js
+// @updateURL https://update.greasyfork.org/scripts/500060/StarTube%20Beta.meta.js
 // ==/UserScript==
 var globalDataPoints = {
 "currWatchData":{}
@@ -128,9 +128,10 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer = "2.4.0 Beta 3 Patch 1";
-let currStarChan = "beta"
-let STUID="st24031p";
+let currStarVer="2.4.0 Beta 4 RC1";
+let currStarChan="Beta";
+    let currStarDetails="Release Candidate";
+let STUID="st24041r";
 let STDELAY=300;
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
@@ -624,7 +625,7 @@ astroSetting:`
 												</div>
 `,
 astroSection:`
-											<div class="astro-title">
+											<div class="astro-title flex-bar">
 												<h4></h4>
 											</div>
                                             <div class="astro-description">
@@ -694,6 +695,7 @@ astroSettings:`
 						<div id="st-astro-config" class="astro-sidebar-item flex-bar" p="config">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>StarTube</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div class="astro-sidebar-text">
@@ -717,11 +719,13 @@ astroSettings:`
 						<div id="st-astro-guide" class="astro-sidebar-item flex-bar" p="guide">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Guide</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-player" class="astro-sidebar-item flex-bar" p="player">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Player</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-watch" class="astro-sidebar-item flex-bar" p="watch">
@@ -740,7 +744,7 @@ astroSettings:`
 							</div>
 						</div>
 					</div>
-                    <div id="startube-settings-sidebar-below">
+                    <!--div id="startube-settings-sidebar-below">
                         <a id="st-astro-update" class="astro-sidebar-item flex-bar astro-link" href="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Update/Reinstall StarTube</span>
@@ -751,7 +755,7 @@ astroSettings:`
 								<span>GitHub</span>
 							</div>
 						</a>
-					</div>
+					</div-->
 				</div>
 				<div id="startube-settings-content" class="astro-content">
 					<div class="multistate-handler" state="layout" multistate-id="">
@@ -779,6 +783,33 @@ astroSettings:`
 									<div class="astro-scroller-inner">
 										<div id="startube-layout-subtitle" class="hid">
 											<span>General site layout options.</span>
+										</div>
+                                        <div id="st-logo-section" class="astro-section">
+                                            <div id="st-logo">
+											    <img width="300" src="https://private-user-images.githubusercontent.com/105595945/397604973-4d557c60-c1b6-46f8-a671-0cc0a6a15809.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mzg1MjA3MjcsIm5iZiI6MTczODUyMDQyNywicGF0aCI6Ii8xMDU1OTU5NDUvMzk3NjA0OTczLTRkNTU3YzYwLWMxYjYtNDZmOC1hNjcxLTBjYzBhNmExNTgwOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMjAyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDIwMlQxODIwMjdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0zYzAwMWRmMjA3ZWNkODRkMDIyZDBhNzBiZjY0NjI2MjdmZGUxNWIzMjFmNTYyZDYxMjI1NTM4NjI5MzBhOTNkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.stEtZVLdmXqmR5ZbInxVcEvGMu8zA3KWPyVJe-mZFMs">
+                                            </div>
+                                            <div id="st-buildinfo">
+                                                <div class="st-infopoint">
+                                                    <b>StarTube Version: </b><span>${currStarVer}</span>
+                                                </div>
+                                                <div class="st-infopoint">
+                                                    <b>Release Channel: </b><span>${currStarChan}</span>
+                                                </div>
+                                                <div class="st-infopoint">
+                                                    <b>Release Type: </b><span>${currStarDetails}</span>
+                                                </div>
+                                            </div>
+                                            <div id="st-links" class="flex-bar">
+                                                <a class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar" id="st-gh-link" href="https://www.github.com/lightbeam24/StarTube">
+                                                    <span>GitHub</span>
+                                                </a>
+                                                <a class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar" id="st-update-link" href="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js">
+                                                    <span>Update or reinstall StarTube (via GitHub)</span>
+                                                </a>
+                                                <a id="RTD" class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar">
+											    	<span>Reset StarTube config</span>
+											    </a>
+                                            </div>
 										</div>
 										<!--div id="startube-save-files" class="astro-section">
 											<div class="astro-title">
@@ -814,15 +845,15 @@ astroSettings:`
 												<span>Config is from the channel</span>
 											</div>
 										</div>
-										<div id="startube-reset-config" class="astro-section">
+										<div id="startube-reset-config" class="astro-section none">
 											<div class="astro-title">
 												<h4>Reset config</h4>
 											</div>
-											<button id="RTD" class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
+											<!--button id="RTD" class="astro-filter-button yt-uix-button-default yt-uix-button yt-uix-button-size-default">
 												<span>Reset config</span>
-											</button>
+											</button-->
 										</div>
-										<div id="startube-disable-options" class="astro-section">
+										<div id="startube-disable-options" class="astro-section none">
 											<div class="astro-title">
 												<h4>Turn off all StarTube options (will not affect locked settings)</h4>
 											</div>
@@ -2115,6 +2146,8 @@ var defaultConfigs = {
 	"expStaticSite": false,
 	"expStaticSiteForcesSmallPlayer": true,
 
+    "expCosmicBG": false,
+    "expCosmicButtons": false,
 	"expCosmicComments": false,
 	"expCosmicGuideLayout": false,
 	"expNotifSquare": false,
@@ -2167,6 +2200,11 @@ var defaultConfigs = {
             name:"cfgWinDen",
             tValue:"0",
             visValue:"0"
+        },
+        showNew:{
+            name:"showNew",
+            tValue:"on",
+            visValue:"on"
         },
 		layoutMode:{
             name:"layoutMode",
@@ -2253,6 +2291,11 @@ var defaultConfigs = {
             tValue:"on",
             visValue:"auto"
         },
+        autoLoop:{
+            name:"autoLoop",
+            tValue:"off",
+            visValue:"off"
+        },
         watchLayout:{
             name:"watchLayout",
             tValue:"watch8",
@@ -2298,6 +2341,11 @@ var defaultConfigs = {
             tValue:"off",
             visValue:"off"
         },
+        guideSubsAutoExpand:{
+            name:"guideSubsAutoExpand",
+            tValue:"on",
+            visValue:"auto"
+        },
         channelVersion:{
             name:"channelVersion",
             tValue:"c4",
@@ -2315,9 +2363,10 @@ var defaultConfigs = {
         },
         newStructure2:"true"
 	},
-	"importantInfo": {
-		startubeVersion: currStarVer,
-		startubeChannel: currStarChan
+	"importantInfo":{
+		startubeVersion:currStarVer,
+		startubeChannel:currStarChan,
+        startubeDetails:currStarDetails
 	}
 };
 if(STS == null){
@@ -2374,6 +2423,16 @@ function applyNewSettings(){
     if(STS.radioSettings.newStructure2==null){
        if(STS.newConfig==false){
            STS.radioSettings={
+               cfgWinDen:{
+                   name:"cfgWinDen",
+                   tValue:STS.radioSettings.cfgWinDen,
+                   visValue:STS.radioSettings.cfgWinDen
+               },
+               showNew:{
+                   name:"showNew",
+                   tValue:STS.radioSettings.showNew,
+                   visValue:STS.radioSettings.showNew
+               },
                layoutMode:{
                    name:"layoutMode",
                    tValue:STS.radioSettings.layoutMode,
@@ -2403,6 +2462,11 @@ function applyNewSettings(){
                    name:"playerVersion",
                    tValue:STS.radioSettings.playerVersion,
                    visValue:STS.radioSettings.playerVersion
+               },
+               autoLoop:{
+                   name:"autoLoop",
+                   tValue:STS.radioSettings.autoLoop,
+                   visValue:STS.radioSettings.autoLoop
                },
                watchLayout:{
                    name:"watchLayout",
@@ -2443,6 +2507,11 @@ function applyNewSettings(){
                    name:"guideAlwaysPinned",
                    tValue:STS.radioSettings.guideAlwaysPinned,
                    visValue:STS.radioSettings.guideAlwaysPinned
+               },
+               guideSubsAutoExpand:{
+                   name:"guideSubsAutoExpand",
+                   tValue:STS.radioSettings.guideSubsAutoExpand,
+                   visValue:STS.radioSettings.guideSubsAutoExpand
                },
                channelVersion:{
                    name:"channelVersion",
@@ -2531,6 +2600,13 @@ function applyNewSettings(){
             visValue:"0"
         }
 	}
+    if(STS.radioSettings.showNew==null){
+        STS.radioSettings.showNew={
+            name:"showNew",
+            tValue:"on",
+            visValue:"on"
+        }
+	}
     if(STS.radioSettings.rndPlayer==null){
         STS.radioSettings.rndPlayer={
             name:"rndPlayer",
@@ -2564,6 +2640,20 @@ function applyNewSettings(){
             name:"siteFont",
             tValue:"roboto",
             visValue:"auto"
+        }
+    }
+    if(STS.radioSettings.guideSubsAutoExpand==null){
+        STS.radioSettings.guideSubsAutoExpand={
+            name:"guideSubsAutoExpand",
+            tValue:"on",
+            visValue:"auto"
+        }
+    }
+    if(STS.radioSettings.autoLoop==null){
+        STS.radioSettings.autoLoop={
+            name:"autoLoop",
+            tValue:"off",
+            visValue:"off"
         }
     }
 }
@@ -2732,7 +2822,15 @@ let ScFa={
 	"expStaticSiteForcesSmallPlayer":{
 		name:"expStaticSiteForcesSmallPlayer",
 		desc:"If expStaticSite is enabled, the non-flexwatch (360p) player will be forced on."
-	},
+    },
+    "expCosmicBG":{
+        name:"expCosmicBG",
+        desc:"Makes the site use the Cosmic Panda background image"
+    },
+    "expCosmicButtons":{
+        name:"expCosmicButtons",
+        desc:"Makes the site use Cosmic Panda styled buttons"
+    },
 	"expCosmicComments":{
 		name:"expCosmicComments",
 		desc:"Use Cosmic Panda comments."
@@ -2873,7 +2971,6 @@ pages:[
 	sections:[
         {section:{
 			id:"cfgWinDen",
-            new:true,
 			title:{
 				text:"Config Window UI Density"
 			},
@@ -2888,6 +2985,26 @@ pages:[
 				{opt:{
 					name:"Compact",
 					value:"1"
+				}}
+			]
+		}},
+        {section:{
+			id:"showNew",
+            new:true,
+			title:{
+				text:"Highlight newly added settings"
+			},
+			desc:{
+				text:"Add highlights to settings newly added to StarTube. This setting is always highlighted for demonstration purposes. (This setting will apply without refreshing the page)"
+			},
+			opts:[
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
 				}}
 			]
 		}}
@@ -3556,6 +3673,30 @@ pages:[
 			]
 		}},
         {section:{
+			id:"guideSubsAutoExpand",
+            new:true,
+			title:{
+				text:"Auto expand subscriptions on guide"
+			},
+			desc:{
+				text:"When the page first loads, have the subscriptions already expanded."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto"
+				}},
+                {opt:{
+					name:"On",
+					value:"on"
+				}},
+                {opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
 			id:"subsGrid",
 			title:{
 				text:"Subscriptions page"
@@ -3586,6 +3727,26 @@ pages:[
 		text:"Player"
 	},
 	sections:[
+        {section:{
+			id:"autoLoop",
+            new:true,
+			title:{
+				text:"Loop videos by default"
+			},
+			desc:{
+				text:"Make videos loop by default. You can still disable loop like normal. Convenient for people who like to listen to music on repeat."
+			},
+			opts:[
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+                {opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
         {section:{
 			id:"playerVersion",
 			title:{
@@ -4484,6 +4645,7 @@ function executeRadiosParent(s){
 	executeRadios("playerVersion",s.playerVersion,true);
     executeRadios("playerSpinner",s.playerSpinner,true);
 	executeRadios("playerSizerules",s.playerSizerules,true);
+    executeRadios("autoLoop",s.autoLoop,true);
 	executeRadios("watchLayout",s.watchLayout,true);
 	executeRadios("relatedTabs",s.relatedTabs,true);
 	executeRadios("relatedGrid",s.relatedGrid,true);
@@ -4492,6 +4654,7 @@ function executeRadiosParent(s){
     executeRadios("compactName",s.compactName,true);
 	executeRadios("guideNavToFeed",s.guideNavToFeed,true);
 	executeRadios("guideAlwaysPinned",s.guideAlwaysPinned,true);
+    executeRadios("guideSubsAutoExpand",s.guideSubsAutoExpand,true);
     executeRadios("homeRedir",s.homeRedir,true);
     executeRadios("logoLink",s.logoLink,true);
     executeRadios("subsGrid",s.subsGrid,true);
@@ -4626,6 +4789,7 @@ function STAltWatch9Fancy(){
         SRS.uploadBtn.tValue="modern";
         SRS.appsBtn.tValue="off";
         SRS.guideAlwaysPinned.tValue="off";
+        SRS.guideSubsAutoExpand.tValue="on";
         SRS.subsGrid.tValue="grid";
         SRS.rndPlayer.tValue="off";
         SRS.playerVersion.tValue="modernV1";
@@ -4662,6 +4826,8 @@ function STAltWatch9Fancy(){
 
 		STS.expStaticSite = false;
 
+        STS.expCosmicBG=false;
+        STS.expCosmicButtons=false;
 		STS.expCosmicComments = false;
 		STS.expCosmicGuideLayout = false;
 		STS.expNotifSquare = false;
@@ -4702,6 +4868,7 @@ function STAltWatch9Fancy(){
         SRS.faviconSelect.tValue="2012";
         SRS.siteFont.tValue="arial";
         SRS.playerVersion.tValue="default2014";
+        SRS.guideSubsAutoExpand.tValue="off";
 		STS.expTrueScrollableGuide = false;
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
@@ -4793,6 +4960,7 @@ function STRingo2(){
         SRS.playerVersion.tValue="default2014";
         SRS.subsGrid.tValue="list";
         SRS.watchLayout.tValue="watch7";
+        SRS.guideSubsAutoExpand.tValue="off";
 		STS.expTrueScrollableGuide = false;
 
 		STS.expHideYoodles = false;
@@ -4870,6 +5038,7 @@ function STRingo2(){
         SRS.compactName.tValue="off";
         SRS.playerSpinner.tValue="classic";
         SRS.channelVersion.tValue="c3";
+        SRS.guideSubsAutoExpand.tValue="off";
 		STS.expMoveGuideMainSectionToTop = false;
 		STS.expMoreTooltips = true;
 		STS.expWatch9NoOwner = false;
@@ -4895,6 +5064,8 @@ function STRingo2(){
 
 		STS.expStaticSite = true;
 
+        STS.expCosmicBG=false;
+        STS.expCosmicButtons=false;
 		STS.expCosmicComments = true;
 		STS.expCosmicGuideLayout = true;
 		STS.expNotifSquare = true;
@@ -4940,6 +5111,7 @@ function STEpicPandaRealSettings(){
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="small";
     SRS.playerSpinner.tValue="classic";
+    STS.expCosmicButtons=true;
 
 		if(STS.STPresetsAlsoSetV3Settings==true){
 			setV3Settings("epicreal");
@@ -4969,6 +5141,7 @@ function STEpicPandaRealSettings(){
         SRS.compactName.tValue="off";
         SRS.playerSpinner.tValue="classic";
         SRS.channelVersion.tValue="c3";
+        SRS.guideSubsAutoExpand.tValue="off";
 		STS.expMoveGuideMainSectionToTop = false;
 		STS.expMoreTooltips = true;
 		STS.expWatch9NoOwner = false;
@@ -4995,6 +5168,8 @@ function STEpicPandaRealSettings(){
 
 		STS.expStaticSite = true;
 
+        STS.expCosmicBG=true;
+        STS.expCosmicButtons=true;
 		STS.expCosmicComments = true;
 		STS.expCosmicGuideLayout = true;
 		STS.expNotifSquare = true;
@@ -5064,6 +5239,8 @@ function STAozoraSettings(){
     SRS.playerSpinner.tValue="classic";
     SRS.channelVersion.tValue="c3";
 	STS.expCosmicGuideLayout=true;
+    STS.expCosmicBG=false;
+    STS.expCosmicButtons=false;
     STS.expCosmicComments=false;
 
 	STS.expChannels3TimeVisible = false;
@@ -5094,6 +5271,7 @@ function STStargazerSettings(){
     SRS.uploadBtn.tValue="modern";
     SRS.appsBtn.tValue="off";
     SRS.guideAlwaysPinned.tValue="off";
+    SRS.guideSubsAutoExpand.tValue="off";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
     SRS.playerVersion.tValue="default2014";
@@ -5130,6 +5308,8 @@ function STStargazerSettings(){
 
 		STS.expStaticSite = true;
 
+    STS.expCosmicBG=false;
+    STS.expCosmicButtons=false;
 		STS.expCosmicComments = false;
 		STS.expCosmicGuideLayout = true;
 		STS.expNotifSquare = true;
@@ -5189,6 +5369,7 @@ function ST2019Settings(){
     SRS.uploadBtn.tValue="create";
     SRS.appsBtn.tValue="yt";
     SRS.guideAlwaysPinned.tValue="off";
+    SRS.guideSubsAutoExpand.tValue="off";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
     SRS.playerVersion.tValue="modernV2";
@@ -5225,6 +5406,8 @@ function ST2019Settings(){
 
 	STS.expStaticSite = false;
 
+    STS.expCosmicBG=false;
+    STS.expCosmicButtons=false;
 	STS.expCosmicComments = false;
 	STS.expCosmicGuideLayout = false;
 	STS.expNotifSquare = false;
@@ -5414,6 +5597,7 @@ function ST2025Settings(){
         SRS.uploadBtn.tValue="icon";
         SRS.appsBtn.tValue="off";
         SRS.guideAlwaysPinned.tValue="off";
+        SRS.guideSubsAutoExpand.tValue="off";
         SRS.subsGrid.tValue="grid";
         SRS.rndPlayer.tValue="off";
         SRS.playerVersion.tValue="modernV2";
@@ -5450,6 +5634,8 @@ function ST2025Settings(){
 
 		STS.expStaticSite = false;
 
+        STS.expCosmicBG=false;
+        STS.expCosmicButtons=false;
 		STS.expCosmicComments = false;
 		STS.expCosmicGuideLayout = false;
 		STS.expNotifSquare = false;
@@ -5606,6 +5792,7 @@ function setV3Settings(preset){
 	}
 	if(preset == "poly16"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=false;
 
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
@@ -5640,6 +5827,7 @@ function setV3Settings(preset){
 	}
 	if(preset == "poly17"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=false;
 
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
@@ -5674,6 +5862,7 @@ function setV3Settings(preset){
 	}
     if(preset == "hitchhiker13centered"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=false;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=true;
 
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5704,6 +5893,7 @@ function setV3Settings(preset){
 	}
     if(preset == "hitchhiker14centered"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=true;
 
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5734,6 +5924,7 @@ function setV3Settings(preset){
 	}
 	if(preset == "hitchhiker13"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=false;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=true;
 
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = false;
@@ -5783,6 +5974,7 @@ function setV3Settings(preset){
 	}
 	if(preset == "nirvana14"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=true;
 
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5816,6 +6008,7 @@ function setV3Settings(preset){
 	}
 	if(preset == "nirvana15Early"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=true;
 
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
 		V3_SETTINGS_CONF.SITE_CENTER_ALIGNED = true;
@@ -5849,6 +6042,7 @@ function setV3Settings(preset){
 	}
 	if(preset == "nirvana15"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=false;
 
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
@@ -5883,6 +6077,7 @@ function setV3Settings(preset){
 	}
 	if(preset == "nirvana16"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=true;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=false;
 
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = true;
@@ -5916,6 +6111,7 @@ function setV3Settings(preset){
 	}
 	if(preset == "cosmic"){
         V3_SETTINGS_CONF.WATCH7_CREATOR_BAR_LIGHT=false;
+        V3_SETTINGS_CONF.BACKSTAGE_POST_IS_PRESENTED_AS_FEED=true;
 
 		V3_SETTINGS_CONF.JFK_SIGN_IN = false;
 		V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI = false;
@@ -5950,7 +6146,7 @@ function setV3Settings(preset){
 	}
 
 	if(preset == "epicreal"){
-		V3_SETTINGS_CONF.BODY_LEGACY_BACKGROUND = true;
+		V3_SETTINGS_CONF.BODY_LEGACY_BACKGROUND=true;
 	}
 
 	var V3_SETTINGS = localStorage.getItem("v3_local_db");
@@ -6031,6 +6227,15 @@ async function waitForElement500(elm){
 		await timeout(10).then(function(){
 			canGo = true;
 			return document.querySelector(elm);
+		});
+    }
+    async function wF(e,d){
+		while (null==document.querySelector(e)){
+			await new Promise(r => requestAnimationFrame(r));
+		}
+		await timeout(d).then(function(){
+			canGo=true;
+			return document.querySelector(e);
 		});
     }
     setTimeout(function(){
@@ -6324,8 +6529,8 @@ function getVideoSize(){
 		[data-player-size="small"] .appbar-flexwatch-mini #watch7-content,
 		[data-player-size="small"] .appbar-flexwatch-mini #action-panel-stats.action-panel-content,
 		[data-player-size="small"] .appbar-flexwatch-mini .player-width,
-		[data-player-size="small"] .appbar-flexwatch-mini .player-unavailable .video-thumb img {
-			width: ${PS1W}px !important;
+		[data-player-size="small"] .appbar-flexwatch-mini .player-unavailable .video-thumb img{
+			width:${PS1W}px!important
 		}
 		[data-player-size="small"] .player-height:not(.livestream_chat.yt-uix-expander-collapsed){
 			height: calc(${PS1H}px + 30px) !important;
@@ -6333,6 +6538,14 @@ function getVideoSize(){
 		[data-player-size="small"][pl-ver^="m"] .player-height:not(.livestream_chat.yt-uix-expander-collapsed){
 			height: ${PS1H}px !important;
 		}
+        /*.appbar-mini-cinema #player.watch-medium::before{
+            height:${PS2H}px!important
+        }
+        .watch-medium .player-width,
+       .appbar-mini-cinema #player.watch-medium{
+            width:${PS2W}px!important;
+            height:${PS2H}px!important
+        }*/
 		@media screen and (min-width: ${SR2W}px) and (min-height: ${SR2H}px){
 			[data-player-size="small"] .appbar-flexwatch-mini .watch-content,
 			[data-player-size="small"] .appbar-flexwatch-mini #watch7-content,
@@ -6347,6 +6560,14 @@ function getVideoSize(){
 			[data-player-size="small"][pl-ver^="m"] .appbar-flexwatch-mini .player-height:not(.livestream_chat.yt-uix-expander-collapsed){
 				height: ${PS2H}px !important;
 			}
+            /*.appbar-mini-cinema #player.watch-medium::before{
+                height:${PS3H}px!important
+            }
+            .watch-medium .player-width,
+            .appbar-mini-cinema #player.watch-medium{
+                width:${PS3W}px!important;
+                height:${PS3H}px!important
+            }*/
 		}
 		@media screen and (min-width: ${SR3W}px) and (min-height: ${SR3H}px){
 			[data-player-size="small"] .appbar-flexwatch-mini .watch-content,
@@ -6362,6 +6583,14 @@ function getVideoSize(){
 			[data-player-size="small"][pl-ver^="m"] .appbar-flexwatch-mini .player-height:not(.livestream_chat.yt-uix-expander-collapsed){
 				height: ${PS3H}px !important;
 			}
+            /*.appbar-mini-cinema #player.watch-medium::before{
+                height:${PS3H}px!important
+            }
+            .watch-medium .player-width,
+            .appbar-mini-cinema #player.watch-medium{
+                width:${PS3W}px!important;
+                height:${PS3H}px!important
+            }*/
 		}
 		</style>
 		`;
@@ -6397,19 +6626,22 @@ function finishVideoSize(){
 		newElem2.innerHTML = `
 		<style>
 		[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #player,
-		[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content {
-			width: ${fullWidth}px !important;
+        [data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #st-watch-above-container,
+		[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content{
+			width:${fullWidth}px!important
 		}
 		@media screen and (min-width: ${SR2W}px) and (min-height: ${SR2H}px){
 			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #player,
-			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content {
-				width: ${fullWidth}px !important;
+            [data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #st-watch-above-container,
+			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content{
+				width:${fullWidth}px!important
 			}
 		}
 		@media screen and (min-width: ${SR3W}px) and (min-height: ${SR3H}px){
 			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #player,
-			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content {
-				width: ${fullWidth}px !important;
+            [data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #st-watch-above-container,
+			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content{
+				width:${fullWidth}px!important
 			}
 		}
 		</style>
@@ -6481,6 +6713,9 @@ function getWatchMetadata(x){
             }
             CWD.owner=$("#watch7-user-header").data.watch7UserHeader.userName.title.simpleText;
             CWD.pfp=$("#watch7-user-header").data.watch7UserHeader.userPhoto.thumbnails.thumbnails[0].url;
+            setTimeout(function(){
+                CWD.pfp=$("#watch7-user-header").data.watch7UserHeader.userPhoto.thumbnails.thumbnails[0].url;
+            },2000);
             let subBtn=$("#watch7-user-header").data.watch7UserHeader.subscribeButton;
             if(subBtn.subscribeButtonRenderer){
                 subBtn=subBtn.subscribeButtonRenderer;
@@ -8283,7 +8518,6 @@ width: 360px !important;
         nE.classList.add("stdustwb");
         nE.classList.add(SRS.watchLayout.tValue);
         nE.setAttribute("wl",SRS.watchLayout.tValue);
-        // if has title on top if has sidebar stuff or smth if mvoes player lke watch6
         nE.innerHTML = `
         <div id="st-watch-below" class="st-watch-multistate st-multistate-handler" state="normal">
             <div id="st-ratings-info-row-holder" class="st-contents">
@@ -8628,7 +8862,7 @@ function createYTC(){
     let nE=document.createElement("li");
     nE.id="st-yt-c";
     nE.innerHTML=`
-    <span class="copyright" dir="ltr">© 2024 YouTube, LLC</span>
+    <span class="copyright" dir="ltr">© 2025 YouTube, LLC</span>
     `;
     cont.append(nE);
 }
@@ -8725,6 +8959,15 @@ function everyLoadNeo(x){
 	}
 	if($("#page.watch")){
 		getVideoSize();
+        if(SRS.autoLoop.tValue=="on"){
+            var e="video";
+			wF(e,10).then(function(elm){
+				if(canGo!=false){
+                    $("video").setAttribute("loop","");
+                    $(".yt-uix-button-menu-item.html5-context-menu-loop-switch").classList.add("checked");
+				}
+			});
+        }
 	}
 	if(sets.polymerComments==true){
 		polyComment=true;
@@ -8830,24 +9073,24 @@ function modComments(ver){
 				i.classList.add("no-replies");
 			}
 		}else{
-			if(i.querySelector("svg") == null){
-				var newHome = i.querySelector(".action_bar");
-				var toMove = i.querySelector(".action_bar .like");
-				var toMove2 = i.querySelector(".action_bar .dislike");
-				var toMove3 = i.querySelector(".action_bar .reply-button");
-				var toMove4 = i.querySelector(".reply_poster");
-				let toMove5 = null;
+			if(i.querySelector("svg")==null){
+				var newHome=i.querySelector(".action_bar");
+				var toMove=i.querySelector(".action_bar .like");
+				var toMove2=i.querySelector(".action_bar .dislike");
+				var toMove3=i.querySelector(".action_bar .reply-button");
+				var toMove4=i.querySelector(".reply_poster");
+				let toMove5=null;
 				if(i.querySelector(".action_bar .heart")){
-					toMove5 = i.querySelector(".action_bar .heart");
+					toMove5=i.querySelector(".action_bar .heart");
 				}
-				let count = i.querySelector(".count_active").textContent;
-				if(count == 1){
+				let count=i.querySelector(".count_active").textContent;
+				if(count==1){
 					newHome.classList.add("no-likes");
 				}
 				if(sets.polyG2Comments==true){
 					newHome.appendChild(toMove);
 					newHome.appendChild(toMove2);
-					if(toMove5 !== null){
+					if(toMove5!=null){
 						newHome.appendChild(toMove5);
 					}
 					newHome.appendChild(toMove3);
@@ -8856,7 +9099,7 @@ function modComments(ver){
 					newHome.appendChild(toMove3);
 					newHome.appendChild(toMove);
 					newHome.appendChild(toMove2);
-					if(toMove5 !== null){
+					if(toMove5!=null){
 						newHome.appendChild(toMove5);
 					}
 					newHome.classList.add("gen1-comment");
@@ -8950,17 +9193,17 @@ function modComments(ver){
 					}, 100);
 				});
 				i.classList.add("startube-comment");
-				if(i.parentNode.classList != "post"){
+				if(i.parentNode.classList!="post"){
 					i.classList.add("startube-reply");
 				}else if(i.parentNode.parentNode.parentNode.querySelector(".link_action")){
 					if($("[lang='en']")&&sets.simpleReply==true){
-						let count = i.parentNode.parentNode.parentNode.querySelector(".link_action_text").textContent;
+						let count=i.parentNode.parentNode.parentNode.querySelector(".link_action_text").textContent;
 						if(count.includes("View all")){
-							count = count.split("View all ")[1];
+							count=count.split("View all ")[1];
 						}else{
-							count = "1 Reply";
+							count="1 Reply";
 						}
-						i.parentNode.parentNode.parentNode.querySelector(".link_action_text").textContent = count;
+						i.parentNode.parentNode.parentNode.querySelector(".link_action_text").textContent=count;
 					}
 					if(sets.polyG2Comments==true){
 						let cont = i.parentNode.parentNode.parentNode.querySelector(".loader");
@@ -12433,10 +12676,13 @@ ${date}
 </div>
 					`;
 			let rgi = $("#content").data.twoColumnBrowseResultsRenderer.items[0].brandedPageV2Renderer.tabs[1].tabRenderer.richGridInfo;
+            let chipBar0;
+            let chipBar1;
+            let chipBar2;
             if(rgi){
-                let chipBar0 = rgi.header.feedFilterChipBarRenderer.contents[0].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
-                let chipBar1 = rgi.header.feedFilterChipBarRenderer.contents[1].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
-                let chipBar2 = rgi.header.feedFilterChipBarRenderer.contents[2].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                chipBar0=rgi.header.feedFilterChipBarRenderer.contents[0].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                chipBar1=rgi.header.feedFilterChipBarRenderer.contents[1].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                chipBar2=rgi.header.feedFilterChipBarRenderer.contents[2].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
             }
 			if(!window.location.href.includes("view=0")){
 			}else{
@@ -13662,9 +13908,9 @@ function deleteTitleOnTop(){
 					if($("#guide-subscriptions-container:not(.st-modded) .guide-flyout") && $("#startube-subs-expander-container") == null){
 						let container = $("#guide-subscriptions-container");
 						let newElem = document.createElement("div");
-						newElem.id = "startube-subs-expander-container";
+						newElem.id="startube-subs-expander-container";
 						newElem.innerHTML = `
-								 <div class="startube-guide-expander yt-uix-expander guide-channels-list">
+								 <div class="startube-guide-expander yt-uix-expander yt-uix-expander-collapsed guide-channels-list">
 									<div class="startube-guide-expander-items yt-uix-expander-body">
                                     <li class="guide-channel startube">
 									<a class="startube-guide-expand-button flex-bar guide-item yt-uix-expander-head guide-view-more yt-valign">
@@ -13711,6 +13957,9 @@ function deleteTitleOnTop(){
 						newHome = document.querySelector("#guide-subscriptions-container .startube-guide-expander-items");
 						newHome.insertBefore(theFlyout, newHome.children[0]);
 						newHome.classList.add("startube-fixed-guide-item");
+                        if(SRS.guideSubsAutoExpand.tValue=="on"){
+                            $("#startube-subs-expander-container .yt-uix-expander").classList.remove("yt-uix-expander-collapsed");
+                        }
 					}
 					if(document.querySelectorAll("#guide-subscriptions-container")[1]){
 						if($(".st-guide-2") == null){
@@ -14360,7 +14609,6 @@ border-width: 12px;
                 var elm=".ytp-menu-container .ytp-menu";
 				waitForElement10(elm).then(function(elm){
 					if(canGo!=false&&$("#st-pl-settings")==null){
-                        $(".ytp-menu-container").classList.add("scrawl");
                         let conta=$(".ytp-menu-container");
                         //let conta=$(".ytp-menu-container .ytp-menu .ytp-menu-content");
                         let nE=document.createElement("div");
@@ -14394,6 +14642,8 @@ border-width: 12px;
                                             <button class="st-pl-menuitem st-pl-submenu-btn st-pl-speed st-pl-trigger flex-bar" trigger="speed">
                                             </button>
                                             <button class="st-pl-menuitem st-pl-submenu-btn st-pl-subtitles st-pl-trigger flex-bar" trigger="subtitles">
+                                            </button>
+                                            <button class="st-pl-menuitem st-pl-submenu-btn st-pl-audio-track st-pl-trigger flex-bar" trigger="audio-track">
                                             </button>
                                             <button class="st-pl-menuitem st-pl-submenu-btn st-pl-quality st-pl-trigger flex-bar" trigger="quality">
                                             </button>
@@ -14430,6 +14680,18 @@ border-width: 12px;
                                             <button class="st-plm-back st-pl-trigger flex-bar" trigger="main">
                                                 <div class="st-pl-back-icon">${STH2.ST_SVG}</div>
                                                 <span class="st-plm-text">Subtitles</span>
+                                            </button>
+                                        </div>
+                                        <div class="st-plm-content">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="st-audio-track-page" class="st-plm-page">
+                                    <div class="st-plm-page-inner">
+                                        <div class="st-plm-header flex-bar">
+                                            <button class="st-plm-back st-pl-trigger flex-bar" trigger="main">
+                                                <div class="st-pl-back-icon">${STH2.ST_SVG}</div>
+                                                <span class="st-plm-text">Audio track</span>
                                             </button>
                                         </div>
                                         <div class="st-plm-content">
@@ -14555,15 +14817,34 @@ border-width: 12px;
         let nH;
         if($(".ytp-menu .ytp-menu-row:nth-child(3)")){
             let hasSubtitles=false;
+            let hasAT=false;
+            $("body .v3").removeAttribute("has-at");
             if($(".ytp-menu .ytp-menu-row:nth-child(5)")){
                 hasSubtitles=true;
+            }
+            if($(".ytp-menu .ytp-menu-row:nth-child(6)")){
+                hasAT=true;
+                $("body .v3").setAttribute("has-at","");
             }
             if($("#st-pl-settings .ytp-menu-row")){
                 document.querySelectorAll("#st-pl-settings .ytp-menu-row").forEach(i=>{
                     i.remove();
                 });
             }else{
-                if(hasSubtitles==true){
+                if(hasAT==true){
+                    // subtitles
+                    tM=$(".ytp-menu .ytp-menu-row:nth-child(4) .ytp-drop-down-menu");
+                    nH=$("#st-subtitles-page .st-plm-content");
+                    nH.append(tM);
+                    // audio track
+                    tM=$(".ytp-menu .ytp-menu-row:nth-child(5) .ytp-drop-down-menu");
+                    nH=$("#st-audio-track-page .st-plm-content");
+                    nH.append(tM);
+                    // quality
+                    tM=$(".ytp-menu .ytp-menu-row:nth-child(6) .ytp-drop-down-menu");
+                    nH=$("#st-quality-page .st-plm-content");
+                    nH.append(tM);
+                }else if(hasSubtitles==true){
                     // subtitles
                     tM=$(".ytp-menu .ytp-menu-row:nth-child(4) .ytp-drop-down-menu");
                     nH=$("#st-subtitles-page .st-plm-content");
@@ -14594,24 +14875,42 @@ border-width: 12px;
             tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
             nH=$("#st-main-page .st-pl-menuitem:nth-child(3)");
             nH.append(tM);
-            if(hasSubtitles==true){
+            if(hasAT==true){
+                // subtitles
+                tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
+                nH=$("#st-main-page .st-pl-menuitem:nth-child(4)");
+                nH.append(tM);
+                // audio track
+                tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
+                nH=$("#st-main-page .st-pl-menuitem:nth-child(5)");
+                nH.append(tM);
+                // quality
+                tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
+                nH=$("#st-main-page .st-pl-menuitem:nth-child(6)");
+                nH.append(tM);
+                tM=$(".st-pl-subtitles .ytp-menu-cell:last-child");
+                nH=$("#st-subtitles-page .st-plm-header");
+                nH.append(tM);
+            }else if(hasSubtitles==true){
                 // subtitles
                 tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
                 nH=$("#st-main-page .st-pl-menuitem:nth-child(4)");
                 nH.append(tM);
                 // quality
                 tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
-                nH=$("#st-main-page .st-pl-menuitem:nth-child(5)");
+                nH=$("#st-main-page .st-pl-menuitem:nth-child(6)");
                 nH.append(tM);
                 tM=$(".st-pl-subtitles .ytp-menu-cell:last-child");
                 nH=$("#st-subtitles-page .st-plm-header");
                 nH.append(tM);
+                $("#st-main-page .st-pl-menuitem:nth-child(5)").classList.add("none");
             }else{
                 // quality
                 tM=$(".ytp-menu .ytp-menu-row:nth-child(3)");
-                nH=$("#st-main-page .st-pl-menuitem:nth-child(5)");
+                nH=$("#st-main-page .st-pl-menuitem:nth-child(6)");
                 nH.append(tM);
                 $("#st-main-page .st-pl-menuitem:nth-child(4)").classList.add("none");
+                $("#st-main-page .st-pl-menuitem:nth-child(5)").classList.add("none");
             }
         }
     }
@@ -18442,7 +18741,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
             if($("[layout^='cos']")){
                 html.setAttribute("cosmic-styles","");
                 sets.cosmicStyles=true;
-                html.setAttribute("cosmic-buttons","");
+                //html.setAttribute("cosmic-buttons","");
                 sets.cosmicButtons=true;
                 html.setAttribute("exp-cosmic-guide-style","");
                 sets.cosmicGuideStyle=true;
@@ -18455,7 +18754,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 html.setAttribute("exp-aozora-home","");
                 sets.aozoraHome=true;
                 html.setAttribute("topbar","cosmic");
-                html.setAttribute("cosmic-bg","");
+                //html.setAttribute("cosmic-bg","");
             }
 			if($("[layout^='cosmic2012_1']")){
                 html.setAttribute("exp-cosmic-banners","");
@@ -18476,7 +18775,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 html.setAttribute("exp-big-search-thumbs","");
             }
             if($("[layout^='epic2012_2']")){
-                html.setAttribute("cosmic-buttons","");
+                //html.setAttribute("cosmic-buttons","");
                 sets.cosmicButtons=true;
                 html.setAttribute("exp-aozora-topbar-links","");
                 createAozoraTopbarLinks();
@@ -18663,6 +18962,10 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					html.setAttribute("exp-no-by-text","");
 				}else if(value == true && name == "expStaticSite"){
 					html.setAttribute("static", "");
+				}else if(value == true && name == "expCosmicBG"){
+					html.setAttribute("cosmic-bg","");
+				}else if(value == true && name == "expCosmicButtons"){
+					html.setAttribute("cosmic-buttons","");
 				}else if(value == true && name == "expCosmicComments"){
 					html.setAttribute("exp-legacy-comments","");
 					html.setAttribute("exp-cosmic-comments","");
@@ -19286,13 +19589,13 @@ padding: 3px 0;
 padding: 10px;
 border-bottom: 1px solid #ccc;
 }
-#cfgWinDen,
+#st-logo-section,
 #channelVersion,
 #faviconSelect,
 #guideNavToFeed,
 #watchLayout,
 #startube-config-overview,
-#playerVersion,
+#autoLoop,
 #gbarVersion,
 #layoutMode,
 #astro-scroller .astro-section:first-child {
@@ -19683,16 +19986,65 @@ filter: invert(1);
 .astro-radio-setting:hover .astro-radio{
   border-color:#dd5044
 }
-#startube-settings-sidebar-inner{
+/*#startube-settings-sidebar-inner{
   max-height:66%;
   overflow:auto
-}
+}*/
 
 .astro-title-bar{
   animation:.5s slideupCont 1
 }
 .astro-options{
   animation:.5s slideup 1
+}
+
+.st-link{
+  width:fit-content;
+  margin-right:8px
+}
+#st-links{
+  margin-top:8px
+}
+.st-new{
+  margin-left:8px;
+  background:linear-gradient(to right,#f4c001,#fdc600,#ffcb00);
+  color:#fff;
+  padding:2px 5px;
+  border-radius:2px;
+  font-weight:var(--bold);
+  text-shadow:-0.5px -1px rgba(150,150,150,.3)
+}
+.st-sb-new{
+  background:#08c;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  position:absolute;
+  right:24px
+}
+[showNew="off"] .st-sb-new,
+[showNew="off"] .st-new{
+  display:none
+}
+.st-infopoint{
+  font-size:13px;
+  margin-top:5px;
+  color:var(--333)
+}
+[cfgwinden="0"] .st-infopoint{
+  font-size:14px;
+  margin-top:8px
+}
+[cfgwinden="0"] #st-logo img{
+  width:500px
+}
+[cfgwinden="0"] .st-link{
+  height:32px;
+  padding:0 15px;
+  font-size:13px
+}
+#st-adv-dep-warn{
+  color:#000
 }
 	</style>
     ${STH.astroSettings}
@@ -19758,6 +20110,15 @@ filter: invert(1);
             }
             setNumb++;
         });
+        if(ix.section.new){
+            let conta=nE.querySelector(".astro-title");
+            let newerE=document.createElement("div");
+            newerE.classList.add("st-new");
+            newerE.innerHTML=`
+            <span>New in ${currStarVer}</span>
+            `;
+            conta.append(newerE);
+        }
     }
     radioSets.pages.forEach(i=>{
         let obj=i.page;
@@ -19828,6 +20189,9 @@ filter: invert(1);
 	$("#json-upload").addEventListener("change", () => {
 		$("#startube-settings-window").setAttribute("loading-config","true");
 	});
+    let nH=$("[state-id='config'] .astro-scroller-inner");
+    let tM=$("#st-logo-section");
+    nH.insertBefore(tM,nH.children[0]);
 
 	$("#st-load-file button").addEventListener("click", function(){
 		if($("#st-load-file input").files[0]){
@@ -22151,12 +22515,12 @@ overflow: hidden;
 min-width: 300px;
 max-width: 416px;
 }
-[modern-styles] .distiller_yt-post-option-menu {
-visibility: visible;
-opacity: .5;
+[modern-styles] .distiller_yt-post-option-menu{
+visibility:visible;
+opacity:.5
 }
-[modern-styles] .comment:hover .distiller_yt-post-option-menu {
-opacity: .8;
+[modern-styles] .comment:hover .distiller_yt-post-option-menu{
+opacity:.8
 }
 [modern-styles] .distiller_yt-post-option-menu .oz-sprite {
 opacity: .8;
@@ -22647,7 +23011,7 @@ overflow:scroll;
 max-height:100vh;
 overscroll-behavior:contain
 }
-[modern-cards] #appbar-guide-menu,
+[modern-cards]:not([ly^="hh2014alt"]) #appbar-guide-menu,
 [exp-true-scrollable-guide] #appbar-guide-menu{
 top:50px!important
 }
@@ -31678,7 +32042,7 @@ html:not([static])[skybird] #watch7-sidebar{
   margin:15px 0;
   padding:0 15px
 }
-[skybird] #appbar-guide-menu{
+[modern-cards][skybird] .v3 #appbar-guide-menu{
   top:57px!important
 }
 [skybird] #appbar-guide-menu .guide-section h3,
@@ -32550,8 +32914,8 @@ html:not([exp-watch8-no-more]) [wl="w8"] #st-transcript-button{
 }
 [poly-styles] .st-watch-row,
 [exp-epic-styling] .st-watch-row,
-[cosmic-bg] .st-watch-row,
-[layout^="stargazer"] .st-watch-row,
+[layout^="cos"] .st-watch-row,
+[layout^="star"] .st-watch-row,
 [aozora-styles] .st-watch-row{
   background:none;
   border:none;
@@ -32649,7 +33013,7 @@ html:not([exp-watch8-no-more]) [wl="w8"] #st-transcript-button{
   background:#222
 }
 [exp-epic-styling] .st-desc-content,
-[cosmic-bg] .st-desc-content,
+[layout^="cos"] .st-desc-content,
 [aozora-styles] .st-desc-content,
 [wl^="aw9"] .st-desc-content,
 [layout^="stargazer"] .st-desc-content,
@@ -32658,9 +33022,9 @@ html:not([exp-watch8-no-more]) [wl="w8"] #st-transcript-button{
   background:none;
   border-inline:none
 }
-[cosmic-bg] .st-desc,
+[layout^="cos"] .st-desc,
 [aozora-styles] .st-desc,
-[cosmic-bg] .st-desc-content,
+[layout^="cos"] .st-desc-content,
 [aozora-styles] .st-desc-content{
   width:100%
 }
@@ -34381,6 +34745,7 @@ html:not([exp-watch9-true-expander]) .st-desc-snippet-content{
   align-items:center;
   border-radius:3px 0 0 3px;
   border-right:none!important;
+  text-decoration:none!important
 }
 [wl^="w5"] #watch7-sentiment-actions{
   margin-top:0
@@ -35211,6 +35576,9 @@ border-color:#484851
   color:#e62117;
   margin-right:-8px
 }
+[exp-colorful-channels][location="channel"][c4banner] [layout^="poly2016"] #yt-masthead #startube-create-btn{
+  color:#fff
+}
 [ringo2] [layout^="poly201"] #yt-masthead #startube-create-btn{
   color:#f03
 }
@@ -35275,7 +35643,12 @@ html{
   --st-plm-padding:0 22px;
   --st-plm-header-fs:19px
 }
-
+html [has-at]{
+  --st-plm-w:307px;
+}
+[data-player-size="fullscreen"] [has-at]{
+  --st-plm-w:444px
+}
 
 [pl-ver^="m"] .ytp-drop-down-menu,
 [pl-ver^="m"] .ytp-menu-container{
@@ -35288,6 +35661,7 @@ html{
 }
 [pl-ver^="m"] #st-pl-settings:not([state="main"]) #st-main-page .st-plm-content,
 [pl-ver^="m"] #st-pl-settings:not([state="quality"]) #st-quality-page .st-plm-content,
+[pl-ver^="m"] #st-pl-settings:not([state="audio-track"]) #st-audio-track-page .st-plm-content,
 [pl-ver^="m"] #st-pl-settings:not([state="subtitles"]) #st-subtitles-page .st-plm-content,
 [pl-ver^="m"] #st-pl-settings:not([state="speed"]) #st-speed-page .st-plm-content{
   max-height:0
@@ -35397,6 +35771,9 @@ html{
 }
 [pl-ver^="m"] [state="quality"] .st-plm-inner{
   transform:translateX(-200%)
+}
+[pl-ver^="m"] [state="audio-track"] .st-plm-inner{
+  transform:translateX(-400%)
 }
 [pl-ver^="m"] .ytp-menu-title{
   font-size:var(--st-plm-title-fs);
