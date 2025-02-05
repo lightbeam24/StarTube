@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0
+// @version      2.4.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,13 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.4.0";
+let currStarVer="2.4.1";
+    let updateStarVer="2.4.0";
 let currStarChan="Stable";
-    let currStarDetails="Standard Release";
-let STUID="st240s";
+    let currStarDetails="Patch Update";
+let STUID="st241s";
 let STDELAY=300;
+let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
 	starTubeConfigCreated = currStarVer;
@@ -749,7 +751,7 @@ astroSettings:`
 						</div>
 					</div>
                     <!--div id="startube-settings-sidebar-below">
-                        <a id="st-astro-update" class="astro-sidebar-item flex-bar astro-link" href="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js">
+                        <a id="st-astro-update" class="astro-sidebar-item flex-bar astro-link" href="${updateLink}">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Update/Reinstall StarTube</span>
 							</div>
@@ -807,7 +809,7 @@ astroSettings:`
                                                 <a class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar" id="st-gh-link" href="https://www.github.com/lightbeam24/StarTube">
                                                     <span>GitHub</span>
                                                 </a>
-                                                <a class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar" id="st-update-link" href="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js">
+                                                <a class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar" id="st-update-link" href="${updateLink}">
                                                     <span>Update or reinstall StarTube (via GitHub)</span>
                                                 </a>
                                                 <a id="RTD" class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar">
@@ -19113,16 +19115,36 @@ background:none
 top:0;
 left:0
 }
+#overly-obvious-close-button{
+  background:#06c;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  width:100%;
+  position:absolute;
+  left:0;
+  top:0;
+  padding:8px 15px;
+  min-height:50px
+}
+#st-nsp .content{
+  padding-top:70px
+}
+#st-nsp .distiller-first-time-promo .image{
+  top:65px
+}
 </style>
 	<div class="distiller-first-time-promo show" id="dfp">
 <div class="content">
   <!--div class="arrow arrow-border"></div>
   <div class="arrow"></div-->
+  <button id="overly-obvious-close-button">
+    <span>Close this update popup</span>
+</button>
   <div class="image">
   <svg fill="#000000" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 4.588l2.833 8.719H28l-7.416 5.387 2.832 8.719L16 22.023l-7.417 5.389 2.833-8.719L4 13.307h9.167L16 4.588z" style="fill: #e63127;"/></svg>
   </div>
   <div class="title">What's new in StarTube 2.4.0</div>
-
 
 
 <div class="text">
@@ -19150,6 +19172,18 @@ left:0
 	`;
 container76.insertBefore(newElem76, container76.children[0]);
 			$("#close-st-nsp").addEventListener("click", function(){
+				$("#st-nsp").remove();
+				STS.show2point4 = false;
+				applySettings(0);
+				$("html").setAttribute("no-startube-popup","");
+				var elm = "#show2point4";
+				waitForElement10(elm).then(function(elm){
+					if(canGo != false){
+						$("#show2point4").setAttribute("checked","false");
+					}
+				});
+			});
+            $("#overly-obvious-close-button").addEventListener("click", function(){
 				$("#st-nsp").remove();
 				STS.show2point4 = false;
 				applySettings(0);
@@ -20147,7 +20181,7 @@ filter: invert(1);
             let newerE=document.createElement("div");
             newerE.classList.add("st-new");
             newerE.innerHTML=`
-            <span>New in ${currStarVer}</span>
+            <span>New in ${updateStarVer}</span>
             `;
             conta.append(newerE);
         }
@@ -36100,6 +36134,11 @@ html [has-at]{
   transition:none
 }
 
+
+
+.banner-promo-renderer{
+  display:none
+}
 </style>
 `;
 html.insertBefore(nE,html.children[0]);
