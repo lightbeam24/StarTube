@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.0.50
+// @version      2.4.1.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,13 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.4.0 Beta 4 RC1";
+let currStarVer="2.4.1.1";
+    let updateStarVer="2.4.0";
 let currStarChan="Beta";
-    let currStarDetails="Release Candidate";
-let STUID="st24041r";
+    let currStarDetails="Patch Update (Aligned with current stable release)";
+let STUID="st2411b";
 let STDELAY=300;
+let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
 	starTubeConfigCreated = currStarVer;
@@ -616,7 +618,7 @@ astroSetting:`
 												<div class="astro-setting-middle flex-bar">
 													<div class="astro-radio">
 													</div>
-													<div class="astro-setting-title">
+													<div class="astro-setting-title flex-bar">
 														<span></span>
 													</div>
                                                     <div class="astro-minitext">
@@ -704,16 +706,19 @@ astroSettings:`
 						<div id="st-astro-layout" class="astro-sidebar-item flex-bar active" p="layout">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Layout</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-misc" class="astro-sidebar-item flex-bar" p="misc">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Misc</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-topbar" class="astro-sidebar-item flex-bar" p="topbar">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Topbar</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-guide" class="astro-sidebar-item flex-bar" p="guide">
@@ -731,6 +736,7 @@ astroSettings:`
 						<div id="st-astro-watch" class="astro-sidebar-item flex-bar" p="watch">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Watch page</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-channel" class="astro-sidebar-item flex-bar" p="channel">
@@ -745,7 +751,7 @@ astroSettings:`
 						</div>
 					</div>
                     <!--div id="startube-settings-sidebar-below">
-                        <a id="st-astro-update" class="astro-sidebar-item flex-bar astro-link" href="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js">
+                        <a id="st-astro-update" class="astro-sidebar-item flex-bar astro-link" href="${updateLink}">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Update/Reinstall StarTube</span>
 							</div>
@@ -803,7 +809,7 @@ astroSettings:`
                                                 <a class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar" id="st-gh-link" href="https://www.github.com/lightbeam24/StarTube">
                                                     <span>GitHub</span>
                                                 </a>
-                                                <a class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar" id="st-update-link" href="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js">
+                                                <a class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar" id="st-update-link" href="${updateLink}">
                                                     <span>Update or reinstall StarTube (via GitHub)</span>
                                                 </a>
                                                 <a id="RTD" class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar">
@@ -2114,7 +2120,6 @@ var defaultConfigs = {
 	"expAdaptiveLayout2022Cap": false,
 	"expAdaptiveLayout2024HH": false,
 	"polymerWarningBanner": true,
-	"showWelcomeBanner": true,
 	"expMoveGuideMainSectionToTop": false,
 	"expMoreTooltips": true,
 	"expWatch9NoOwner": true,
@@ -2715,10 +2720,6 @@ let ScFa={
 		name:"show2point4",
 		desc:"Show the 2.4.0 update card."
 	},
-	"showWelcomeBanner":{
-		name:"showWelcomeBanner",
-		desc:"Show the welcome to StarTube Beta banner."
-	},
 	"polymerWarningBanner":{
 		name:"polymerWarningBanner",
 		desc:"If V3 is disabled or not installed, StarTube will display a banner urging the user to install it."
@@ -2971,6 +2972,7 @@ pages:[
 	sections:[
         {section:{
 			id:"cfgWinDen",
+            new:true,
 			title:{
 				text:"Config Window UI Density"
 			},
@@ -3071,7 +3073,8 @@ pages:[
                         }},
                         {opt:{
                             name:"2023",
-                            value:"amst2023_1"
+                            value:"amst2023_1",
+                            new:true
                         }}
                     ]
                 }},
@@ -3106,7 +3109,8 @@ pages:[
                         }},
                         {opt:{
                             name:"Early 2017",
-                            value:"polyE2017"
+                            value:"polyE2017",
+                            new:true
                         }},
                         {opt:{
                             name:"2016 (Prototype layout)",
@@ -3121,15 +3125,18 @@ pages:[
                     opts:[
                         {opt:{
                             name:"2024 (alternate universe version)",
-                            value:"sb2024"
+                            value:"sb2024",
+                            new:true
                         }},
                         {opt:{
                             name:"2017-2018 (alternate universe version)",
-                            value:"sb2017"
+                            value:"sb2017",
+                            new:true
                         }},
                         {opt:{
                             name:"2016 (alternate universe version)",
-                            value:"sb2016"
+                            value:"sb2016",
+                            new:true
                         }}
                     ]
                 }},
@@ -3180,11 +3187,13 @@ pages:[
                         }},
                         {opt:{
                             name:"Early 2014 (Prototype centered layout)",
-                            value:"hh2014alt_1"
+                            value:"hh2014alt_1",
+                            new:true
                         }},
                         {opt:{
                             name:"Late 2013 (Prototype centered layout)",
-                            value:"hh2013alt_3"
+                            value:"hh2013alt_3",
+                            new:true
                         }},
                         {opt:{
                             name:"Late 2013",
@@ -3319,6 +3328,7 @@ pages:[
 		}},
 		{section:{
 			id:"outlineIcons",
+            new:true,
 			title:{
 				text:"Outline icons"
 			},
@@ -3346,6 +3356,7 @@ pages:[
 		}},
 		{section:{
 			id:"homeRedir",
+            new:true,
 			title:{
 				text:"Homepage (https://www.youtube.com/) Redirect"
 			},
@@ -3373,6 +3384,7 @@ pages:[
 		}},
         {section:{
 			id:"rndThumbs",
+            new:true,
 			title:{
 				text:"Rounded Thumbnails"
 			},
@@ -3396,6 +3408,7 @@ pages:[
 		}},
         {section:{
 			id:"siteFont",
+            new:true,
 			title:{
 				text:"Site Font"
 			},
@@ -3454,6 +3467,7 @@ pages:[
 		}},
 		{section:{
 			id:"logoLink",
+            new:true,
 			title:{
 				text:"Logo Link"
 			},
@@ -3485,6 +3499,7 @@ pages:[
 		}},
 		{section:{
 			id:"searchText",
+            new:true,
 			title:{
 				text:'"Search" text on searchbar'
 			},
@@ -3539,6 +3554,7 @@ pages:[
 		}},
         {section:{
 			id:"frostedGlass",
+            new:true,
 			title:{
 				text:'Frosted Glass'
 			},
@@ -3562,6 +3578,7 @@ pages:[
 		}},
         {section:{
 			id:"uploadBtn",
+            new:true,
 			title:{
 				text:"Upload Button"
 			},
@@ -3593,6 +3610,7 @@ pages:[
 		}},
         {section:{
 			id:"appsBtn",
+            new:true,
 			title:{
 				text:"Apps Button"
 			},
@@ -3698,6 +3716,7 @@ pages:[
 		}},
         {section:{
 			id:"subsGrid",
+            new:true,
 			title:{
 				text:"Subscriptions page"
 			},
@@ -3796,6 +3815,7 @@ pages:[
 		}},
 		{section:{
 			id:"playerSpinner",
+            new:true,
 			title:{
 				text:"Player loading icon"
 			},
@@ -3882,6 +3902,7 @@ pages:[
 		}},
         {section:{
 			id:"rndPlayer",
+            new:true,
 			title:{
 				text:"Rounded Player"
 			},
@@ -3913,6 +3934,7 @@ pages:[
 	sections:[
         {section:{
 			id:"watchLayout",
+            new:true,
 			title:{
 				text:"Watch Layout"
 			},
@@ -4113,6 +4135,7 @@ pages:[
 		}},
         {section:{
 			id:"compactName",
+            new:true,
 			title:{
 				text:"Clickable channel names on related videos"
 			},
@@ -17863,9 +17886,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		if($("#efyt-background") && ($("#st-efyt-alert") == null) && ($("#alerts")) && closedEFYTBanner == false){
 			createEFYTAlert();
 		}
-		if(($("#st-welcome-alert") == null) && ($("#alerts")) && closedWelcomeBanner == false && STS.showWelcomeBanner == true){
+		/*if(($("#st-welcome-alert") == null) && ($("#alerts")) && closedWelcomeBanner == false && STS.showWelcomeBanner == true){
 			createWelcomeAlert();
-		}
+		}*/
 		if(window.location.href.includes("force-c4")&&sets.channels3==true){
 			forceC4 = true;
 			$("html").setAttribute("exp-channels3","");
@@ -19092,21 +19115,43 @@ background:none
 top:0;
 left:0
 }
+#overly-obvious-close-button{
+  background:#06c;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  width:100%;
+  position:absolute;
+  left:0;
+  top:0;
+  padding:8px 15px;
+  min-height:50px
+}
+#st-nsp .content{
+  padding-top:70px
+}
+#st-nsp .distiller-first-time-promo .image{
+  top:65px
+}
 </style>
 	<div class="distiller-first-time-promo show" id="dfp">
 <div class="content">
   <!--div class="arrow arrow-border"></div>
   <div class="arrow"></div-->
+  <button id="overly-obvious-close-button">
+    <span>Close this update popup</span>
+</button>
   <div class="image">
   <svg fill="#000000" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 4.588l2.833 8.719H28l-7.416 5.387 2.832 8.719L16 22.023l-7.417 5.389 2.833-8.719L4 13.307h9.167L16 4.588z" style="fill: #e63127;"/></svg>
   </div>
   <div class="title">What's new in StarTube 2.4.0</div>
 
 
-
 <div class="text">
+<div class="label">Settings have been reset</div>
+<span class="run run-text">Due to a bug with the new internal settings structure, upgrading 2.3 configs to 2.4 configs is unreliable and can cause major issues. So instead, you've been given a fresh new config for 2.4.0. The settings structure is more futureproofed now, and is much better overall.</span>
 <div class="label">Watch Layout HTML Rewrite</div>
-<span class="run run-text">The watch layout HTML (page structure) has been rewritten. While mostly an under-the-hood improvement, some improvements have been made to the user experience because of it. The rewrite isn't 100% done, and some things might be changed/fixed in the future.</span>
+<span class="run run-text">The watch layout HTML (page structure) has been rewritten. While mostly an under-the-hood improvement, some improvements have been made to the user experience because of it.</span>
 <div class="label">Stargazer watch layout</div>
 <span class="run run-text">One of the Stargazer watch layouts, Watch4B has been added thanks to the HTML rewrite.</span>
 <div class="label">Advanced options are being phased out</div>
@@ -19127,6 +19172,18 @@ left:0
 	`;
 container76.insertBefore(newElem76, container76.children[0]);
 			$("#close-st-nsp").addEventListener("click", function(){
+				$("#st-nsp").remove();
+				STS.show2point4 = false;
+				applySettings(0);
+				$("html").setAttribute("no-startube-popup","");
+				var elm = "#show2point4";
+				waitForElement10(elm).then(function(elm){
+					if(canGo != false){
+						$("#show2point4").setAttribute("checked","false");
+					}
+				});
+			});
+            $("#overly-obvious-close-button").addEventListener("click", function(){
 				$("#st-nsp").remove();
 				STS.show2point4 = false;
 				applySettings(0);
@@ -20066,6 +20123,15 @@ filter: invert(1);
                 aM.classList.add("astro-"+mT.color);
             }
         }
+        if(i.new){
+            let conta=newE.querySelector(".astro-setting-title");
+            let newerE=document.createElement("div");
+            newerE.classList.add("st-new");
+            newerE.innerHTML=`
+            <span>New in ${updateStarVer}</span>
+            `;
+            conta.append(newerE);
+        }
     }
     function createSector(i,container,n,theSet,ix){
         let newE=document.createElement("div");
@@ -20115,7 +20181,7 @@ filter: invert(1);
             let newerE=document.createElement("div");
             newerE.classList.add("st-new");
             newerE.innerHTML=`
-            <span>New in ${currStarVer}</span>
+            <span>New in ${updateStarVer}</span>
             `;
             conta.append(newerE);
         }
@@ -20156,7 +20222,7 @@ filter: invert(1);
 <use id="lock2" href="#shape-lock-base" fill="context-fill"/>
 </svg>
 		</div>
-		<div class="astro-setting-title">
+		<div class="astro-setting-title flex-bar">
 			<span></span>
 		</div>
 	</div>
@@ -36068,6 +36134,11 @@ html [has-at]{
   transition:none
 }
 
+
+
+.banner-promo-renderer{
+  display:none
+}
 </style>
 `;
 html.insertBefore(nE,html.children[0]);
