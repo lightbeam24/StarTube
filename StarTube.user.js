@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube
 // @namespace    http://tampermonkey.net/
-// @version      2.4.1
+// @version      2.4.1.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,11 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.4.1";
+let currStarVer="2.4.1.1";
     let updateStarVer="2.4.0";
 let currStarChan="Stable";
     let currStarDetails="Patch Update";
-let STUID="st241s";
+let STUID="st2411s";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -20128,7 +20128,7 @@ filter: invert(1);
             let newerE=document.createElement("div");
             newerE.classList.add("st-new");
             newerE.innerHTML=`
-            <span>New in ${currStarVer}</span>
+            <span>New in ${updateStarVer}</span>
             `;
             conta.append(newerE);
         }
