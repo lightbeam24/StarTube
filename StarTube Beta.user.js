@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.1.1
+// @version      2.4.2
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,11 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.4.1.1";
+let currStarVer="2.4.2";
     let updateStarVer="2.4.0";
 let currStarChan="Beta";
     let currStarDetails="Patch Update (Aligned with current stable release)";
-let STUID="st2411b";
+let STUID="st242b";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -792,7 +792,7 @@ astroSettings:`
 										</div>
                                         <div id="st-logo-section" class="astro-section">
                                             <div id="st-logo">
-											    <img width="300" src="https://private-user-images.githubusercontent.com/105595945/397604973-4d557c60-c1b6-46f8-a671-0cc0a6a15809.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mzg1MjA3MjcsIm5iZiI6MTczODUyMDQyNywicGF0aCI6Ii8xMDU1OTU5NDUvMzk3NjA0OTczLTRkNTU3YzYwLWMxYjYtNDZmOC1hNjcxLTBjYzBhNmExNTgwOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMjAyJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDIwMlQxODIwMjdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0zYzAwMWRmMjA3ZWNkODRkMDIyZDBhNzBiZjY0NjI2MjdmZGUxNWIzMjFmNTYyZDYxMjI1NTM4NjI5MzBhOTNkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.stEtZVLdmXqmR5ZbInxVcEvGMu8zA3KWPyVJe-mZFMs">
+											    <img width="300" src="https://private-user-images.githubusercontent.com/105595945/397604973-4d557c60-c1b6-46f8-a671-0cc0a6a15809.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mzg4NTk3MDYsIm5iZiI6MTczODg1OTQwNiwicGF0aCI6Ii8xMDU1OTU5NDUvMzk3NjA0OTczLTRkNTU3YzYwLWMxYjYtNDZmOC1hNjcxLTBjYzBhNmExNTgwOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMjA2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDIwNlQxNjMwMDZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0wNDU1NDkyYWRkMDc4NzRjZDY2YzVhMmVkMmY0ZmJhZmZkODBlYzcxNTk0MzJkMGM0MmQxZjg1MjA5ZTMwYzQ5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.pH5oBLgyHvDLQOu9pOYKMkN1E2VoCQbYRw0kFtCp8yc">
                                             </div>
                                             <div id="st-buildinfo">
                                                 <div class="st-infopoint">
@@ -29474,7 +29474,7 @@ left:-37px
 }
 [modern-cards] .compact-shelf:hover .yt-uix-button-shelf-slider-pager{
 border-left:0;
-width:40px;
+width:40px!important;
 border:1px solid #e3e3e3;
 box-shadow:1px 1px 3px rgba(0,0,0,.1)
 }
