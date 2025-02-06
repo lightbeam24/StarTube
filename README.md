@@ -12,6 +12,8 @@ StarTube is built to be used with Vorapis 2013 (V3), which is a YouTube client t
 
 [Install StarTube Beta](https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js)
 
+[Install StarTube Legacy](https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Legacy.user.js) (Missing features. Only recommended on older browsers, and only if the regular version of StarTube doesn't work for you)
+
 <sub>Note that V3 is closed source. Also note that V3 and StarTube are separate projects with different developers.</sub>
 
 ## Installation and usage
