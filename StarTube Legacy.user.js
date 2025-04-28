@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Legacy
 // @namespace    http://tampermonkey.net/
-// @version      2.3.3
+// @version      2.3.3.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -121,9 +121,9 @@ GM_registerMenuCommand("Open StarTube settings", showHideSettings);
 GM_registerMenuCommand("Reset StarTube settings", resetSettings);
 (function(){
 'use strict';
-let currStarVer = "2.3.3";
+let currStarVer = "2.3.3.1";
 let currStarChan = "legacy";
-let STUID="st233l";
+let STUID="st2331l";
 let STDELAY=1;
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
 if(starTubeConfigCreated == null){
@@ -21997,7 +21997,7 @@ text-decoration: none !important;
 		newElem.id = "startube-style";
 		newElem.innerHTML = `
 <style>
-.v3 #content .google-chart-container .google-chart svg{
+.v3 #content .google-chart-container svg{
 display:block!important
 }
 html {
