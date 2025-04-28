@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube
 // @namespace    http://tampermonkey.net/
-// @version      2.4.2
+// @version      2.4.3
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,11 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.4.2";
+let currStarVer="2.4.3";
     let updateStarVer="2.4.0";
 let currStarChan="Stable";
     let currStarDetails="Patch Update";
-let STUID="st242s";
+let STUID="st243s";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -792,7 +792,7 @@ astroSettings:`
 										</div>
                                         <div id="st-logo-section" class="astro-section">
                                             <div id="st-logo">
-											    <img width="300" src="https://private-user-images.githubusercontent.com/105595945/397604973-4d557c60-c1b6-46f8-a671-0cc0a6a15809.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mzg4NTk3MDYsIm5iZiI6MTczODg1OTQwNiwicGF0aCI6Ii8xMDU1OTU5NDUvMzk3NjA0OTczLTRkNTU3YzYwLWMxYjYtNDZmOC1hNjcxLTBjYzBhNmExNTgwOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwMjA2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDIwNlQxNjMwMDZaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0wNDU1NDkyYWRkMDc4NzRjZDY2YzVhMmVkMmY0ZmJhZmZkODBlYzcxNTk0MzJkMGM0MmQxZjg1MjA5ZTMwYzQ5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.pH5oBLgyHvDLQOu9pOYKMkN1E2VoCQbYRw0kFtCp8yc">
+											    <img width="300" src="https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/logo.png">
                                             </div>
                                             <div id="st-buildinfo">
                                                 <div class="st-infopoint">
@@ -21080,8 +21080,8 @@ html:not([exp-polymer-shell]) .st-svg,
 html:not([exp-polymer-shell]) .v3 #content svg{
 display:none
 }
-.v3 #content .google-chart-container .google-chart svg{
-display:block
+.v3 #content .google-chart-container svg{
+display:block!important
 }
 html{
   --000:#000;
