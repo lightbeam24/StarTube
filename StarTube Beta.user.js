@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.4.3
+// @version      2.5.0.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -18,8 +18,8 @@
 var globalDataPoints = {
 "currWatchData":{}
 };
-window.globalDataPoints = globalDataPoints;
-document.globalDataPoints = globalDataPoints;
+window.globalDataPoints=globalDataPoints;
+document.globalDataPoints=globalDataPoints;
 var $ = a => document.querySelector(a);
 let theSets = "ST_BLEEDING_EDGE_SETTINGS";
 function showHideSettings(){
@@ -45,46 +45,46 @@ function resetSettings(){
 if($("#st-reset-settings-container")){
 	$("#st-reset-settings-container").remove();
 }
-let container = $("html");
-let newElem = document.createElement("div");
-newElem.id = "st-reset-settings-container"
-newElem.classList = "flex-bar";
-newElem.innerHTML = `
+let conta=$("html");
+let nE=document.createElement("div");
+nE.id="st-reset-settings-container"
+nE.classList="flex-bar";
+nE.innerHTML=`
 <style>
-#st-reset-settings-container {
-width: 100vw;
-height: 100vh;
-position: fixed;
-left: 0;
-top: 0;
-z-index: 11130100000;
+#st-reset-settings-container{
+width:100vw;
+height:100vh;
+position:fixed;
+left:0;
+top:0;
+z-index:11130100000;
 font-family:arial
 }
-#st-reset-settings-fence {
-background: #fff9;
-width: 100vw;
-height: 100vh;
-position: absolute;
+#st-reset-settings-fence{
+background:#fff9;
+width:100vw;
+height:100vh;
+position:absolute
 }
-#st-reset-settings {
-margin: 0 auto;
-position: relative;
-z-index: 2;
-background: #fff;
-border: 1px solid #c5c5c5;
-box-shadow: 0 0 15px rgba(0,0,0,.18);
-padding: 15px;
+#st-reset-settings{
+margin:0 auto;
+position:relative;
+z-index:2;
+background:#fff;
+border:1px solid #c5c5c5;
+box-shadow:0 0 15px rgba(0,0,0,.18);
+padding:15px
 }
-.st-text-area {
-font-size: 13px;
-font-weight: var(--bold);
-color: #333;
+.st-text-area{
+font-size:13px;
+font-weight:var(--bold);
+color:#333
 }
-.st-buttons-area {
-padding-top: 15px;
+.st-buttons-area{
+padding-top:15px
 }
-#st-reset-cancel {
-margin: 0 10px 0 auto;
+#st-reset-cancel{
+margin:0 10px 0 auto
 }
 </style>
 <div id="st-reset-settings-fence">
@@ -103,7 +103,7 @@ margin: 0 10px 0 auto;
 	</div>
 </div>
 `;
-container.insertBefore(newElem,container.children[0]);
+conta.insertBefore(nE,conta.children[0]);
 function hideResetWindow(){
 	$("#st-reset-settings-container").remove();
 }
@@ -128,11 +128,11 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.4.3";
-    let updateStarVer="2.4.0";
+let currStarVer="2.5.0 Beta 1";
+    let updateStarVer="2.5.0";
 let currStarChan="Beta";
-    let currStarDetails="Patch Update (Aligned with current stable release)";
-let STUID="st243b";
+    let currStarDetails="Standard Beta Release";
+let STUID="st250b";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -510,6 +510,7 @@ ST_OWNER:`
                         </a>
                         <div class="st-owner-info">
                             <div class="st-owner-title">
+                                <span class="st-owner-from st-owner-before-text hid">From: </span>
                                 <span class="st-owner-name"></span>
                                 <a class="st-owner-name-spec hid"></a>
                                 <span class="st-owner-icon"></span>
@@ -518,10 +519,20 @@ ST_OWNER:`
                             <div class="st-owner-subtitle">
                                 <span class="st-sub-count"></span>
                                 <span class="st-pub-date hid"></span>
+                                <span class="st-joined-text st-owner-before-text hid">Joined: </span>
                                 <span class="st-join-date hid"></span>
                                 <span class="st-upload-date hid"></span>
-                                <a class="st-video-count-link st-video-count hid"></a>
+                                <div class="st-owner-vid-part">
+                                    <span class="st-videos-before-text st-owner-before-text hid">Videos: </span>
+                                    <a class="st-video-count-link st-video-count hid"></a>
+                                    <a class="st-video-count-link st-short-video-count hid"></a>
+                                </div>
                             </div>
+                            <div class="st-owner-desc-sub-expander-outer flex-bar">
+                                <div class="st-owner-subsubtitle">
+                                    <span class="st-added-text st-owner-before-text hid">Added: </span>
+                                    <span class="st-upload-date hid"></span>
+                                </div>
                             <div class="st-owner-desc-expander hid">
                                 <span>(</span>
                                 <button>
@@ -529,6 +540,7 @@ ST_OWNER:`
                                 <span class="st-show-less">less info</span>
                                 </button>
                                 <span>)</span>
+                            </div>
                             </div>
                             <div class="st-sub-button">
                             </div>
@@ -540,6 +552,7 @@ ST_POLY_OWNER:`
                         </a>
                         <div class="st-owner-info">
                             <div class="st-owner-title flex-bar">
+                                <span class="st-owner-from st-owner-before-text hid">From: </span>
                                 <span class="st-owner-name"></span>
                                 <span class="st-owner-icon"></span>
                                 <a class="st-video-count st-video-count-link"></a>
@@ -697,7 +710,6 @@ astroSettings:`
 						<div id="st-astro-config" class="astro-sidebar-item flex-bar" p="config">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>StarTube</span>
-                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div class="astro-sidebar-text">
@@ -706,7 +718,6 @@ astroSettings:`
 						<div id="st-astro-layout" class="astro-sidebar-item flex-bar active" p="layout">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Layout</span>
-                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-misc" class="astro-sidebar-item flex-bar" p="misc">
@@ -718,13 +729,11 @@ astroSettings:`
 						<div id="st-astro-topbar" class="astro-sidebar-item flex-bar" p="topbar">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Topbar</span>
-                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-guide" class="astro-sidebar-item flex-bar" p="guide">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Guide</span>
-                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-player" class="astro-sidebar-item flex-bar" p="player">
@@ -815,6 +824,41 @@ astroSettings:`
                                                 <a id="RTD" class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar">
 											    	<span>Reset StarTube config</span>
 											    </a>
+                                            </div>
+                                            <div id="st-changelog">
+                                                <div class="st-cl">
+                                                    <b>StarTube 2.5.0 Beta 1 Changelog:</b>
+                                                </div>
+                                                <div class="st-cl">
+                                                    <span>-The changelog is now shown in the config window itself</span>
+                                                </div>
+                                                <div class="st-cl">
+                                                    <span>-Added the 2012 player style</span>
+                                                </div>
+                                                <div class="st-cl">
+                                                    <span>-Improved the 2008 layout</span>
+                                                    <div class="st-sub-cl">
+                                                        <span>-Added the "Videos being watched right now" section on the homepage</span>
+                                                    </div>
+                                                    <div class="st-sub-cl">
+                                                        <span>-Added Watch4A (2008 watch layout)</span>
+                                                    </div>
+                                                </div>
+                                                <div class="st-cl">
+                                                    <span>-Improved the 2009 layouts</span>
+                                                </div>
+                                                <div class="st-cl">
+                                                    <span>-Added Super Scaled UI Option</span>
+                                                </div>
+                                                <div class="st-cl">
+                                                    <span>-Fixed modern players settings button position glitch when watching 1440p or 4K videos in fullscreen</span>
+                                                </div>
+                                                <div class="st-cl">
+                                                    <span>-The Early 2013 layout now works a little better with dark mode</span>
+                                                </div>
+                                                <div class="st-cl">
+                                                    <span>-Other fixes</span>
+                                                </div>
                                             </div>
 										</div>
 										<!--div id="startube-save-files" class="astro-section">
@@ -2188,7 +2232,7 @@ var defaultConfigs = {
 
 	"STPresetsAlsoSetV3Settings": true,
 
-	"show2point4": true,
+	"show2point5": true,
 
 	"expHideYoodles": false,
 	"expFixedXIcon": true,
@@ -2366,6 +2410,11 @@ var defaultConfigs = {
             tValue:"off",
             visValue:"auto"
         },
+        superScale:{
+            name:"superScale",
+            tValue:"off",
+            visValue:"off"
+        },
         newStructure2:"true"
 	},
 	"importantInfo":{
@@ -2422,8 +2471,8 @@ function applyNewSettings(){
 	if(STS.configNoCast == null){
 		STS.configNoCast = true;
 	}
-	if(STS.show2point4 == null){
-		STS.show2point4 = true;
+	if(STS.show2point5 == null){
+		STS.show2point5 = true;
 	}
     if(STS.radioSettings.newStructure2==null){
        if(STS.newConfig==false){
@@ -2584,6 +2633,13 @@ function applyNewSettings(){
             visValue:"auto"
         }
 	}
+    if(STS.radioSettings.superScale==null){
+        STS.radioSettings.superScale={
+            name:"superScale",
+            tValue:"off",
+            visValue:"off"
+        }
+	}
     if(STS.radioSettings.compactName==null){
         STS.radioSettings.compactName={
             name:"compactName",
@@ -2716,9 +2772,9 @@ let ScFa={
 		name:"expAdaptiveLayout2024HH",
 		desc:"(For the adaptive layout) Use 2024 Hitchhiker for videos uploaded in 2024 and 2025."
 	},
-	"show2point4":{
-		name:"show2point4",
-		desc:"Show the 2.4.0 update card."
+	"show2point5":{
+		name:"show2point5",
+		desc:"Show the 2.5.0 update card."
 	},
 	"polymerWarningBanner":{
 		name:"polymerWarningBanner",
@@ -2972,7 +3028,6 @@ pages:[
 	sections:[
         {section:{
 			id:"cfgWinDen",
-            new:true,
 			title:{
 				text:"Config Window UI Density"
 			},
@@ -3073,8 +3128,7 @@ pages:[
                         }},
                         {opt:{
                             name:"2023",
-                            value:"amst2023_1",
-                            new:true
+                            value:"amst2023_1"
                         }}
                     ]
                 }},
@@ -3109,8 +3163,7 @@ pages:[
                         }},
                         {opt:{
                             name:"Early 2017",
-                            value:"polyE2017",
-                            new:true
+                            value:"polyE2017"
                         }},
                         {opt:{
                             name:"2016 (Prototype layout)",
@@ -3125,18 +3178,15 @@ pages:[
                     opts:[
                         {opt:{
                             name:"2024 (alternate universe version)",
-                            value:"sb2024",
-                            new:true
+                            value:"sb2024"
                         }},
                         {opt:{
                             name:"2017-2018 (alternate universe version)",
-                            value:"sb2017",
-                            new:true
+                            value:"sb2017"
                         }},
                         {opt:{
                             name:"2016 (alternate universe version)",
-                            value:"sb2016",
-                            new:true
+                            value:"sb2016"
                         }}
                     ]
                 }},
@@ -3187,13 +3237,11 @@ pages:[
                         }},
                         {opt:{
                             name:"Early 2014 (Prototype centered layout)",
-                            value:"hh2014alt_1",
-                            new:true
+                            value:"hh2014alt_1"
                         }},
                         {opt:{
                             name:"Late 2013 (Prototype centered layout)",
-                            value:"hh2013alt_3",
-                            new:true
+                            value:"hh2013alt_3"
                         }},
                         {opt:{
                             name:"Late 2013",
@@ -3272,7 +3320,18 @@ pages:[
                             value:"stargazer2008_1"
                         }}
                     ]
-                }},
+                }}/*,
+                {sector:{
+                    sectorTitle:{
+                        text:"Cirrus Cloudgazer"
+                    },
+                    opts:[
+                        {opt:{
+                            name:"2007",
+                            value:"cloudgazer2007_1"
+                        }}
+                    ]
+                }}*/
 			]
 		}}
 	]
@@ -3326,9 +3385,28 @@ pages:[
 				}}
 			]
 		}},
+        {section:{
+			id:"superScale",
+            new:true,
+			title:{
+				text:"Super Scaled UI"
+			},
+			desc:{
+				text:"[BETA] Makes 2014 onwards layouts work better on screens above 1920x1080, namely 2560x1440."
+			},
+			opts:[
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
 		{section:{
 			id:"outlineIcons",
-            new:true,
 			title:{
 				text:"Outline icons"
 			},
@@ -3356,7 +3434,6 @@ pages:[
 		}},
 		{section:{
 			id:"homeRedir",
-            new:true,
 			title:{
 				text:"Homepage (https://www.youtube.com/) Redirect"
 			},
@@ -3384,7 +3461,6 @@ pages:[
 		}},
         {section:{
 			id:"rndThumbs",
-            new:true,
 			title:{
 				text:"Rounded Thumbnails"
 			},
@@ -3408,7 +3484,6 @@ pages:[
 		}},
         {section:{
 			id:"siteFont",
-            new:true,
 			title:{
 				text:"Site Font"
 			},
@@ -3467,7 +3542,6 @@ pages:[
 		}},
 		{section:{
 			id:"logoLink",
-            new:true,
 			title:{
 				text:"Logo Link"
 			},
@@ -3499,7 +3573,6 @@ pages:[
 		}},
 		{section:{
 			id:"searchText",
-            new:true,
 			title:{
 				text:'"Search" text on searchbar'
 			},
@@ -3554,7 +3627,6 @@ pages:[
 		}},
         {section:{
 			id:"frostedGlass",
-            new:true,
 			title:{
 				text:'Frosted Glass'
 			},
@@ -3578,7 +3650,6 @@ pages:[
 		}},
         {section:{
 			id:"uploadBtn",
-            new:true,
 			title:{
 				text:"Upload Button"
 			},
@@ -3610,7 +3681,6 @@ pages:[
 		}},
         {section:{
 			id:"appsBtn",
-            new:true,
 			title:{
 				text:"Apps Button"
 			},
@@ -3692,7 +3762,6 @@ pages:[
 		}},
         {section:{
 			id:"guideSubsAutoExpand",
-            new:true,
 			title:{
 				text:"Auto expand subscriptions on guide"
 			},
@@ -3716,7 +3785,6 @@ pages:[
 		}},
         {section:{
 			id:"subsGrid",
-            new:true,
 			title:{
 				text:"Subscriptions page"
 			},
@@ -3748,7 +3816,6 @@ pages:[
 	sections:[
         {section:{
 			id:"autoLoop",
-            new:true,
 			title:{
 				text:"Loop videos by default"
 			},
@@ -3800,6 +3867,11 @@ pages:[
 					value:"default2014"
 				}},
                 {opt:{
+					name:"2012",
+					value:"cosmic2012",
+                    new:true
+				}},
+                {opt:{
 					name:"Flash7",
 					value:"flash7"
 				}},
@@ -3815,7 +3887,6 @@ pages:[
 		}},
 		{section:{
 			id:"playerSpinner",
-            new:true,
 			title:{
 				text:"Player loading icon"
 			},
@@ -3902,7 +3973,6 @@ pages:[
 		}},
         {section:{
 			id:"rndPlayer",
-            new:true,
 			title:{
 				text:"Rounded Player"
 			},
@@ -3934,7 +4004,6 @@ pages:[
 	sections:[
         {section:{
 			id:"watchLayout",
-            new:true,
 			title:{
 				text:"Watch Layout"
 			},
@@ -3949,6 +4018,15 @@ pages:[
                 {opt:{
 					name:"Auto (use alt-watch9 for Hitchhiker layouts)",
 					value:"autoPreferAltW9"
+				}},
+                {opt:{
+					name:"Watch4A (2008)",
+					value:"watch4a",
+                    new:true,
+                    mText:{
+                        text:"<span>Star ratings, title on top, description on right</span>",
+                        color:"normal"
+                    }
 				}},
                 {opt:{
 					name:"Watch4B (Early 2009)",
@@ -4135,7 +4213,6 @@ pages:[
 		}},
         {section:{
 			id:"compactName",
-            new:true,
 			title:{
 				text:"Clickable channel names on related videos"
 			},
@@ -4385,6 +4462,8 @@ function executeRadios(i, x, K){
 			STStargazerMid2009Settings();
 			STStargazerEarly2009Settings();
 			STStargazer2008Settings();
+		}else if(x == "cloudgazer2007_1"){
+			STCloudgazerSettings();
 		}else if(x == "hhE2017"){
 			STModernHitchhikerSettings();
 			ST2016Settings();
@@ -4684,6 +4763,7 @@ function executeRadiosParent(s){
 	executeRadios("channelVersion",s.channelVersion,true);
 	executeRadios("colorfulChannels",s.colorfulChannels,true);
     executeRadios("outlineIcons",s.outlineIcons,true);
+    executeRadios("superScale",s.superScale,true);
 }
 getIronSettings();
 function STAltWatch9(){
@@ -5053,7 +5133,7 @@ function STRingo2(){
         SRS.guideAlwaysPinned.tValue="off";
         SRS.subsGrid.tValue="list";
         SRS.rndPlayer.tValue="off";
-        SRS.playerVersion.tValue="default2014";
+        SRS.playerVersion.tValue="cosmic2012";
         SRS.watchLayout.tValue="watch7beta";
         SRS.relatedTabs.tValue="off";
         SRS.relatedSize.tValue="small";
@@ -5156,7 +5236,7 @@ function STEpicPandaRealSettings(){
         SRS.guideAlwaysPinned.tValue="off";
         SRS.subsGrid.tValue="list";
         SRS.rndPlayer.tValue="off";
-        SRS.playerVersion.tValue="default2014";
+        SRS.playerVersion.tValue="cosmic2012";
         SRS.watchLayout.tValue="watch5d";
         SRS.relatedTabs.tValue="off";
         SRS.relatedSize.tValue="small";
@@ -5253,7 +5333,7 @@ function STAozoraSettings(){
     SRS.logoLink.tValue="home";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
-    SRS.playerVersion.tValue="default2014";
+    SRS.playerVersion.tValue="cosmic2012";
     SRS.watchLayout.tValue="watch5c";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="smaller";
@@ -5297,7 +5377,7 @@ function STStargazerSettings(){
     SRS.guideSubsAutoExpand.tValue="off";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
-    SRS.playerVersion.tValue="default2014";
+    SRS.playerVersion.tValue="cosmic2012";
     SRS.watchLayout.tValue="watch4b";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="smaller";
@@ -5374,10 +5454,104 @@ function STStargazerMid2009Settings(){
 }
 function STStargazerEarly2009Settings(){
     SRS.layoutSelect.tValue="stargazer2009_1";
+    SRS.homeRedir.tValue="feedList";
+    SRS.logoLink.tValue="feedList";
 }
 function STStargazer2008Settings(){
     SRS.layoutSelect.tValue="stargazer2008_1";
+    SRS.homeRedir.tValue="feedList";
+    SRS.logoLink.tValue="feedList";
+    SRS.watchLayout.tValue="watch4a";
 }
+    function STCloudgazerSettings(){
+    SRS.layoutSelect.tValue="cloudgazer2007_1";
+    SRS.faviconSelect.tValue="2005";
+    SRS.outlineIcons.tValue="off";
+    SRS.rndThumbs.tValue="off";
+    SRS.siteFont.tValue="arial";
+    SRS.homeRedir.tValue="off";
+    SRS.logoLink.tValue="home";
+    SRS.searchText.tValue="off";
+    SRS.accountMenu.tValue="me";
+    SRS.frostedGlass.tValue="off";
+    SRS.uploadBtn.tValue="modern";
+    SRS.appsBtn.tValue="off";
+    SRS.guideAlwaysPinned.tValue="off";
+    SRS.guideSubsAutoExpand.tValue="off";
+    SRS.subsGrid.tValue="grid";
+    SRS.rndPlayer.tValue="off";
+    SRS.playerVersion.tValue="cosmic2012";
+    SRS.watchLayout.tValue="watch4a";
+    SRS.relatedTabs.tValue="off";
+    SRS.relatedSize.tValue="smaller";
+    SRS.compactDate.tValue="off";
+    SRS.compactName.tValue="on";
+    SRS.playerSpinner.tValue="classic";
+    SRS.channelVersion.tValue="c3";
+		STS.expMoveGuideMainSectionToTop = false;
+		STS.expMoreTooltips = true;
+		STS.expWatch9NoOwner = false;
+		STS.expWatch9TrueExpander = false;
+		STS.expWatch8NoMore = false;
+		STS.expMoveCountsToButtons = false;
+		STS.expSharrow = false;
+		STS.expWatch7AboutTabRename = false;
+		STS.expWatch7AboutTabRename2 = false;
+		STS.expFlatLogo = false;
+		STS.expInvertLogo = false;
+		STS.expGlossyLogo = false;
+		STS.expClassicTitle = false;
+		STS.expClassicGuide = false;
+		STS.expClassicSubscribe = false;
+		STS.expClassicLtod = false;
+		STS.expNoVideosLink = false;
+		STS.expModernGuide = false;
+		STS.expPlaylistRedBorder = false;
+		STS.expPlaylistTimestamps = false;
+		STS.expTrueScrollableGuide = true;
+		STS.expViewsString = false;
+		STS.expNoByText = false;
+
+		STS.expStaticSite = true;
+
+    STS.expCosmicBG=false;
+    STS.expCosmicButtons=false;
+		STS.expCosmicComments = false;
+		STS.expCosmicGuideLayout = true;
+		STS.expNotifSquare = true;
+
+		STS.expChannels3TimeVisible = false;
+		STS.expChannels3DateVisible = false;
+		STS.expChannels3DateHidden = false;
+
+		STS.expNoGuide = true;
+		STS.expGuideOnFeedsOnly = false;
+
+		STS.expAozoraComments = true;
+		STS.expAozoraSearch = true;
+
+		STS.expCenteredSearch = false;
+		STS.expBigSearch = false;
+		STS.expMaterialSearch = false;
+		STS.expTopbarShadow = false;
+		STS.expRichGridHome = false;
+		STS.expSegmentedLtod = false;
+		STS.expRoundedSubscribe = false;
+		STS.expBlackSubscribe = false;
+		STS.expRoundedSearch = false;
+		STS.expWMRButtonsLowercase = false;
+		STS.expWMRAddTo = false;
+		STS.expWMRNoSaveText = false;
+		STS.expWMRNoShareText = false;
+		STS.expRoundedTopbarPfp = false;
+		STS.expRingo2 = false;
+	STS.expRingo2Gradients = false;
+		STS.expHideYoodles = true;
+
+		if(STS.STPresetsAlsoSetV3Settings == true){
+			setV3Settings("cosmic");
+		}
+	}
 function ST2019Settings(){
     SRS.layoutSelect.tValue="poly2019";
     SRS.faviconSelect.tValue="2017";
@@ -6508,12 +6682,14 @@ function getChannelVideosList(){
 					$("body").setAttribute("channel-sort","false");
 				}
 				CWD.channelVideosList = richGrid.contents;
-				CWD.videoCount = CWD.APIvideoCount;
+				CWD.videoCount=CWD.APIvideoCount;
+                CWD.shortVideoCount=CWD.APIvideoCount.split(" v")[0];
 				getCVPagination();
 			}else{
 				$("body").setAttribute("channel-sort","false");
 				CWD.channelVideosList = "Invalid";
-				CWD.videoCount = "No videos";
+				CWD.videoCount="No videos";
+                CWD.shortVideoCount="0";
 			}
 		});
 	}
@@ -6936,6 +7112,7 @@ function getWatchMetadata(x){
             videoCount = result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.videoCountText;
             viewCount = result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.viewCountText;
             CWD.joinedDate=result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.joinedDateText.content;
+            CWD.shortJoinedDate=CWD.joinedDate.split("d ")[1];
             CWD.channelSubCount=subCount.split('s')[0];
             CWD.channelVideoCount=videoCount.split('v')[0];
             CWD.channelViewCount=viewCount.split(' v')[0];
@@ -7101,7 +7278,7 @@ function getWatchMetadata(x){
                 }
             }
         },500);
-        if(SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"){
+        if(SRS.watchLayout.tValue=="watch4a"||SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"){
             $(".st-owner .st-sub-count").classList.add("hid");
             $(".st-owner .st-upload-date").classList.remove("hid");
         }
@@ -7302,6 +7479,13 @@ function getWatchMetadata(x){
                     $(".st-sub-button").classList.add("st-stargazer-sub");
                 }
                 $("#watch7-subscription-container").classList.add("st-stargazer-sub");
+            }else if(
+                SRS.layoutSelect.tValue=="cloudgazer2007_1"
+            ){
+                if($(".st-sub-button")){
+                    $(".st-sub-button").classList.add("st-cirrus-sub");
+                }
+                $("#watch7-subscription-container").classList.add("st-cirrus-sub");
             }else if(
                 SRS.layoutSelect.tValue=="aozora2011_3"||
                 SRS.layoutSelect.tValue=="aozora2011_2"||
@@ -8010,7 +8194,7 @@ function getWatchMetadata(x){
         if(w.isLive==true){
             ext="";
         }
-        if(gdp.watchLayout=="watch4b"||gdp.watchLayout=="watch4c"||gdp.watchLayout=="watch5a"||gdp.watchLayout=="watch5b"||gdp.watchLayout=="watch5c"||gdp.watchLayout=="watch5d"){
+        if(gdp.watchLayout=="watch4a"||gdp.watchLayout=="watch4b"||gdp.watchLayout=="watch4c"||gdp.watchLayout=="watch5a"||gdp.watchLayout=="watch5b"||gdp.watchLayout=="watch5c"||gdp.watchLayout=="watch5d"){
             ext="";
         }
         document.querySelectorAll(".st-view-count").forEach(i=>{
@@ -8026,7 +8210,7 @@ function getWatchMetadata(x){
         }
         document.querySelectorAll(".st-upload-date").forEach(i=>{
             if(w.superDate!=null){
-                if(SRS.layoutSelect.tValue=="stargazer2008_1"||SRS.layoutSelect.tValue=="stargazer2009_1"||SRS.layoutSelect.tValue=="stargazer2009_2"||SRS.layoutSelect.tValue=="stargazer2009_3"||SRS.watchLayout.tValue=="watch4a"||SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"){
+                if(SRS.layoutSelect.tValue=="cloudgazer2007_1"||SRS.layoutSelect.tValue=="stargazer2008_1"||SRS.layoutSelect.tValue=="stargazer2009_1"||SRS.layoutSelect.tValue=="stargazer2009_2"||SRS.layoutSelect.tValue=="stargazer2009_3"||SRS.watchLayout.tValue=="watch4a"||SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"){
                     i.textContent=w.superDate;
                 }else{
                     i.textContent=w.date;
@@ -8038,6 +8222,11 @@ function getWatchMetadata(x){
         if($(".st-pub-date")){
             document.querySelectorAll(".st-pub-date").forEach(i=>{
                 i.textContent=w.pubDate;
+            });
+        }
+        if($(".st-join-date")){
+            document.querySelectorAll(".st-join-date").forEach(i=>{
+                i.textContent=w.shortJoinedDate;
             });
         }
         document.querySelectorAll(".st-relative-date").forEach(i=>{
@@ -8082,6 +8271,11 @@ function getWatchMetadata(x){
         if($(".st-video-count")){
             document.querySelectorAll(".st-video-count").forEach(i=>{
                 i.textContent=w.videoCount;
+            });
+        }
+        if($(".st-short-video-count")){
+            document.querySelectorAll(".st-short-video-count").forEach(i=>{
+                i.textContent=w.shortVideoCount;
             });
         }
         if($(".st-video-count-link")){
@@ -8525,7 +8719,8 @@ width: 360px !important;
             SRS.watchLayout.tValue=="watch5b"||
             SRS.watchLayout.tValue=="watch5a"||
             SRS.watchLayout.tValue=="watch4c"||
-            SRS.watchLayout.tValue=="watch4b"
+            SRS.watchLayout.tValue=="watch4b"||
+            SRS.watchLayout.tValue=="watch4a"
         ){
             titleOnTop=true;
         }
@@ -8650,7 +8845,7 @@ width: 360px !important;
             $("#st-side-tabs-row-holder").innerHTML=STH.sideTabsRow;
             $("#st-side-panels-row-holder").innerHTML=STH.sidePanelsRow;
         }
-        if(SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"){
+        if(SRS.watchLayout.tValue=="watch4a"||SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"){
             $("#st-ratings-info-row-holder").innerHTML=STH.ratingsInfoRow;
             $("#st-watch-tabs-row-holder").innerHTML=STH.watchTabsRow;
             $("#st-side-banner-row-holder").innerHTML=STH.sideBannerRow;
@@ -9026,6 +9221,68 @@ function everyLoadNeo(x){
         setTimeout(doSubscribeIcons,100);
     }
 }
+    function videosWatchedNow(){
+        if($("#st-vids-watched-now")==null){
+            if($("[location='feed-recs']")){
+                $("body .v3").setAttribute("vwn-ready","false");
+                let container = $(".feed .branded-page-v2-subnav-container");
+                let newElem = document.createElement("div");
+                newElem.id = "st-vids-watched-now";
+                newElem.innerHTML = `
+			<div id="st-vwn-title">
+				<h3>Videos being watched right now...</h3>
+			</div>
+			<div id="st-vwn-vids">
+            </div>
+				`;
+                container.insertBefore(newElem, container.children[0]);
+                if(gdp.thirdColVideos==null){
+                    EXFetch("none","single","browse","browseId","FEtrending","params","6gQJRkVleHBsb3Jl").then(result=>{
+                        fillVWN(result);
+                        gdp.thirdColVideos=result;
+                    });
+                }else{
+                    fillVWN(gdp.thirdColVideos);
+                }
+            }
+        }
+    }
+	function fillVWN(result){
+		let shelf = result.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[3].itemSectionRenderer.contents[0].shelfRenderer.content.expandedShelfContentsRenderer.items;
+        let nTT=0;
+        let nPage=0;
+		shelf.forEach(i => {
+			if(i.videoRenderer){
+                setTimeout(function(){
+                    nTT++;
+                    if(nTT==6||nTT==11||nTT==16||nTT==21||nTT==26||nTT==31||nTT==36||nTT==41||nTT==46||nTT==51||nTT==56||nTT==61||nTT==66||nTT==71||nTT==76){
+                        nPage++;
+                    }
+                    createRenderer(i.videoRenderer,"videosWatchedNow",nPage);
+                },10);
+			}
+		});
+        var elm=".st-vwn-s:last-of-type";
+        waitForElement10(elm).then(function(elm){
+            if(canGo!=false){
+                handleVWN();
+            }
+        });
+	}
+    function handleVWN(){
+        let vwnSCount=$(".st-vwn-s:last-of-type").getAttribute("page");
+        let vwn=$("#st-vids-watched-now");
+        let state=0;
+        vwn.setAttribute("state",state);
+        $("body .v3").setAttribute("vwn-ready","true");
+        setInterval(function(){
+            state++;
+            vwn.setAttribute("state",state);
+            if(state==vwnSCount){
+                state=-1;
+            }
+        },6000);
+    }
 function modComments(ver){
 	document.querySelectorAll(".comment:not(.startube-comment)").forEach(i=>{
 		if(ver==false){
@@ -12003,6 +12260,63 @@ Search
 				}
 			};
 		}
+        if(renderer=="videosWatchedNow"){
+            // number is page
+            if($("#st-vwn-s"+number)==null){
+                let conta=$("#st-vwn-vids");
+                let nE=document.createElement("ul");
+                nE.classList="st-vwn-s flex-bar";
+                nE.id="st-vwn-s"+number;
+                nE.setAttribute("page",number);
+                conta.append(nE);
+            }
+			let id = i.navigationEndpoint.watchEndpoint.videoId;
+			let href = "/watch?v=" + id;
+			let date = i.publishedTimeText.simpleText;
+			let viewCount = i.viewCountText.simpleText;
+			let owner = i.ownerText.runs[0].text;
+			let container = $("#st-vwn-s"+number);
+			let title = i.title.runs[0].text;
+			let time = i.lengthText.simpleText;
+			let thumbnail = i.thumbnail.thumbnails[2].url;
+			let newElem = document.createElement("li");
+			newElem.classList = "vwn-video context-data-item video-list-item related-list-item context-data-item";
+			newElem.innerHTML = `
+			<a href="${href}" class="yt-uix-contextlink yt-uix-sessionlink related-video"><span class="ux-thumb-wrap " href="${href}">    <span class="video-thumb yt-thumb yt-thumb-100"><span class="yt-thumb-default">
+	<span class="yt-thumb-clip">
+	  <span class="yt-thumb-clip-inner">
+		<img alt="Thumbnail" src="${thumbnail}" width="100">
+		<span class="vertical-align"></span>
+	  </span>
+	</span>
+  </span></span>
+<span class="video-time">${time}</span>
+
+
+
+<button class="yt-uix-button yt-uix-button-size-default yt-uix-button-default addto-button video-actions addto-watch-later-button yt-uix-button-size-small yt-uix-button-empty"><span class="yt-uix-button-content"><img src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"></span></button>
+</span><span dir="ltr" class="title" title="${title}">${title}</span><span class="stat attribution"><span class="g-hovercard" data-name="watch-vrec">
+<span class="run run-text">by </span><span class="run run-text"><b>${owner}</b></span></span></span><span class="stat view-count">${viewCount}<span class="extra">${date}</span></span></a>
+<div class="st-thumb-echo" style="background-image:url(${thumbnail});">
+</div>
+				`;
+			container.insertBefore(newElem,container.children[number]);
+			newElem.querySelector("a").data = {
+				abstractVorElement: {
+					navigationEndpoint: {
+						watchEndpoint: {
+							videoId: id,
+							canonicalBaseUrl: href
+						},
+						commandMetadata: {
+							webCommandMetadata: {
+								url: href
+							}
+						}
+					}
+				}
+			};
+		}
 		if(renderer == "channelGridVideo"){
 			let i2 = i.contextItemData;
 					let href;
@@ -13818,7 +14132,7 @@ function deleteTitleOnTop(){
 					`;
 					container.insertBefore(newElem, container.children[0]);
 					$("#logo-container").classList.add("startube");
-					if(sets.outlineIcons == true){
+					if(sets.outlineIcons==true){
 						$("#ringo-svg-logo svg").setAttribute("viewBox","0 0 200 56");
 						$("#ringo-svg-logo svg").style.marginTop = "-1px";
 					}
@@ -16586,9 +16900,9 @@ border:none;
 padding-top:4px;
 padding-bottom:4px
 }
-html:not([stargazer-header="tabbed"]) .st-sth,
-html:not([stargazer-header="bar"]) .st-sbh,
-html:not([stargazer-header="simple"]) .st-ssh{
+html:not([stargazer-header^="tabbed"]) .st-sth,
+html:not([stargazer-header^="bar"]) .st-sbh,
+html:not([stargazer-header^="simple"]) .st-ssh{
 display:none !important
 }
 .st-ssh .stargazer-user-container,
@@ -17275,7 +17589,24 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					}
 				}
 			});
-			/*document.querySelectorAll("#stargazer-videos").forEach(i => {
+            document.querySelectorAll("#stargazer-home.stargazer-tab").forEach(i => {
+				i.data = {
+					abstractVorElement: {
+						navigationEndpoint: {
+							browseEndpoint: {
+								browseId: "FEwhat_to_watch",
+								canonicalBaseUrl: "/feed/what_to_watch/recommended"
+							},
+							commandMetadata: {
+								webCommandMetadata: {
+									url: "/feed/what_to_watch/recommended"
+								}
+							}
+						}
+					}
+				}
+			});
+			document.querySelectorAll("#stargazer-videos").forEach(i => {
 				i.data = {
 					abstractVorElement: {
 						navigationEndpoint: {
@@ -17291,8 +17622,8 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 						}
 					}
 				}
-			});*/
-            document.querySelectorAll("#stargazer-videos").forEach(i => {
+			});
+            /*document.querySelectorAll("#stargazer-videos").forEach(i => {
 				i.data = {
 					abstractVorElement: {
 						navigationEndpoint: {
@@ -17308,7 +17639,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 						}
 					}
 				}
-			});
+			});*/
 			document.querySelectorAll("#stargazer-videos.stargazer-link").forEach(i => {
 				i.data = {
 					abstractVorElement: {
@@ -17395,10 +17726,54 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 				}
 			});
 		}
-	}
+    }
+    // EXfunct
+    function doStargazerFeedHeader(){
+        if(sets.stargazerStyles==true){
+            if($(".stargazer-feed-header")==null){
+                if($("[location='feed-recs']")){
+                    var elm = ".branded-page-v2-subnav-container";
+                    waitForElement10(elm).then(function(elm){
+                        if(canGo != false){
+                            $(".branded-page-v2-subnav-container").innerHTML = `
+					<div class="stargazer-feed-header">
+                        <div class="stargazer-feed-header-top flex">
+					    	<div class="stargazer-feed-header-text">
+						    	<span>Featured Videos</span>
+					    	</div>
+						    <div class="stargazer-feed-header-actions">
+                                <a href="/feed/trending" class="stargazer-feed-top-link">
+                                    <span>See more featured videos</span>
+                                </a>
+					    	</div>
+                        </div>
+                        <div class="stargazer-feed-header-bottom flex-bar">
+						    <div class="stargazer-feed-header-links flex-bar">
+                                <a id="stf-featured" href="/feed/what_to_watch/recommended" class="stargazer-feed-link disabled">
+                                    <span>Featured</span>
+                                </a>
+                                <a id="stf-history" href="/feed/history" class="stargazer-feed-link">
+                                    <span>Watch History</span>
+                                </a>
+                                <a id="stf-liked" href="/playlist?list=LL" class="stargazer-feed-link">
+                                    <span>Liked Videos</span>
+                                </a>
+                                <a id="stf-watch-later" href="/playlist?list=WL" class="stargazer-feed-link">
+                                    <span>Watch Later</span>
+                                </a>
+					    	</div>
+                        </div>
+					</div>
+					`;
+                        }
+                    });
+                }
+            }
+        }
+    }
 	// EXfunct
 	function doCosmicFeedHeader(){
-		if($(".epic-feed-header") == null){
+        if($(".epic-feed-header")==null){
 			if($("[location='feed-recs']")){
 				var elm = ".branded-page-v2-subnav-container";
 				waitForElement10(elm).then(function(elm){
@@ -17835,7 +18210,13 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 			if(
 				date.includes("2005")||
 				date.includes("2006")||
-				date.includes("2007")||
+				date.includes("2007")
+			){
+				if(SRS.layoutSelect.visValue!="stargazer2008_1"){
+					setAdaptiveLayout("stargazer2008_1");
+				}
+			}
+            if(
 				date.includes("2008")
 			){
 				if(SRS.layoutSelect.visValue!="stargazer2008_1"){
@@ -18011,7 +18392,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 				if($(".stargazer-tab.active")){
 					$(".stargazer-tab.active").classList.remove("active");
 				}
-				$("#stargazer-videos.stargazer-tab").classList.add("active");
+				$("#stargazer-home.stargazer-tab").classList.add("active");
 			}
 			var elm = "#page";
 			waitForElement10(elm).then(function(elm){
@@ -18360,6 +18741,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
         }
         setTimeout(function(){
             switch (SRS.layoutSelect.tValue){
+                case "cloudgazer2007_1":
+                    layoutFactor=120000;
+                    break;
                 case "stargazer2008_1":
                     layoutFactor=150000;
                     break;
@@ -18484,6 +18868,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                     break;
             }
             switch (SRS.watchLayout.tValue){
+                case "watch4a":
+                    $(".spitfire-body-container").setAttribute("wl","w4a");
+                    break;
                 case "watch4b":
                     $(".spitfire-body-container").setAttribute("wl","w4b");
                     break;
@@ -18556,6 +18943,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                     break;
             }
             switch (SRS.playerVersion.tValue){
+                case "cosmic2012":
+                    html.setAttribute("pl-ver","cosmic2012");
+                    break;
                 case "modernV1":
                     doModernPlayer();
                     html.setAttribute("pl-ver","mv1");
@@ -18637,6 +19027,10 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
             if(SRS.outlineIcons.tValue=="on"){
                 html.setAttribute("exp-outline-icons","");
                 sets.outlineIcons=true;
+            }
+            if(SRS.superScale.tValue=="on"){
+                html.setAttribute("super-scaled-ui","");
+                sets.superScale=true;
             }
             if(SRS.channelVersion.tValue=="c3"&&!window.location.href.includes("force-c4")){
                 html.setAttribute("exp-channels3","");
@@ -18727,22 +19121,35 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
             if($("[layout^='star']")){
                 html.setAttribute("stargazer-sub","");
             }
+            if($("[layout^='cloudgazer2007']")){
+                html.setAttribute("stargazer-header","tabbed-cirrus");
+                stargazerHeader(0);
+                searchButtonLowercase();
+            }
+            if($("[layout^='cloudgazer2007']")){
+                html.setAttribute("stargazer-header","tabbed-cirrus");
+                stargazerHeader(0);
+                searchButtonLowercase();
+            }
             if($("[layout^='stargazer2008']")){
                 html.setAttribute("stargazer-header","tabbed");
                 stargazerHeader(0);
                 searchButtonLowercase();
+                doStargazerFeedHeader();
+                setTimeout(videosWatchedNow,1000);
             }
             if($("[layout^='stargazer2009_1']")){
                 html.setAttribute("stargazer-header","bar");
                 stargazerHeader(1);
                 searchButtonLowercase();
+                doStargazerFeedHeader();
             }
             if($("[layout^='stargazer2009_3']")){
                 html.setAttribute("stargazer-header","simple");
                 stargazerHeader(2);
                 searchButtonLowercase();
             }
-            if($("[layout^='aoz']")||$("[layout^='star']")){
+            if($("[layout^='aoz']")||$("[layout^='star']")||$("[layout^='cloud']")){
                 html.setAttribute("aozora-styles","");
                 html.setAttribute("exp-aozora-styles","");
                 sets.aozoraStyles=true;
@@ -18751,6 +19158,10 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 html.setAttribute("aozora-home","");
                 html.setAttribute("exp-aozora-home","");
                 sets.aozoraHome=true;
+            }
+            if($("[layout^='star']")){
+                html.setAttribute("stargazer-styles","");
+                sets.stargazerStyles=true;
             }
             if($("[layout^='aoz']")){
                 html.setAttribute("aozora-header","");
@@ -18847,6 +19258,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 sets.polyG3Colors=true;
             }
             if($("[layout^='poly201']")){
+                html.setAttribute("exp-polymer-subscribe","");
+            }
+            if($("[layout^='polyE']")){
                 html.setAttribute("exp-polymer-subscribe","");
             }
             if($("[layout^='poly202']")||$("[layout^='amst']")){
@@ -19063,7 +19477,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		refreshCheck++;
 		if(
 			$("#st-nsp") === null &&
-			STS.show2point4 == true
+			STS.show2point5 == true
 		   ){
 			let container76=$('.spitfire-body-container.v3');
 let newElem76=document.createElement("div");
@@ -19144,24 +19558,12 @@ left:0
   <div class="image">
   <svg fill="#000000" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 4.588l2.833 8.719H28l-7.416 5.387 2.832 8.719L16 22.023l-7.417 5.389 2.833-8.719L4 13.307h9.167L16 4.588z" style="fill: #e63127;"/></svg>
   </div>
-  <div class="title">What's new in StarTube 2.4.0</div>
+  <div class="title">What's new in StarTube 2.5.0</div>
 
 
 <div class="text">
-<div class="label">Settings have been reset</div>
-<span class="run run-text">Due to a bug with the new internal settings structure, upgrading 2.3 configs to 2.4 configs is unreliable and can cause major issues. So instead, you've been given a fresh new config for 2.4.0. The settings structure is more futureproofed now, and is much better overall.</span>
-<div class="label">Watch Layout HTML Rewrite</div>
-<span class="run run-text">The watch layout HTML (page structure) has been rewritten. While mostly an under-the-hood improvement, some improvements have been made to the user experience because of it.</span>
-<div class="label">Stargazer watch layout</div>
-<span class="run run-text">One of the Stargazer watch layouts, Watch4B has been added thanks to the HTML rewrite.</span>
-<div class="label">Advanced options are being phased out</div>
-<span class="run run-text">Several advanced options have been removed, and were replaced with easier to understand regular options.</span>
-<div class="label">New layout options</div>
-<span class="run run-text">2023 Layout, Early 2017 Layout, Early 2014 Layout (Prototype), and Late 2013 Layout (Prototype) have been added, and are all variations of existing layouts.</span>
-<div class="label">Free as a Skybird</div>
-<span class="run run-text">An entirely custom layout has been added to StarTube: Skybird. It aims to be an alternate universe 2016/2017 layout.</span>
-<div class="label">Toggle Dark Mode from the account menu</div>
-<span class="run run-text">In the Polymer layouts, you can now toggle dark mode from the account menu.</span>
+<div class="label">The Changelog Has Moved</div>
+<span class="run run-text">See what's new in StarTube in the "StarTube" tab of the StarTube Settings window.</span>
 <button id="close-st-nsp" class="yt-uix-button yt-uix-button-size-default start yt-uix-button-primary dismiss-button">
 <span class="yt-uix-button-content">
 <span class="run">OK</span>
@@ -19173,25 +19575,25 @@ left:0
 container76.insertBefore(newElem76, container76.children[0]);
 			$("#close-st-nsp").addEventListener("click", function(){
 				$("#st-nsp").remove();
-				STS.show2point4 = false;
+				STS.show2point5 = false;
 				applySettings(0);
 				$("html").setAttribute("no-startube-popup","");
-				var elm = "#show2point4";
+				var elm = "#show2point5";
 				waitForElement10(elm).then(function(elm){
 					if(canGo != false){
-						$("#show2point4").setAttribute("checked","false");
+						$("#show2point5").setAttribute("checked","false");
 					}
 				});
 			});
             $("#overly-obvious-close-button").addEventListener("click", function(){
 				$("#st-nsp").remove();
-				STS.show2point4 = false;
+				STS.show2point5 = false;
 				applySettings(0);
 				$("html").setAttribute("no-startube-popup","");
-				var elm = "#show2point4";
+				var elm = "#show2point5";
 				waitForElement10(elm).then(function(elm){
 					if(canGo != false){
-						$("#show2point4").setAttribute("checked","false");
+						$("#show2point5").setAttribute("checked","false");
 					}
 				});
 			});
@@ -20102,6 +20504,25 @@ filter: invert(1);
 }
 #st-adv-dep-warn{
   color:#000
+}
+#st-changelog{
+  margin:8px 0;
+  padding:10px;
+  border:1px solid var(--ccc);
+  background:var(--f1f1f1)
+}
+.st-cl b{
+  font-size:16px;
+  margin-bottom:8px
+}
+.st-cl{
+  margin:4px 0;
+  font-size:14px
+}
+.st-sub-cl{
+  margin:4px 0 4px 10px;
+  font-size:14px;
+  color:var(--333)
 }
 	</style>
     ${STH.astroSettings}
@@ -21141,6 +21562,8 @@ html {
 --000:#000;
 --03c:#03c;
 --333text:#333;
+--f1f1f1:#f1f1f1;
+--ccc:#ccc;
 --spec-menu-bg:rgba(255,255,255,0.98)
 }
 [dark] {
@@ -21154,6 +21577,8 @@ html {
 --000:#fff;
 --03c:#06c;
 --333text:#fff;
+--f1f1f1:#222;
+--ccc:#333;
 --spec-menu-bg:rgba(33,33,33,0.98)
 }
 [exp-roboto] {
@@ -27061,6 +27486,20 @@ margin-right: 14px;
 [exp-rich-grid-home][exp-modern-home][location="feed-recs"],
 [exp-rich-grid-home][exp-modern-home][location="home"] {
 --rich-item-width: 15.85%;
+}
+[exp-rich-grid-home][exp-modern-home][location="feed-recs"] .site-center-aligned .multirow-shelf .yt-shelf-grid-item:nth-child(6n),
+[exp-rich-grid-home][exp-modern-home][location="home"] .site-center-aligned .multirow-shelf .yt-shelf-grid-item:nth-child(6n){
+margin-right: 0;
+}
+[exp-rich-grid-home][exp-modern-home][location="feed-recs"] .site-center-aligned .multirow-shelf .yt-shelf-grid-item:nth-child(5n),
+[exp-rich-grid-home][exp-modern-home][location="home"] .site-center-aligned .multirow-shelf .yt-shelf-grid-item:nth-child(5n){
+margin-right: 14px;
+}
+}
+@media screen and (min-width: 2600px){
+[exp-rich-grid-home][exp-modern-home][location="feed-recs"],
+[exp-rich-grid-home][exp-modern-home][location="home"] {
+--rich-item-width: 11.8%;
 }
 [exp-rich-grid-home][exp-modern-home][location="feed-recs"] .site-center-aligned .multirow-shelf .yt-shelf-grid-item:nth-child(6n),
 [exp-rich-grid-home][exp-modern-home][location="home"] .site-center-aligned .multirow-shelf .yt-shelf-grid-item:nth-child(6n){
@@ -34076,6 +34515,13 @@ background:var(--tpl);
 #st-report-button:hover .st-watch-tab-icon{
   background-position:-91px -247px
 }
+[wl="w4a"] #st-share-tab .st-watch-tab-icon{
+  background:transparent url(https://i.imgur.com/w3ZxnEj.gif) no-repeat scroll -326px 0
+}
+[wl="w4a"] #st-share-tab.active .st-watch-tab-icon,
+[wl="w4a"] #st-share-tab:hover .st-watch-tab-icon{
+  background-position:-326px -20px
+}
 .st-watch-tabs-content{
   background:#fafafa;
   border-top:1px solid #ccc;
@@ -35998,6 +36444,376 @@ html [has-at]{
   height:27px;
   left:10px
 }
+[pl-ver^="m"] .ytp-settings-2k-quality-badge,
+[pl-ver^="m"] .ytp-settings-4k-quality-badge{
+  position:absolute;
+  right:4px;
+  top:7px
+}
+
+/* cosmic player */
+[pl-ver^="c"] .html5-player-chrome{
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAdCAYAAABrAQZpAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAABIAAAASABGyWs+AAAACXZwQWcAAAABAAAAHQAh4gKwAAAAMUlEQVQI12OQlJD4x2Sgr8/I9OTZs5dM//79Y2T6//8/IyqLAcLClEBjYahDKCHSKADN5VNQpdTxzgAAAABJRU5ErkJggg==);
+  background-repeat: repeat-x;
+}
+[pl-ver^="c"] .ytp-progress-list{
+  background:linear-gradient(to top,rgba(30,31,31,.75) 89%,#2f2f2f 90%)
+}
+[pl-ver^="c"] .ytp-load-progress{
+  background:linear-gradient(to top,#5a5a5a 89%,#666 90%)
+}
+[pl-ver^="c"] .ytp-play-progress{
+  background:linear-gradient(to bottom,#c00 0,#600 100%)
+}
+[pl-ver^="c"][exp-ringo2] body .v3  .player-api > #movie_player .ytp-play-progress{
+  background:linear-gradient(to bottom,#cc0029 0,#660014 100%)!important
+}
+
+[pl-ver^="c"] .html5-player-chrome .ytp-button{
+  background-image:url(https://s.ytimg.com/yt/imgbin/player-dark-vflCDBE54.png)!important
+}
+[pl-ver^="c"] .ytp-button-play{
+  background-position:-96px -232px!important
+}
+[pl-ver^="c"] .ytp-button-play:hover{
+  background-position:-121px -43px!important
+}
+[pl-ver^="c"] .ytp-button-pause{
+  background-position:-64px -178px!important
+}
+[pl-ver^="c"] .ytp-button-pause:hover{
+  background-position:-64px -259px!important
+}
+[pl-ver^="c"] .ytp-button-replay{
+  background-position:-96px -286px!important
+}
+[pl-ver^="c"] .ytp-button-replay:hover{
+  background-position:-32px -16px!important
+}
+[pl-ver^="c"] .ytp-button-fullscreen-enter{
+  background-position:-89px -124px!important
+}
+[pl-ver^="c"] .ytp-button-fullscreen-enter:hover{
+  background-position:-96px -97px!important
+}
+[pl-ver^="c"] .ytp-button-fullscreen-exit{
+  background-position:0 -70px!important
+}
+[pl-ver^="c"] .ytp-button-fullscreen-exit:hover{
+  background-position:-64px -151px!important
+}
+[pl-ver^="c"] .ytp-size-toggle-large{
+  background-position:-89px -16px!important
+}
+[pl-ver^="c"] .ytp-size-toggle-large:hover{
+  background-position:-32px -205px!important
+}
+[pl-ver^="c"] .ytp-size-toggle-small{
+  background-position:-57px -124px!important
+}
+[pl-ver^="c"] .ytp-size-toggle-small:hover{
+  background-position:-32px -232px!important
+}
+[pl-ver^="c"] .ytp-button-watch-later{
+  background-position:0 -259px!important
+}
+[pl-ver^="c"] .ytp-button-watch-later:hover{
+  background-position:-64px -232px!important
+}
+[pl-ver^="c"] .ytp-settings-button{
+  background-position:-153px -124px!important
+}
+[pl-ver^="c"] .ytp-settings-button-active,
+[pl-ver^="c"] .ytp-settings-button:hover{
+  background-position:-128px -205px!important
+}
+[pl-ver^="c"] .ytp-subtitles-button{
+  background-position:-64px -205px!important
+}
+[pl-ver^="c"] .ytp-subtitles-button:hover{
+  background-position:-64px -286px!important
+}
+[pl-ver^="c"] .ytp-subtitles-button-active{
+  background-position:-32px -151px!important
+}
+[pl-ver^="c"] .ytp-button-volume{
+  background-position:-153px -259px!important
+}
+[pl-ver^="c"] .ytp-button-volume:hover{
+  background-position:-121px -124px!important
+}
+[pl-ver^="c"] .ytp-button-volume[data-value="normal"],
+[pl-ver^="c"] .ytp-button-volume[data-value="quiet"]{
+  background-position:-121px -259px!important
+}
+[pl-ver^="c"] .ytp-button-volume[data-value="normal"]:hover,
+[pl-ver^="c"] .ytp-button-volume[data-value="quiet"]:hover{
+  background-position:-96px -205px!important
+}
+[pl-ver^="c"] .ytp-button-volume[data-value="min"]{
+  background-position:-153px -232px!important
+}
+[pl-ver^="c"] .ytp-button-volume[data-value="min"]:hover{
+  background-position:-32px -97px!important
+}
+[pl-ver^="c"] .ytp-button-volume[data-value="off"]{
+  background-position:-121px -16px!important
+}
+[pl-ver^="c"] .ytp-button-volume[data-value="off"]:hover{
+  background-position:0 -43px!important
+}
+[pl-ver^="c"] .ytp-volume-slider-foreground::after,
+[pl-ver^="c"] .ytp-volume-slider-foreground::before{
+  border-bottom:1px solid #404040
+}
+[pl-ver^="c"] .ytp-volume-slider-foreground::before{
+  background-image:linear-gradient(to bottom,#c00 0,#600 100%);
+}
+[pl-ver^="c"] .ytp-volume-slider-foreground{
+  border-radius:3px;
+  background:linear-gradient(to top,#ccc,#f5f5f5)
+}
+[pl-ver^="c"] .html5-scrubber-button{
+  background:no-repeat url(https://s.ytimg.com/yt/imgbin/player-common-vflXVjbFd.png) -158px -19px!important;
+  border:none;
+  width:17px;
+  height:16px!important
+}
+[pl-ver^="c"] .ytp-button-playlist{
+  background:no-repeat url(https://s.ytimg.com/yts/imgbin/player-dark-vfllzTuHQ.png)-64px -97px;
+  height:26px;
+  width:30px
+}
+[pl-ver^="c"] .ytp-button-playlist:focus,
+[pl-ver^="c"] .ytp-button-playlist:hover{
+  background:no-repeat url(//s.ytimg.com/yts/imgbin/player-dark-vfllzTuHQ.png)-32px -259px;
+  height:26px;
+  width:30px
+}
+[pl-ver^="c"] .ytp-button-prev,
+[pl-ver^="c"] .ytp-button-next{
+  display:none!important
+}
+[pl-ver^="c"] .html5-scrubber-button:hover,
+[pl-ver^="c"] .seeking-mode .html5-scrubber-button{
+  background-position:-158px 0!important;
+}
+[pl-ver^="c"] .ytp-button-play,
+[pl-ver^="c"] .ytp-button-pause,
+[pl-ver^="c"] .ytp-button-replay,
+[pl-ver^="c"] .ytp-button-watch-later,
+[pl-ver^="c"] .ytp-subtitles-button,
+[pl-ver^="c"] .ytp-subtitles-button-active,
+[pl-ver^="c"] .ytp-settings-button,
+[pl-ver^="c"] .ytp-settings-button-active,
+[pl-ver^="c"] .ytp-size-toggle-small,
+[pl-ver^="c"] .ytp-size-toggle-large,
+[pl-ver^="c"] .ytp-volume-control{
+  border-right:1px solid #222
+}
+[pl-ver^="c"] .ytp-volume-control{
+  padding-right:0
+}
+
+
+[pl-ver^="c"] .ytp-menu{
+    margin-bottom: 0;
+}
+[pl-ver^="c"] .ytp-menu-container{
+    bottom: 35px;
+}
+[pl-ver^="c"] .ytp-drop-down-menu{
+    display:block!important;
+    position:relative;
+    bottom:0!important;
+    background:unset;
+    border:unset;
+    transform:none!important
+}
+[pl-ver^="c"] .ytp-drop-down-label,.ytp-drop-down-menu-button:not(.ytp-drop-down-menu-button-selected) .ytp-drop-down-menu-button-check,.ytp-menu-content>.ytp-menu-row:first-child{
+    display:none
+}
+[pl-ver^="c"] .ytp-menu-row,.ytp-menu-title{
+    display:inline-block
+}
+[pl-ver^="c"] .ytp-menu-title{
+    vertical-align:unset;
+    color:#fff;
+    padding:4px 7px 6px 16px;
+    font-size:11px;
+    white-space:nowrap;
+    cursor:default;
+    margin-top:5px;
+    margin-bottom:1px
+}
+[pl-ver^="c"] .ytp-menu-title+.ytp-menu-cell{
+    vertical-align:unset;
+    display:block;
+    margin-bottom:3px;
+    max-height:calc(var(--v3-player-height) - 288px);
+    overflow-y:auto
+}
+[pl-ver^="c"] .ytp-menu-title+.ytp-menu-cell::-webkit-scrollbar-track{
+    border-left:1px solid #2b2b2b;
+    -webkit-box-shadow:inset 0 0 1px transparent
+}
+[pl-ver^="c"] .ytp-menu-title+.ytp-menu-cell::-webkit-scrollbar-thumb{
+    border-left:1px solid #2b2b2b;
+    background:#131313
+}
+[pl-ver^="c"] .ytp-menu-title+.ytp-menu-cell::-webkit-scrollbar-thumb:hover{
+    background:#2d2d2d
+}
+[pl-ver^="c"] .ytp-menu-title+.ytp-menu-cell::-webkit-scrollbar{
+    width:5px;
+    height:9px;
+    border-left:4px solid #000;
+    background:#000;
+    box-shadow:inset 0 0 1px transparent
+}
+[pl-ver^="c"] .ytp-menu-container{
+    border:1px solid #141414;
+    background-color:#141414!important
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button{
+    color:#aaa;
+    text-align:center;
+    padding:4px 12px
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button:not(.ytp-drop-down-menu-button-selected):hover,.ytp-menu-more-options:hover{
+    color:#fff;
+    background-color:#601212!important
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button-selected:hover{
+    background-color:#0f0f0f!important
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button-selected{
+    list-style:disc inside;
+    color:#fff;
+    background-color:#0f0f0f;
+    -moz-border-radius:12px;
+    -webkit-border-radius:12px;
+    border-radius:12px;
+    -moz-box-shadow:0 1px #292929,0 -1px #000;
+    -ms-box-shadow:0 1px #292929,0 -1px #000;
+    -webkit-box-shadow:0 1px #292929,0 -1px #000;
+    box-shadow:0 1px #292929,0 -1px #000
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button-selected .ytp-drop-down-menu-button-check{
+    background:url(//s.ytimg.com/yts/imgbin/player-common-vflGwqWf5.png) -39px -1110px no-repeat;
+    opacity:1
+}
+[pl-ver^="c"] .ytp-menu-row:first-child+.ytp-menu-row{
+    padding-right:5px
+}
+[pl-ver^="c"] .ytp-menu-row:not(:first-child)+.ytp-menu-row{
+    border-left:1px solid #000;
+    -moz-box-shadow:1px 0 0 0 #2b2b2b inset;
+    -ms-box-shadow:1px 0 0 0 #2b2b2b inset;
+    -webkit-box-shadow:1px 0 0 0 #2b2b2b inset;
+    box-shadow:1px 0 0 0 #2b2b2b inset;
+    padding:0 5px
+}
+[pl-ver^="c"] .ytp-drop-down{
+    min-width:unset!important
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button-check{
+    margin:0 4px
+}
+[pl-ver^="c"] .ytp-menu-content{
+    border-spacing:0;
+    margin:0 5px
+}
+[pl-ver^="c"] .ytp-menu{
+    padding:0
+}
+[pl-ver^="c"] .ytp-menu-row{
+    display:table-cell
+}
+[pl-ver^="c"] .ytp-menu-title+.ytp-menu-cell+.ytp-menu-cell{
+    text-align:center;
+    display:block;
+    margin-top:-5px
+}
+[pl-ver^="c"] .ytp-menu-more-options{
+    text-decoration:none;
+    color:#aaa;
+    text-align:center;
+    padding:4px 0;
+    display:block;
+    width:100%
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button-separated-above{
+    border-top:1px solid #000;
+    box-shadow:0 1px 0 0 #2b2b2b inset;
+    margin-top:3px;
+    padding-top:6px
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button:not(.ytp-drop-down-menu-button-selected) > span > sup {
+    position:absolute;
+    margin-left:3px;
+    top: unset;
+}
+[pl-ver^="c"] .ytp-menu-content .ytp-menu-row:last-child .ytp-drop-down .ytp-drop-down-menu-button {
+    min-width:70px;
+}
+[pl-ver^="c"] .ytp-menu-title {
+    padding: 4px 0px 6px 0px;
+    position:relative;
+    transform: translateX(-50%);
+    left: 50%;
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button:not(.ytp-drop-down-menu-button-separated-above) {
+    border-radius: 12px;
+}
+[pl-ver^="c"] .ytp-drop-down-menu-button sup{
+    line-height:5px;
+}
+
+
+[pl-ver^="c"] .ytp-segmented-control > .ytp-button {
+    display: block;
+    float: unset;
+    color: #aaa;
+    text-align: center;
+    border-radius: 12px;
+    padding: 0 12px;
+    background: unset;
+    border-color: transparent;
+    height: 17px;
+}
+[pl-ver^="c"] .ytp-segmented-control > .ytp-button:hover:not(.ytp-segmented-control-selected) {
+    color: #fff;
+    background-color: #601212!important;
+}
+[pl-ver^="c"] .ytp-segmented-control-other {
+    margin-left: unset;
+}
+[pl-ver^="c"] .ytp-segmented-control {
+    display: block;
+}
+[pl-ver^="c"] .ytp-segmented-control > .ytp-button.ytp-segmented-control-selected {
+    list-style: disc inside;
+    color: #fff;
+    background: #0f0f0f!Important;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 0 1px #292929,0 -1px #000;
+    -ms-box-shadow: 0 1px #292929,0 -1px #000;
+    -webkit-box-shadow: 0 1px #292929, 0 -1px #000;
+    box-shadow: 0 1px #292929, 0 -1px #000;
+    padding-left: 25px;
+}
+[pl-ver^="c"] .ytp-segmented-control > .ytp-button.ytp-segmented-control-selected:before {
+    content: "";
+    background: no-repeat url(https://s.ytimg.com/yts/imgbin/player-common-vflGwqWf5.png) -39px -1110px;
+    width: 11px;
+    height: 8px;
+    position: absolute;
+    margin-top: 4px;
+    margin-left: -14px;
+}
 
 [layout^="sta"] #st-related-header,
 /*[layout^="cos"] #st-ap-toggle-cont,*/
@@ -36134,6 +36950,611 @@ html [has-at]{
   transition:none
 }
 
+/* 2.5.0 stuff */
+
+[wl="w4a"] .st-watch-tab{
+  background:linear-gradient(to top,#e0e0e0,#fff 95%,#fefefe);
+  border-bottom:1px solid #ccc;
+  border-left:1px solid #ccc;
+  height:35px
+}
+[wl="w4a"] #st-share-tab{
+  border-left:none
+}
+[wl="w4a"] #st-watch-tabs-row{
+  border-top:1px solid #ccc;
+  padding-top:0
+}
+[wl="w4a"] .st-watch-tabs-content{
+  border-top:none;
+  background:#fff
+}
+[wl="w4a"] .st-watch-tab-arrow{
+  display:none
+}
+[wl="w4a"] .st-watch-tab-inner span{
+  border:none!important
+}
+[wl="w4a"] .st-watch-tab:hover span{
+  text-decoration:underline
+}
+[wl="w4a"] .st-watch-tab.active{
+  background:#fff;
+  border-bottom:none
+}
+
+[wl="w4a"] #st-ratings-info-row{
+  border-bottom:1px solid #ccc;
+  padding:5px;
+  margin-bottom:10px
+}
+[wl="w4a"] #st-ratings-info-row .st-view-count{
+  font-size:16px
+}
+
+[wl="w4a"] .st-upload-date{
+  display:none
+}
+[wl="w4a"] .st-videos-before-text{
+  display:inline-block;
+  width:fit-content
+}
+[wl="w4a"] .st-join-date,
+[wl="w4a"] .st-owner-from,
+[wl="w4a"] .st-joined-text,
+[wl="w4a"] .st-added-text,
+[wl="w4a"] .st-owner-subsubtitle .st-upload-date,
+[wl="w4a"] .st-owner-subtitle .st-short-video-count{
+  display:inline-block!important
+}
+[wl="w4a"] .st-join-date,
+[wl="w4a"] .st-owner-subsubtitle{
+  font-size:12px;
+  color:#000;
+  margin-right:4px
+}
+[wl="w4a"] .st-owner-subsubtitle .st-upload-date,
+[wl="w4a"] .st-short-video-count{
+  font-size:12px;
+  color:#000;
+  font-weight:bold
+}
+[wl="w4a"] .st-owner-desc-sub-expander-outer{
+  margin-bottom:-20px;
+  position:relative;
+  z-index:1;
+  margin-left:-60px;
+  border-top:1px solid #ccc;
+  padding-top:8px;
+  min-width:297px
+}
+[wl="w4a"] #st-side-desc-row{
+  padding-top:20px
+}
+[wl="w4a"] .st-owner-before-text{
+  font-size:12px;
+  color:#999;
+}
+[wl^="w4a"] .st-owner-subtitle{
+  margin:6px 0 12px 0
+}
+[wl^="w4a"] .st-owner-vid-part{
+  margin-top:6px
+}
+
+
+
+[wl^="w4"] #st-side-owner-row .st-owner-title{
+  width:160px
+}
+[wl^="w4"] #st-side-owner-row .st-owner{
+  align-items:unset!important
+}
+
+
+.st-watch5-upload-info{
+  max-width:390px
+}
+
+
+.st-modern-sub:has(.yt-subscription-button-disabled-mask) .yt-uix-button-subscribe-branded{
+  border-radius:2px
+}
+
+
+
+[stargazer-styles] body .v3 .yt-lockup-thumbnail{
+  padding:2px 2px 0 2px;
+  border-radius:0;
+  border:1px solid #999;
+  margin-right:6px
+}
+[stargazer-styles] body .v3 .yt-lockup-thumbnail{
+  padding:1px
+}
+[stargazer-styles][location="home"] body .v3 .yt-lockup-thumbnail{
+  padding:2px 2px 0 2px
+}
+[stargazer-styles][location="feed-recs"] .yt-thumb-185 img,
+[stargazer-styles][location="feed-recs"] .yt-thumb-185{
+  width:118px
+}
+[stargazer-styles][location="feed-recs"] .yt-lockup-title a{
+  font-size:15px;
+  font-weight:bold!important
+}
+[stargazer-styles][location="feed-recs"] .yt-lockup-title{
+  margin-top:0
+}
+[stargazer-styles][location="feed-recs"] .branded-page-v2-primary-col .yt-lockup-content{
+  width:400px
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .branded-page-v2-primary-col .yt-lockup-content{
+  width:unset
+}
+[stargazer-styles][location="feed-recs"] .feed-item-context-message,
+[stargazer-styles][location="feed-recs"] .branded-page-v2-primary-col .feed-author-bubble-container{
+  display:none
+}
+[stargazer-styles][location="feed-recs"] .feed-item-container{
+  margin:0 8px
+}
+[stargazer-styles][location="feed-recs"] .feed-item-main{
+  margin-left:10px;
+  border-bottom:1px solid #ccc;
+  padding-bottom:0
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"] .feed-item-header{
+  position:absolute;
+  left:560px;
+  top:0
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .feed-item-header{
+  position:absolute;
+  bottom:0;
+  right:0
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"]  .feed-item-owner::before{
+  content:"From: ";
+  color:#666;
+  font-size:11px;
+  text-decoration:none!important;
+  font-weight:normal
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"] .feed-item-time::before{
+  content:"Added: ";
+  color:#666
+}
+[stargazer-styles][location="feed-recs"] .feed-item-owner a{
+  font-size:11px;
+  color:#03c!important;
+  font-weight:normal
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"] .feed-item-owner{
+  display:flex
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"] .feed-item-owner a{
+  text-decoration:underline;
+  max-height:14px;
+  overflow:hidden;
+  display:block;
+  margin-left:4px
+}
+[stargazer-styles] .yt-user-name-icon-verified{
+  display:none
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"] .feed-item-time{
+  position:absolute;
+  margin:2px 0 0 0;
+  font-size:11px;
+  color:#000
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .feed-item-main .feed-item-time{
+  color:#666
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"] .branded-page-v2-primary-col .yt-lockup-content .yt-lockup-meta{
+  position:absolute;
+  left:560px;
+  top:30px
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .branded-page-v2-primary-col .yt-lockup-content .yt-lockup-meta .view-count-stat{
+  font-weight:normal;
+  font-size:11px;
+  color:#666
+}
+[stargazer-styles][location="feed-recs"] .yt-lockup-video .ux-thumb-wrap{
+  overflow:visible
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"] .branded-page-v2-primary-col .yt-lockup-video .video-time{
+  position:absolute;
+  left:547px;
+  top:50px;
+  width:fit-content;
+  padding:0;
+  background:none;
+  color:#000!important;
+  opacity:1;
+  display:block!important
+}
+[stargazer-styles][location="feed-recs"] .yt-lockup-description .yt-ui-ellipsis-wrapper{
+  color:#000;
+  font-size:12px
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2008"] .yt-lockup-description{
+  max-height:44px
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .yt-lockup-description{
+  max-height:14px
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .yt-lockup-content{
+  display:flex;
+  flex-direction:column;
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .yt-lockup-title{
+  order:1
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .yt-lockup-description{
+  order:2
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .yt-lockup-meta{
+  order:3
+}
+[stargazer-styles][location="feed-recs"][ly^="stargazer2009"] .yt-lockup-badges{
+  order:3
+}
+
+
+[stargazer-styles] #page.watch .context-data-item .yt-thumb.yt-thumb-120{
+  padding:1px;
+  border:1px solid #999;
+  border-radius:0;
+  width:calc(var(--rel-width) - 2px)!important
+}
+[stargazer-styles] #page.watch .context-data-item .yt-thumb-120 img{
+  width:calc(var(--rel-width) - 2px)!important
+}
+[stargazer-styles] .lohp-video-link,
+[stargazer-styles] .video-list .video-list-item .title,
+[stargazer-styles] .yt-lockup-title a,
+[stargazer-styles] .yt-lockup .yt-lockup-meta a,
+[stargazer-styles] .yt-lockup:hover a,
+[stargazer-styles] .yt-lockup:hover .yt-lockup-meta a,
+[stargazer-styles] .yt-lockup:hover .yt-lockup-description a{
+  font-weight:bold
+}
+[stargazer-styles] .video-list .video-list-item .title{
+  font-size:12px
+}
+[stargazer-styles] .video-list .video-list-item b,
+[stargazer-styles] .video-list .video-list-item .description,
+[stargazer-styles] .video-list .video-list-item .stat{
+  color:#000;
+  font-size:11px
+}
+[stargazer-styles] #page.watch .context-data-item.video-list-item{
+  border-bottom:1px dotted #ccc;
+  margin-bottom:0
+}
+
+[stargazer-styles][location="feed-recs"] #page:not(.channel) .branded-page-v2-subnav-container{
+  padding:0;
+  border:none
+}
+.stargazer-feed-header{
+  padding:8px;
+  margin-left:10px;
+  margin-top:10px
+}
+.stargazer-feed-header-top{
+  font-size:19px;
+  font-weight:bold;
+  border-bottom:1px solid #ccc;
+  width:100%;
+  padding:5px 0 3px
+}
+.stargazer-feed-header-bottom{
+  border-bottom:1px solid #ccc;
+  padding:6px
+}
+.stargazer-feed-header-actions,
+.stargazer-feed-header-links{
+  margin-left:auto
+}
+.stargazer-feed-link{
+  padding:0 10px;
+  border-left:1px solid #ccc;
+  color:#03c;
+  font-size:11px
+}
+.stargazer-feed-link.disabled{
+  border-left:none;
+  color:#000;
+  font-weight:bold;
+  text-decoration:none!important
+}
+.stargazer-feed-header-actions{
+  margin-top:-8px
+}
+.stargazer-feed-top-link{
+  text-decoration:underline;
+  color:#03c;
+  font-size:12px
+}
+
+
+#st-vids-watched-now{
+  width:fit-content;
+  margin:0 auto;
+  max-height:0;
+  overflow:hidden;
+  transition-duration:0.5s
+}
+[vwn-ready="true"] #st-vids-watched-now{
+  margin:10px auto;
+  max-height:120px;
+  height:120px
+}
+html:not([location="feed-recs"]) #st-vids-watched-now,
+[vwn-ready="false"] #st-vwn-vids{
+  display:none
+}
+#st-vwn-vids{
+  width:578px
+}
+#st-vwn-title h3{
+  font-size:14px;
+  color:#666;
+  font-weight:normal;
+  margin:5px
+}
+.st-vwn-s{
+  perspective:1000px
+}
+.vwn-video a{
+  display:flex;
+  flex-direction:column;
+  width:100px;
+  padding:1px!important;
+  height:58px;
+  background:transparent!important;
+  overflow:visible!important
+}
+.vwn-video{
+  border:2px solid #ccc!important;
+  border-radius:2px;
+  margin-right:12px;
+  height:58px;
+  display:none;
+  opacity:0
+}
+.vwn-video .ux-thumb-wrap{
+  margin:0
+}
+.vwn-video .video-time{
+  width:96px;
+  background:linear-gradient(to left,#fffc 20%,#0000);
+  text-align:right;
+  color:#444!important;
+  text-shadow:none;
+  font-weight:normal;
+  margin:0!important;
+  bottom:0;
+  right:0;
+  padding:0 2px;
+  opacity:1!important
+}
+.yt-thumb-100{
+  width:100px;
+  height:56px
+}
+.vwn-video .stat,
+.vwn-video .title{
+  opacity:0;
+  position:absolute;
+  z-index:-1
+}
+.vwn-video:hover .title{
+  opacity:1;
+  position:absolute;
+  z-index:1;
+  top:60px;
+  background:#ccc;
+  animation:0.15s STTITLEANIM 1 linear;
+  color:#023396;
+  text-decoration:none;
+  width:102px;
+  overflow:hidden;
+  font-size:12px;
+  padding:2px;
+  margin-left:-3px;
+  margin-top:-2px;
+  border-radius:0 0 2px 2px
+}
+.st-thumb-echo{
+  height:20px;
+  opacity:0.5;
+  background-size:90px 50px;
+  mask-image:linear-gradient(to top,#fff0,#fff8)
+}
+@keyframes STTITLEANIM{
+0%{
+  opacity:0;
+  transform:translate3D(0,-5px,0)
+}
+100%{
+  opacity:1;
+  transform:translate3D(0, 0, 0)
+}
+}
+@keyframes STINANIM{
+0%{
+  opacity:0;
+  transform:translate3D(0, 90px, -900px)
+}
+0.5%{ /* 2% */
+  transform:translate3D(0, -30px, -300px)
+}
+1.5%{ /* 6% */
+  opacity:1;
+  transform:translate3D(0, 0, 0)
+}
+100%{
+  opacity:1;
+  transform:translate3D(0, 0, 0)
+}
+}
+@keyframes STOUTANIM{
+0%{
+  opacity:1;
+  display:block;
+  transform:translate3D(0, 0, 0)
+}
+/*50%{
+  opacity:0.1;
+  transform:translate3D(0, 30px, 50px)
+}*/
+100%{
+  display:block;
+  transform:translate3D(0, 90px, 0)
+}
+}
+[state="0"] #st-vwn-s0 .vwn-video,
+[state="1"] #st-vwn-s1 .vwn-video,
+[state="2"] #st-vwn-s2 .vwn-video,
+[state="3"] #st-vwn-s3 .vwn-video,
+[state="4"] #st-vwn-s4 .vwn-video,
+[state="5"] #st-vwn-s5 .vwn-video,
+[state="6"] #st-vwn-s6 .vwn-video,
+[state="7"] #st-vwn-s7 .vwn-video,
+[state="8"] #st-vwn-s8 .vwn-video,
+[state="9"] #st-vwn-s9 .vwn-video,
+[state="10"] #st-vwn-s10 .vwn-video,
+[state="11"] #st-vwn-s11 .vwn-video,
+[state="12"] #st-vwn-s12 .vwn-video{
+  display:block;
+  animation:40s STINANIM 1
+}
+[state="1"] #st-vwn-s0 .vwn-video,
+[state="2"] #st-vwn-s1 .vwn-video,
+[state="3"] #st-vwn-s2 .vwn-video,
+[state="4"] #st-vwn-s3 .vwn-video,
+[state="5"] #st-vwn-s4 .vwn-video,
+[state="6"] #st-vwn-s5 .vwn-video,
+[state="7"] #st-vwn-s6 .vwn-video,
+[state="8"] #st-vwn-s7 .vwn-video,
+[state="9"] #st-vwn-s8 .vwn-video,
+[state="10"] #st-vwn-s9 .vwn-video,
+[state="11"] #st-vwn-s10 .vwn-video,
+[state="12"] #st-vwn-s11 .vwn-video,
+[state="13"] #st-vwn-s12 .vwn-video{
+  display:block;
+  animation:0.8s STOUTANIM 1!important
+}
+[state="1"] #st-vwn-s0,
+[state="2"] #st-vwn-s1,
+[state="3"] #st-vwn-s2,
+[state="4"] #st-vwn-s3,
+[state="5"] #st-vwn-s4,
+[state="6"] #st-vwn-s5,
+[state="7"] #st-vwn-s6,
+[state="8"] #st-vwn-s7,
+[state="9"] #st-vwn-s8,
+[state="10"] #st-vwn-s9,
+[state="11"] #st-vwn-s10,
+[state="12"] #st-vwn-s11,
+[state="13"] #st-vwn-s12{
+  position:absolute;
+  height:80px;
+  overflow:hidden
+}
+.vwn-video:nth-child(2){
+  animation-delay:0.15s!important
+}
+.vwn-video:nth-child(3){
+  animation-delay:0.3s!important
+}
+.vwn-video:nth-child(4){
+  animation-delay:0.45s!important
+}
+.vwn-video:nth-child(5){
+  animation-delay:0.6s!important;
+  margin-right:auto
+}
+.vwn-video .addto-button,
+.vwn-video:nth-child(6),
+.vwn-video:nth-child(7),
+.vwn-video:nth-child(8),
+.vwn-video:nth-child(9),
+.vwn-video:nth-child(10),
+.vwn-video:nth-child(11),
+.vwn-video:nth-child(12),
+.vwn-video:nth-child(13),
+.vwn-video:nth-child(14),
+.vwn-video:nth-child(15){
+  display:none!important
+}
+
+/* super scale UI */
+@media screen and (min-width: 2200px){
+  [super-scaled-ui][modern-cards] .site-center-aligned.flex-width-enabled #page:not(.watch) #content{
+    width:1678px;
+	max-width:1678px;
+    min-width:1678px
+  }
+  [super-scaled-ui][modern-styles] #page.channel .branded-page-v2-primary-col{
+    max-width:1471px;
+	min-width:1471px;
+    width:1471px
+  }
+  [super-scaled-ui][exp-polymer-channels] #c4-primary-header-contents,
+  [super-scaled-ui][exp-polymer-channels] #channel-subheader,
+  [super-scaled-ui][exp-polymer-channels] .channel .branded-page-v2-col-container,
+  [super-scaled-ui][poly-styles]:not([exp-rich-grid-home]) .site-center-aligned.flex-width-enabled #page:not(.watch):not(.channel) #content,
+  [super-scaled-ui][poly-styles]:not([exp-rich-grid-home]) .site-center-aligned.flex-width-enabled #page.home #content{
+    width:1710px;
+    min-width:1710px
+  }
+  [super-scaled-ui][exp-polymer-channels] #c4-shelves-container .fluid-shelf.yt-uix-shelfslider .yt-shelf-grid-item{
+    width:210px;
+	margin-right:4px
+  }
+  [ly^="h"][super-scaled-ui] #c4-shelves-container .fluid-shelf.yt-uix-shelfslider .yt-shelf-grid-item{
+    width:196px
+  }
+  [skybird][skybird-cards] .cardified-page .home .feed-item-container{
+    width:1736px
+  }
+}
+@media screen and (min-width: 3200px){
+  [super-scaled-ui][modern-cards] .site-center-aligned.flex-width-enabled #page:not(.watch) #content{
+    width:2090px;
+	max-width:2090px;
+    min-width:2090px
+  }
+  [super-scaled-ui][modern-styles] #page.channel .branded-page-v2-primary-col {
+    max-width:1880px;
+	min-width:1880px;
+    width:1880px
+  }
+  [super-scaled-ui][exp-polymer-channels] #c4-primary-header-contents,
+  [super-scaled-ui][exp-polymer-channels] #channel-subheader,
+  [super-scaled-ui][exp-polymer-channels] .channel .branded-page-v2-col-container,
+  [super-scaled-ui][poly-styles]:not([exp-rich-grid-home]) .site-center-aligned.flex-width-enabled #page:not(.watch):not(.channel) #content,
+  [super-scaled-ui][poly-styles]:not([exp-rich-grid-home]) .site-center-aligned.flex-width-enabled #page.home #content{
+    width:2142px;
+    min-width:2142px
+  }
+  [skybird][skybird-cards] .cardified-page .home .feed-item-container{
+    width:2172px
+  }
+}
+body.legacy-color.dark-mode,
+.dark-mode.exp-not-top-guide-fixed.legacy-color #guide-main,
+.dark-mode.legacy-color #watch7-sidebar,
+.dark-mode.exp-not-top-guide-fixed.legacy-color #watch-context-container{
+  background:#050505!important
+}
+
 
 
 .banner-promo-renderer{
@@ -36261,4 +37682,3 @@ async function actionFile(file){
 	window.location.reload();
 }
 })();
-
