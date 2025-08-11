@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.5.0.2
+// @version      2.5.0.21
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,11 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.5.0 Beta 2";
+let currStarVer="2.5.0 Beta 2 Patch 1";
     let updateStarVer="2.5.0";
 let currStarChan="Beta";
-    let currStarDetails="Standard Beta Release";
-let STUID="st250b2";
+    let currStarDetails="Patch Beta Release";
+let STUID="st250b21";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -826,6 +826,14 @@ astroSettings:`
 											    </a>
                                             </div>
                                             <div id="st-changelog">
+                                                <div class="st-cl-sect">
+                                                    <div class="st-cl">
+                                                         <b>StarTube 2.5.0 Beta 2 Patch 1 Changelog:</b>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed miniplayer position</span>
+                                                    </div>
+                                                </div>
                                                 <div class="st-cl-sect">
                                                 <div class="st-cl">
                                                     <b>StarTube 2.5.0 Beta 2 Changelog:</b>
@@ -6837,20 +6845,20 @@ function finishVideoSize(){
 		newElem2.id = "st-sizerule-style-2";
 		newElem2.innerHTML = `
 		<style>
-		[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #player,
+		[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned .watch #player,
         [data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #st-watch-above-container,
 		[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content{
 			width:${fullWidth}px!important
 		}
 		@media screen and (min-width: ${SR2W}px) and (min-height: ${SR2H}px){
-			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #player,
+			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned .watch #player,
             [data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #st-watch-above-container,
 			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content{
 				width:${fullWidth}px!important
 			}
 		}
 		@media screen and (min-width: ${SR3W}px) and (min-height: ${SR3H}px){
-			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #player,
+			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned .watch #player,
             [data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #st-watch-above-container,
 			[data-player-size="small"] .appbar-flexwatch-mini.site-center-aligned #page.watch #content{
 				width:${fullWidth}px!important
