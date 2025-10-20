@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.5.0.21
+// @version      2.5.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,11 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.5.0 Beta 2 Patch 1";
-    let updateStarVer="2.5.0";
+let currStarVer="2.5.1";
+    let updateStarVer="2.5.1";
 let currStarChan="Beta";
-    let currStarDetails="Patch Beta Release";
-let STUID="st250b21";
+    let currStarDetails="Minor Release";
+let STUID="st251b";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -826,6 +826,20 @@ astroSettings:`
 											    </a>
                                             </div>
                                             <div id="st-changelog">
+                                                <div class="st-cl-sect">
+                                                    <div class="st-cl">
+                                                         <b>StarTube 2.5.1 Changelog:</b>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed channel playlists page on channels3</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed trending column not showing up on 2012</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed videos watched now not showing up on 2008</span>
+                                                    </div>
+                                                </div>
                                                 <div class="st-cl-sect">
                                                     <div class="st-cl">
                                                          <b>StarTube 2.5.0 Beta 2 Patch 1 Changelog:</b>
@@ -9269,7 +9283,7 @@ function everyLoadNeo(x){
         }
     }
 	function fillVWN(result){
-		let shelf = result.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[3].itemSectionRenderer.contents[0].shelfRenderer.content.expandedShelfContentsRenderer.items;
+		let shelf=result.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[1].itemSectionRenderer.contents[0].shelfRenderer.content.expandedShelfContentsRenderer.items;
         let nTT=0;
         let nPage=0;
 		shelf.forEach(i => {
@@ -11647,7 +11661,7 @@ Search
 	</span>
   </span></span><span class="sidebar"><span class="video-count-wrapper yt-valign">
 	<span class="video-count-block yt-valign-container">
-		<span class="count-label"> ${i.videoCountShortText.simpleText} </span>
+		<span class="count-label"> ${i.videoCount} </span>
 		<span class="text-label">  videos </span>
 	</span>
   </span><span class="side-thumbs"><span class="sidethumb"><span class="video-thumb yt-thumb yt-thumb-43"><span class="yt-thumb-default">
@@ -11679,10 +11693,10 @@ Search
 	  </span>
 	</span>
   </span></span></span></span></span><span class="yt-pl-thumb-overlay"><span class="yt-pl-thumb-overlay-content"><img src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif">Play all</span></span></span></a></div><div class="yt-lockup-content"><h3 class="yt-lockup-title">
-<a class="yt-uix-sessionlink yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 g-hovercard" dir="ltr" title="${i.title.runs[0].text}" href="/playlist?list=${i.playlistId}"><span class="yt-ui-ellipsis-wrapper">${i.title.runs[0].text}</span></a>
+<a class="yt-uix-sessionlink yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 g-hovercard" dir="ltr" title="${i.title.simpleText}" href="/playlist?list=${i.playlistId}"><span class="yt-ui-ellipsis-wrapper">${i.title.simpleText}</span></a>
 </h3>
 <div class="yt-lockup-meta yt-ui-ellipsis yt-ui-ellipsis-2"><ul class="yt-lockup-meta-info">
-<li class="view-count-stat">${i.videoCountShortText.simpleText} videos</li>
+<li class="view-count-stat">${i.videoCount} videos</li>
 <li class="yt-lockup-deemphasized-text"></li></ul></div>
 </div></div>
 				`;
@@ -16355,7 +16369,7 @@ border-width: 12px;
 		}
 	}
 	function fillThirdCol(result){
-		let shelf = result.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[3].itemSectionRenderer.contents[0].shelfRenderer.content.expandedShelfContentsRenderer.items;
+		let shelf=result.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[1].itemSectionRenderer.contents[0].shelfRenderer.content.expandedShelfContentsRenderer.items;
 		shelf.forEach(i => {
 			if(i.videoRenderer){
 				createRenderer(i.videoRenderer, "thirdColCompactVideo");
