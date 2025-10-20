@@ -129,7 +129,7 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
     let isPopstate=false;
     var SRS = "";
 let currStarVer="2.5.1";
-    let updateStarVer="2.5.1";
+    let updateStarVer="2.5.0";
 let currStarChan="Beta";
     let currStarDetails="Minor Release";
 let STUID="st251b";
