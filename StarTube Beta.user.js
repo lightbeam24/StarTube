@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.5.1
+// @version      2.5.2
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,11 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.5.1";
+let currStarVer="2.5.2";
     let updateStarVer="2.5.0";
 let currStarChan="Beta";
     let currStarDetails="Minor Release";
-let STUID="st251b";
+let STUID="st252b";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -826,6 +826,17 @@ astroSettings:`
 											    </a>
                                             </div>
                                             <div id="st-changelog">
+                                                <div class="st-cl-sect">
+                                                    <div class="st-cl">
+                                                         <b>StarTube 2.5.2 Changelog:</b>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Improved 2012 dark mode</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed some icons not showing up for UK users by hosting the images on GitHub</span>
+                                                    </div>
+                                                </div>
                                                 <div class="st-cl-sect">
                                                     <div class="st-cl">
                                                          <b>StarTube 2.5.1 Changelog:</b>
@@ -16796,20 +16807,20 @@ border-width: 12px;
 	function doGuideIcons(ver){
 		if($("#UCBR8-60-B28hp2BmDPdntcQ-guide-item")){
 			if(ver == "ringo2"){
-				$("#UCF0pVplsI8R5kcAqgtoRqoA-guide-item img").src = "https://i.imgur.com/6NRPiW1.png";
-				$("#UC-9-kyTW8ZkZNDHQJ6FgpwQ-guide-item img").src = "https://i.imgur.com/z65iHM4.png";
-				$("#UCEgdi0XIXXZ-qJOFPf4JSKw-guide-item img").src = "https://i.imgur.com/xCXGcco.png";
-				$("#UCOpNcN46UbXVtpKMrmU4Abg-guide-item img").src = "https://i.imgur.com/2S7spgr.png";
-				$("#UCtFRv9O2AHqOZjjynzrv-xg-guide-item img").src = "https://i.imgur.com/WEYb4Je.png";
+				$("#UCF0pVplsI8R5kcAqgtoRqoA-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2trending.png";
+				$("#UC-9-kyTW8ZkZNDHQJ6FgpwQ-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2music.png";
+				$("#UCEgdi0XIXXZ-qJOFPf4JSKw-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2sports.png";
+				$("#UCOpNcN46UbXVtpKMrmU4Abg-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2gaming.png";
+				$("#UCtFRv9O2AHqOZjjynzrv-xg-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2learning.png";
 				$("#FEcourses_destination-guide-item").style.display = "none";
-				$("#UCl8dMTqDrJQ0c8y23UBu4kQ-guide-item img").src = "https://i.imgur.com/sM8bYeQ.png";
-				$("#UCrpQ4p1Ql_hG8rKXIKM1MOQ-guide-item img").src = "https://i.imgur.com/BwhY9NF.png";
-				$("#UCYfdidRxbB8Qhf0Nx7ioOYw-guide-item img").src = "https://i.imgur.com/RGO0bQS.png";
-				$("#UC4R8DWoMoI7CAwX8_LjQHig-guide-item img").src = "https://i.imgur.com/fFvuFdW.png";
-				$("#UCzuqhhs6NWbgTzMuM09WKDQ-guide-item img").src = "https://i.imgur.com/ye0eloE.png";
+				$("#UCl8dMTqDrJQ0c8y23UBu4kQ-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2movies.png";
+				$("#UCrpQ4p1Ql_hG8rKXIKM1MOQ-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2fashion.png";
+				$("#UCYfdidRxbB8Qhf0Nx7ioOYw-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2news.png";
+				$("#UC4R8DWoMoI7CAwX8_LjQHig-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2live.png";
+				$("#UCzuqhhs6NWbgTzMuM09WKDQ-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2vr.png";
 				$("#UCkYQyvc_i9hXEo4xic9Hh2g-guide-item").style.display = "none";
-				$("#FEpodcasts_destination-guide-item img").src = "https://i.imgur.com/swfIYE2.png";
-				$("#UCBR8-60-B28hp2BmDPdntcQ-guide-item img").src = "https://i.imgur.com/2tYVrgH.jpeg";
+				$("#FEpodcasts_destination-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2podcasts.png";
+				$("#UCBR8-60-B28hp2BmDPdntcQ-guide-item img").src = "https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r1spotlight.jpeg";
 				$("#UCBR8-60-B28hp2BmDPdntcQ-guide-item img").style.filter = "hue-rotate(-14.6deg)";
 			}
 		}
@@ -16932,17 +16943,17 @@ border-width: 12px;
 				.st-sth .stargazer-logo-container #logo {
 				  width: 132px;
 				  height: 63px;
-				  background: white url(https://i.imgur.com/H1vl8Kv.gif) no-repeat scroll 0px 0px;
+				  background: white url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz1.gif) no-repeat scroll 0px 0px;
 				}
 				.st-sbh .stargazer-logo-container #logo {
 				  width: 84px;
 				  height: 33px;
-				  background: white url(https://i.imgur.com/nLJSI0w.png) no-repeat scroll 0px 0px;
+				  background: white url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz2.png) no-repeat scroll 0px 0px;
 				}
 				.st-ssh .stargazer-logo-container #logo {
 				  width: 110px;
 				  height: 54px;
-				  background: white url(https://i.imgur.com/fwAEpzc.png) no-repeat scroll 0px 0px;
+				  background: white url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz3.png) no-repeat scroll 0px 0px;
 				}
 				.stargazer-logo-companion{
 margin-left:6px;
@@ -16961,7 +16972,7 @@ padding:0 0 1px 6px;
 margin-left:6px
 }
 .stargazer-slogan{
-background:transparent url(https://i.imgur.com/fwAEpzc.png) repeat-x scroll 0 -45px;
+background:transparent url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz3.png) repeat-x scroll 0 -45px;
 width:125px;
 height:11px;
 margin:2px 2px 3px 2px;
@@ -17280,10 +17291,10 @@ display:block;
 content:"";
 width:5px;
 height:37px;
-background:transparent url(https://i.imgur.com/H1vl8Kv.gif) repeat-x scroll -132px 0;
+background:transparent url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz1.gif) repeat-x scroll -132px 0;
 }
 .st-sth .stargazer-header-lower::after {
-background:transparent url(https://i.imgur.com/H1vl8Kv.gif) repeat-x scroll -137px 0;
+background:transparent url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz1.gif) repeat-x scroll -137px 0;
 }*/
 .st-sth .stargazer-header-lower-inner {
 width:100%
@@ -17415,7 +17426,7 @@ height:25px !important;
 border-left:none !important
 }
 #stargazer-upload-dropdown span{
-background: url(https://i.imgur.com/fwAEpzc.png) no-repeat -80px center;
+background: url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz3.png) no-repeat -80px center;
 width:25px;
 height:12px;
 display:block
@@ -20306,7 +20317,7 @@ transform:translateX(0)
 margin-left: auto;
 }
 .astro-refresh-button {
-background: no-repeat url(https://i.imgur.com/Egx3tJi.png);
+background: no-repeat url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/arefresh.png);
 width: 24px;
 height: 24px;
 background-size: 14px 14px;
@@ -21665,7 +21676,8 @@ html {
 --333text:#333;
 --f1f1f1:#f1f1f1;
 --ccc:#ccc;
---spec-menu-bg:rgba(255,255,255,0.98)
+--spec-menu-bg:rgba(255,255,255,0.98);
+--ddd:#ddd
 }
 [dark] {
 --fpl:rgba(255,255,255,0.05);
@@ -21680,7 +21692,8 @@ html {
 --333text:#fff;
 --f1f1f1:#222;
 --ccc:#333;
---spec-menu-bg:rgba(33,33,33,0.98)
+--spec-menu-bg:rgba(33,33,33,0.98);
+--ddd:#222
 }
 [exp-roboto] {
 --bold: 500;
@@ -21999,7 +22012,7 @@ background: none !important;
 }
 [cosmic-styles] #watch7-sidebar-contents .autoplay-bar .watch-sidebar-head,
 [cosmic-styles] .new .watch-sidebar-head {
-color: #333 !important;
+color:var(--333) !important;
 }
 [cosmic-buttons] #related-tabs {
 padding-left: 20px;
@@ -22394,7 +22407,7 @@ width:34px!important
 }
 [ringo2]:not([exp-polymer-shell]) .dark-mode #yt-masthead #logo-container::after,
 [ringo2]:not([exp-polymer-shell]) .dark-mode #footer-logo::after{
-background:no-repeat url(https://i.imgur.com/g5wUhra.png);
+background:no-repeat url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2logo.png);
 background-size:100px 30px;
 background-position:-34px;
 filter:invert(1)
@@ -22795,7 +22808,7 @@ color:#f03!important
 }
 [ringo2][exp-invert-logo] #yt-masthead #logo-container #logo,
 [ringo2][exp-invert-logo] body #footer-logo img{
-background-image:url(https://i.imgur.com/g5wUhra.png)!important
+background-image:url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/r2logo.png)!important
 }
 [ringo2]:not([exp-invert-logo]) #stargazer-header #logo,
 [ringo2]:not([exp-invert-logo]) #yt-masthead #logo-container #logo,
@@ -24188,11 +24201,16 @@ height: 81px;
 background: none;
 border: none;
 }
-[topbar="cosmic"] #yt-masthead #logo-container #logo {
+[topbar="cosmic"] #yt-masthead #logo-container #logo{
 display: block;
-background: no-repeat url(https://s.ytimg.com/yt/imgbin/www-refresh-vflMLqC23.png) -114px -51px;
+background: no-repeat url(https://s.ytimg.com/yt/imgbin/www-refresh-vflMLqC23.png) -114px -51px !important;
 width: 100px;
 height: 40px;
+}
+[topbar="epic"] .dark-mode #yt-masthead #logo-container #logo,
+[topbar="cosmic"] .dark-mode #yt-masthead #logo-container #logo{
+background:url(https://s.ytimg.com/yt/img/doodles/earth_hour_sprite-vflQCGwng.png) 0 -40px no-repeat !important;
+width:78px;
 }
 [topbar="epic"] #yt-masthead #logo-container #logo {
 background: no-repeat url(https://s.ytimg.com/yt/imgbin/www-refresh-vflIJtcPd.png) -102px 0;
@@ -24206,6 +24224,9 @@ margin-right: -20px !important;
 [topbar="cosmic"] #yt-masthead #logo-container span.content-region {
 left: 96px;
 }
+[topbar="cosmic"] .dark-mode #yt-masthead #logo-container span.content-region{
+left:80px
+}
 [topbar="epic"] #yt-masthead #logo-container span.content-region {
 left: 76px;
 }
@@ -24216,13 +24237,11 @@ height: 60px;
 [topbar="cosmic"][static] #yt-masthead-container {
 padding: 10px 0;
 }
-[topbar="cosmic"] #yt-masthead #masthead-search-terms {
-height: 32px;
-border-radius: 3px 0 0 3px;
-}
-[topbar="cosmic"] #yt-masthead #masthead-search-terms {
-border: 1px solid #ccc;
-box-shadow: inset 0 1px 2px #eee;
+[topbar="cosmic"] #yt-masthead #masthead-search-terms{
+height:32px;
+border-radius:3px 0 0 3px;
+border:1px solid var(--ccc);
+box-shadow:inset 0 1px 2px var(--eee)
 }
 [topbar="cosmic"] #yt-masthead #search-btn {
 height: 32px;
@@ -24267,14 +24286,14 @@ border-top-color: #555;
 [cosmic-bg] .distiller_yt_headline{
 background:url('https://s.ytimg.com/yt/img/refresh/body_noise_2x-vflQP8XB1.png')
 }
-[cosmic-bg][dark] #body-container,
-[cosmic-bg][dark] body,
-[cosmic-bg][dark] #watch7-headline,
-[cosmic-bg][dark] #watch7-user-header,
-[cosmic-bg][dark] #watch7-content,
-[cosmic-bg][dark] .distiller_yt_instance,
-[cosmic-bg][dark] .distiller_yt_headline{
-background:url(https://s.ytimg.com/yt/img/earthhour/www-refreshbg-vflQx0YnW.png)
+[cosmic-bg] .dark-mode #body-container,
+[cosmic-bg] .dark-mode,
+[cosmic-bg] .dark-mode #watch7-headline,
+[cosmic-bg] .dark-mode #watch7-user-header,
+[cosmic-bg] .dark-mode #watch7-content,
+[cosmic-bg] .dark-mode .distiller_yt_instance,
+[cosmic-bg] .dark-mode .distiller_yt_headline{
+background:url(https://s.ytimg.com/yt/img/earthhour/www-refreshbg-vflQx0YnW.png)!important
 }
 [cosmic-bg] #watch7-action-buttons {
 border-top: 1px solid #ccc;
@@ -24294,23 +24313,56 @@ background: none !important;
 z-index: unset;
 }
 
+[cosmic-buttons] .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default,
 [cosmic-buttons] .yt-uix-button-default:not(.astro-filter-button),
 [cosmic-buttons] .yt-uix-button-default[disabled],
 [cosmic-buttons] .yt-uix-button-default[disabled]:hover,
 [cosmic-buttons] .yt-uix-button-default[disabled]:active,
 [cosmic-buttons] .yt-uix-button-default[disabled]:focus {
-border-color: #ccc #ccc #aaa !important;
-box-shadow: inset 0 0 1px #fff;
-background: linear-gradient(to bottom,#fafafa 0,#dcdcdc 100%);
-color: #555;
-text-shadow: 0 1px 0 #fff;
+border-color:#ccc #ccc #aaa !important;
+box-shadow:inset 0 0 1px #fff;
+background:linear-gradient(to bottom,#fafafa 0,#dcdcdc 100%);
+color:#555;
+text-shadow:0 1px 0 #fff
 }
+[cosmic-buttons] .dark-mode .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default,
+[cosmic-buttons] .dark-mode .yt-uix-button-default:not(.astro-filter-button),
+[cosmic-buttons] .dark-mode .yt-uix-button-default[disabled],
+[cosmic-buttons] .dark-mode .yt-uix-button-default[disabled]:hover,
+[cosmic-buttons] .dark-mode .yt-uix-button-default[disabled]:active,
+[cosmic-buttons] .dark-mode .yt-uix-button-default[disabled]:focus,
+[cosmic-buttons] .dark-mode [wl^="w5"]:not([wl="w5c"]):not([layout^="aozora"]):not([layout^="stargazer"]) .watch .yt-uix-button-subscribe-branded,
+[cosmic-buttons] .dark-mode [wl^="w5"]:not([wl="w5c"]):not([layout^="aozora"]):not([layout^="stargazer"]) .watch .yt-uix-button-subscribed-branded,
+[cosmic-buttons][notif-square] body.dark-mode #yt-masthead-user #sb-button-notify.sb-notif-off .yt-uix-button-content,
+[cosmic-buttons] .dark-mode [wl^="w5"]:not([wl="w5c"]) .st-owner .yt-user-name,
+[cosmic-buttons] .dark-mode [wl^="w5"]:not([wl="w5c"]) #watch-like,
+[cosmic-buttons] .dark-mode [wl^="w5"]:not([wl="w5c"]) #watch-dislike,
+[cosmic-buttons][exp-epic-watch7] .dark-mode .watch .yt-uix-button-subscribe-branded,
+[cosmic-buttons][exp-epic-watch7] .dark-mode .watch .yt-uix-button-subscribed-branded,
+[cosmic-buttons][exp-epic-watch7] .dark-mode #watch7-user-header .yt-user-name,
+[cosmic-buttons][exp-epic-watch7] .dark-mode #watch7-action-buttons:hover #watch-like,
+[cosmic-buttons][exp-epic-watch7] .dark-mode #watch7-action-buttons:hover #watch-dislike{
+border-color:#333 #333 #444 !important;
+box-shadow:inset 0 0 1px #0004 !important;
+background:linear-gradient(to bottom,#262626 0,#181818 100%) !important;
+color:#eee;
+text-shadow:0 1px 0 #000
+}
+[cosmic-buttons] .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default:hover,
 [cosmic-buttons] .yt-uix-button-default:not(.astro-filter-button):hover,
 [cosmic-buttons] .yt-uix-button-text:hover {
 border-color: #aaa #aaa #999 !important;
 box-shadow: 0 1px 2px rgba(0,0,0,0.25),inset 0 0 3px #fff;
 background: linear-gradient(to bottom,#f0f0f0 0,#e6e6e6 100%);
 }
+[cosmic-buttons] .dark-mode .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default:hover,
+[cosmic-buttons] .dark-mode .yt-uix-button-default:not(.astro-filter-button):hover,
+[cosmic-buttons] .dark-mode .yt-uix-button-text:hover{
+border-color:#444 #444 #666 !important;
+box-shadow:0 1px 2px rgba(0,0,0,0.25),inset 0 0 3px #0004;
+background:linear-gradient(to bottom,#262626 0,#1c1c1c 100%) !important
+}
+[cosmic-buttons] .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default:focus,
 [cosmic-buttons] [wl^="w5d"] #st-watch-above .yt-uix-button-default.yt-uix-button-toggled,
 [cosmic-buttons] [wl^="w5d"] #st-watch-below .yt-uix-button-default.active,
 [cosmic-buttons] .yt-uix-button-default:not(.astro-filter-button):active {
@@ -24318,24 +24370,16 @@ border-color: #888 #aaa #ccc !important;
 box-shadow: inset 0 1px 5px rgba(0,0,0,0.25),0 1px 0 #fff !important;
 background: linear-gradient(to bottom,#c8c8c8 0,#e6e6e6 100%);
 }
+[cosmic-buttons] .dark-mode .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default:focus,
+[cosmic-buttons] .dark-mode [wl^="w5d"] #st-watch-above .yt-uix-button-default.yt-uix-button-toggled,
+[cosmic-buttons] .dark-mode [wl^="w5d"] #st-watch-below .yt-uix-button-default.active,
+[cosmic-buttons] .dark-mode .yt-uix-button-default:not(.astro-filter-button):active{
+border-color:#555 #444 #333 !important;
+box-shadow:inset 0 1px 5px rgba(0,0,0,0.25),0 1px 0 #0004 !important;
+background:linear-gradient(to bottom,#242424 0,#131313 100%) !important
+}
 [cosmic-buttons] #watch7-secondary-actions .yt-uix-button-default {
 box-shadow: none !important;
-}
-[cosmic-buttons] .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default {
-border: 1px solid;
-border-color: #ccc #ccc #aaa !important;
-box-shadow: inset 0 0 1px #fff;
-background-image: linear-gradient(to bottom,#fafafa 0,#dcdcdc 100%) !important;
-}
-[cosmic-buttons] .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default:hover {
-border-color: #aaa #aaa #999 !important;
-box-shadow: 0 1px 2px rgba(0,0,0,0.25),inset 0 0 3px #fff;
-background-image: linear-gradient(to bottom,#f0f0f0 0,#e6e6e6 100%) !important;
-}
-[cosmic-buttons] .watch .continuation_item_wrapper .yt-uix-button.yt-uix-button-default:focus {
-border-color: #888 #aaa #ccc !important;
-box-shadow: inset 0 1px 5px rgba(0,0,0,0.25),0 1px 0 #fff;
-background-image: linear-gradient(to bottom,#c8c8c8 0,#e6e6e6 100%) !important;
 }
 [exp-epic-styling] html,
 [exp-epic-styling] body {
@@ -24577,8 +24621,8 @@ display: none;
 margin: 0;
 position: relative;
 height: 0;
-border-top: 1px solid #ddd;
-border-bottom: 1px solid #fff;
+border-top: 1px solid var(-ddd);
+border-bottom: 1px solid var(--fff);
 margin: 25px 0;
 }
 [cosmic-bg] .yt-uix-shelfslider-body {
@@ -25338,10 +25382,10 @@ border-radius: 2px;
 transition: background .15s ease-in-out;
 }
 [cosmic-styles] .yt-shelf-grid-item:hover,
-[cosmic-styles] .video-list-item:hover a {
-background: #fff !important;
-border-bottom-color: #ccc !important;
-transition: none;
+[cosmic-styles] .video-list-item:hover a{
+background:var(--fff) !important;
+border-bottom-color:var(--ccc) !important;
+transition:none
 }
 [cosmic-styles] .video-list-item:hover a .title {
 color: #1c62b9 !important;
@@ -30719,7 +30763,7 @@ color:var(--03c)
 }
 [exp-epic-styling] #aozora-topbar-links .aozora-topbar-link,
 [cosmic-styles] #aozora-topbar-links .aozora-topbar-link{
-color:#333
+color:var(--333)
 }
 html:not([static]):not([exp-centered-search]):not([exp-polymer-shell]) #aozora-topbar-links{
 position:absolute;
@@ -31103,7 +31147,7 @@ padding-top:5px;
 font-size:16px
 }
 [cosmic-styles] .result-list .yt-lockup-title a{
-color:#333
+color:var(--333)
 }
 [cosmic-styles] .result-list .yt-lockup-tile:hover .yt-lockup-title a{
 color:#1c62b9
@@ -34563,7 +34607,7 @@ background:var(--tpl);
   font-weight:var(--bold)
 }
 .st-watch-tab .st-watch-tab-arrow{
-  background:url(https://i.imgur.com/bnjfLEE.png);
+  background:url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz2.png);
   background-position:0 -133px;
   display:inline-block;
   width:21px;
@@ -34585,7 +34629,7 @@ background:var(--tpl);
 }
 .st-watch-tab-icon{
   margin-right:5px;
-  background:url(https://i.imgur.com/bnjfLEE.png);
+  background:url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz2.png);
   background-position:-59px -228px;
   width:25px;
   display:block;
@@ -34617,7 +34661,7 @@ background:var(--tpl);
   background-position:-91px -247px
 }
 [wl="w4a"] #st-share-tab .st-watch-tab-icon{
-  background:transparent url(https://i.imgur.com/w3ZxnEj.gif) no-repeat scroll -326px 0
+  background:transparent url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz1.gif) no-repeat scroll -326px 0
 }
 [wl="w4a"] #st-share-tab.active .st-watch-tab-icon,
 [wl="w4a"] #st-share-tab:hover .st-watch-tab-icon{
@@ -34712,7 +34756,7 @@ background:var(--tpl);
   margin-left:0
 }
 .st-side-panel-icon{
-  background:url(https://i.imgur.com/bnjfLEE.png);
+  background:url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz2.png);
   background-position:0 -342px;
   width:16px;
   height:16px;
@@ -34810,7 +34854,7 @@ background:var(--tpl);
   max-height:70px
 }
 .st-stars-object{
-  background:url(https://i.imgur.com/bnjfLEE.png);
+  background:url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/stgz2.png);
   background-position:-19px -431px;
   position:relative;
   z-index:10
@@ -35614,7 +35658,7 @@ border-color:#b6d0f7 !important;
 [aozora-styles] .st-video-dd-trigger img{
 height:16px;
 width:16px;
-background:no-repeat url(https://i.imgur.com/UyWGgMH.png) -17px -167px;
+background:no-repeat url(https://raw.githubusercontent.com/lightbeam24/StarTube/refs/heads/main/images/aoz.png) -17px -167px;
 vertical-align:middle;
 float:right;
 margin:0;
