@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube
 // @namespace    http://tampermonkey.net/
-// @version      2.5.2
+// @version      2.5.2.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -128,11 +128,11 @@ GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.5.2";
+let currStarVer="2.5.2.1";
     let updateStarVer="2.5.0";
 let currStarChan="Stable";
     let currStarDetails="Minor Release";
-let STUID="st252s";
+let STUID="st2521s";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -826,6 +826,14 @@ astroSettings:`
 											    </a>
                                             </div>
                                             <div id="st-changelog">
+                                                <div class="st-cl-sect">
+                                                    <div class="st-cl">
+                                                         <b>StarTube 2.5.2.1 Changelog:</b>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed Watch7 icon issue, where icons would be gone in base V3 if you disabled StarTube</span>
+                                                    </div>
+                                                </div>
                                                 <div class="st-cl-sect">
                                                     <div class="st-cl">
                                                          <b>StarTube 2.5.2 Changelog:</b>
@@ -5995,6 +6003,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.APPBAR_GUIDE_PINNING = true;
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = false;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = false;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = true;
@@ -6030,6 +6039,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.APPBAR_GUIDE_PINNING = true;
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = false;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = false;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = true;
@@ -6064,6 +6074,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.APPBAR_GUIDE_PINNING = true;
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = false;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = false;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = false;
@@ -6095,6 +6106,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.APPBAR_GUIDE_PINNING = true;
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = true;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = false;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = false;
@@ -6126,6 +6138,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.APPBAR_GUIDE_PINNING = false;
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = false;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = false;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = false;
@@ -6177,6 +6190,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = true;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS = false;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = false;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = true;
@@ -6211,6 +6225,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = true;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS = false;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = true;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = true;
@@ -6246,6 +6261,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = true;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS = false;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = true;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = true;
@@ -6281,6 +6297,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = true;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS = false;
 		V3_SETTINGS_CONF.INDIVIDUAL_CARDS_WATCH = true;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = false;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = true;
@@ -6313,6 +6330,7 @@ function setV3Settings(preset){
 		V3_SETTINGS_CONF.NEW_APPBAR_GUIDE_ICONS = true;
 		V3_SETTINGS_CONF.APPBAR_GUIDE_PINNING = true;
 		V3_SETTINGS_CONF.CARDIFIED_PAGE = false;
+        V3_SETTINGS_CONF.WATCH7_HIDE_ACTION_PANEL_TITLES = false;
 		V3_SETTINGS_CONF.WATCH7_ACTION_PANELS_USE_ICONS = false;
 		V3_SETTINGS_CONF.WATCH7_TEXT_RATING = true;
 		V3_SETTINGS_CONF.MASTHEAD_APPBAR_FUSION = true;
