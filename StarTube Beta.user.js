@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.5.2.1
+// @version      2.5.2.2
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -124,15 +124,18 @@ window.addEventListener("keydown", function(){
 GM_registerMenuCommand("Open StarTube settings",showHideSettings);
 GM_registerMenuCommand("Reset StarTube settings",resetSettings);
 GM_registerMenuCommand("Load page without V3",loadWithoutV3);
+if (window.wrappedJSObject) {
+    window.yt ||= window.wrappedJSObject.yt;
+}
 (function(){
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.5.2.1";
+let currStarVer="2.5.2.2";
     let updateStarVer="2.5.0";
 let currStarChan="Beta";
     let currStarDetails="Patch Release (Aligned With Stable Channel)";
-let STUID="st2521b";
+let STUID="st2522b";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -826,6 +829,14 @@ astroSettings:`
 											    </a>
                                             </div>
                                             <div id="st-changelog">
+                                                <div class="st-cl-sect">
+                                                    <div class="st-cl">
+                                                         <b>StarTube 2.5.2.2 Changelog:</b>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed Pale Moon support</span>
+                                                    </div>
+                                                </div>
                                                 <div class="st-cl-sect">
                                                     <div class="st-cl">
                                                          <b>StarTube 2.5.2.1 Changelog:</b>
