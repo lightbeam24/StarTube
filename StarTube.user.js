@@ -124,6 +124,7 @@ window.addEventListener("keydown", function(){
 GM_registerMenuCommand("Open StarTube settings",showHideSettings);
 GM_registerMenuCommand("Reset StarTube settings",resetSettings);
 GM_registerMenuCommand("Load page without V3",loadWithoutV3);
+window.yt ||= window.wrappedJSObject.yt;
 (function(){
 'use strict';
     let isPopstate=false;
