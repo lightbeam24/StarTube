@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.5.3
+// @version      2.6.0.10
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -131,11 +131,11 @@ if (window.wrappedJSObject) {
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.5.3";
-    let updateStarVer="2.5.0";
+let currStarVer="2.6.0 Beta 1";
+    let updateStarVer="2.6.0";
 let currStarChan="Beta";
-    let currStarDetails="Patch Release (Aligned With Stable Channel)";
-let STUID="st253b";
+    let currStarDetails="Standard Beta Release";
+let STUID="st260b1";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -408,6 +408,77 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 		}
 	});
 }
+function mobileFetch(condition, type, endpoint, avar, id, modifier, modContent, modifier2, mod2Content){
+    //"clientVersion": "2.20251121.01.00",
+    //"clientVersion": "20.46.37",
+    return new Promise((resolve, reject) => {
+        if(condition){
+            if(type == "nomod"){
+                fetch("https://www.youtube.com/youtubei/v1/" + endpoint + "?key=AIzaSyDCU8hByM-4DrUqRUYnGn-3llEO78bcxq8", {
+                    "headers": {
+						"accept": "application/json, text/plain, /",
+						"accept-language": "en-US,en;q=0.9",
+						"Content-type": "application/json",
+						"sec-ch-ua-mobile": "?0",
+						"sec-fetch-dest": "empty",
+						"sec-fetch-mode": "cors",
+						"sec-fetch-site": "same-origin",
+						"x-goog-authuser": "0",
+						"x-origin": "https://www.youtube.com/"
+					},
+					"referrer": "https://www.youtube.com/",
+					"referrerPolicy": "strict-origin-when-cross-origin",
+					"body": JSON.stringify({
+						"context": {
+							"client": {
+								clientName: "ANDROID",
+                                clientVersion: "20.10.38",
+							}
+						},
+						[avar]: id
+					}),
+					"method": "POST",
+					"mode": "cors",
+					"credentials": "include"
+                }).then(response => response.json()).then(data => {
+                    resolve(data);
+                });
+            }
+            else if(type == "single"){
+                fetch("https://www.youtube.com/youtubei/v1/" + endpoint + "?key=AIzaSyDCU8hByM-4DrUqRUYnGn-3llEO78bcxq8", {
+                    "headers": {
+						"accept": "application/json, text/plain, /",
+						"accept-language": "en-US,en;q=0.9",
+						"Content-type": "application/json",
+						"sec-ch-ua-mobile": "?0",
+						"sec-fetch-dest": "empty",
+						"sec-fetch-mode": "cors",
+						"sec-fetch-site": "same-origin",
+						"x-goog-authuser": "0",
+						"x-origin": "https://www.youtube.com/"
+					},
+					"referrer": "https://www.youtube.com/",
+					"referrerPolicy": "strict-origin-when-cross-origin",
+					"body": JSON.stringify({
+						"context": {
+							"client": {
+								clientName: "ANDROID",
+                                clientVersion: "20.10.38",
+							}
+						},
+						[avar]: id,
+						[modifier]: modContent
+					}),
+					"method": "POST",
+					"mode": "cors",
+					"credentials": "include"
+                }).then(response => response.json()).then(data => {
+                    resolve(data);
+                });
+            }
+        }
+    });
+}
 let usedLang="";
 var langEn={
 upload:"Upload",
@@ -465,6 +536,9 @@ save:{
     f:"M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z",
     o:"M22,13h-4v4h-2v-4h-4v-2h4V7h2v4h4V13z M14,7H2v1h12V7z M2,12h8v-1H2V12z M2,16h8v-1H2V16z"
 },
+bookmark:{
+    o:"M18 4v15.06l-5.42-3.87-.58-.42-.58.42L6 19.06V4h12m1-1H5v18l7-5 7 5V3z"
+},
 more:{
     o:"M7.5,12c0,0.83-0.67,1.5-1.5,1.5S4.5,12.83,4.5,12s0.67-1.5,1.5-1.5S7.5,11.17,7.5,12z M12,10.5c-0.83,0-1.5,0.67-1.5,1.5 s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S12.83,10.5,12,10.5z M18,10.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5 S18.83,10.5,18,10.5z"
 },
@@ -477,6 +551,10 @@ dislike:{
     f:"M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v1.91l.01.01L1 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z",
     o:"M17,4h-1H6.57C5.5,4,4.59,4.67,4.38,5.61l-1.34,6C2.77,12.85,3.82,14,5.23,14h4.23l-1.52,4.94C7.62,19.97,8.46,21,9.62,21 c0.58,0,1.14-0.24,1.52-0.65L17,14h4V4H17z M10.4,19.67C10.21,19.88,9.92,20,9.62,20c-0.26,0-0.5-0.11-0.63-0.3 c-0.07-0.1-0.15-0.26-0.09-0.47l1.52-4.94l0.4-1.29H9.46H5.23c-0.41,0-0.8-0.17-1.03-0.46c-0.12-0.15-0.25-0.4-0.18-0.72l1.34-6 C5.46,5.35,5.97,5,6.57,5H16v8.61L10.4,19.67z M20,13h-3V5h3V13z",
     oa:"M18,4h3v10h-3V4z M5.23,14h4.23l-1.52,4.94C7.62,19.97,8.46,21,9.62,21c0.58,0,1.14-0.24,1.52-0.65L17,14V4H6.57 C5.5,4,4.59,4.67,4.38,5.61l-1.34,6C2.77,12.85,3.82,14,5.23,14z"
+},
+shuffle:{
+    f:"M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z",
+    o:"M18.15,13.65l3.85,3.85l-3.85,3.85l-0.71-0.71L20.09,18H19c-2.84,0-5.53-1.23-7.39-3.38l0.76-0.65 C14.03,15.89,16.45,17,19,17h1.09l-2.65-2.65L18.15,13.65z M19,7h1.09l-2.65,2.65l0.71,0.71l3.85-3.85l-3.85-3.85l-0.71,0.71 L20.09,6H19c-3.58,0-6.86,1.95-8.57,5.09l-0.73,1.34C8.16,15.25,5.21,17,2,17v1c3.58,0,6.86-1.95,8.57-5.09l0.73-1.34 C12.84,8.75,15.79,7,19,7z M8.59,9.98l0.75-0.66C7.49,7.21,4.81,6,2,6v1C4.52,7,6.92,8.09,8.59,9.98z"
 },
 rChev:{
     f:"M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z",
@@ -557,6 +635,7 @@ ST_POLY_OWNER:`
                             <div class="st-owner-title flex-bar">
                                 <span class="st-owner-from st-owner-before-text hid">From: </span>
                                 <span class="st-owner-name"></span>
+                                <a class="st-owner-handle"></a>
                                 <span class="st-owner-icon"></span>
                                 <a class="st-video-count st-video-count-link"></a>
                             </div>
@@ -721,12 +800,12 @@ astroSettings:`
 						<div id="st-astro-layout" class="astro-sidebar-item flex-bar active" p="layout">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Layout</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-misc" class="astro-sidebar-item flex-bar" p="misc">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Misc</span>
-                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-topbar" class="astro-sidebar-item flex-bar" p="topbar">
@@ -742,13 +821,12 @@ astroSettings:`
 						<div id="st-astro-player" class="astro-sidebar-item flex-bar" p="player">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Player</span>
-                                <span class="st-sb-new"></span>
 							</div>
+                            <span class="st-sb-new"></span>
 						</div>
 						<div id="st-astro-watch" class="astro-sidebar-item flex-bar" p="watch">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Watch page</span>
-                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-channel" class="astro-sidebar-item flex-bar" p="channel">
@@ -828,7 +906,33 @@ astroSettings:`
 											    	<span>Reset StarTube config</span>
 											    </a>
                                             </div>
-                                            <div id="st-changelog">
+                                            <div id="st-changelog">\
+                                                <div class="st-cl-sect">
+                                                    <div class="st-cl">
+                                                         <b>StarTube 2.6.0 Beta 1 Changelog:</b>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Added actual 2024 layout option</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Added Ambient Mode</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Playlists are now way more accurate in the Polymer layouts</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-The footer on the Polymer layouts is now on the guide</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Added the hype page, accessible at <a href="/feed/hype_leaderboard">https://www.youtube.com/feed/hype_leaderboard</a></span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-The warning banner that StarTube gives on regular YouTube has been redsigned</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Other fixes and improvements</span>
+                                                    </div>
+                                                </div>
                                                 <div class="st-cl-sect">
                                                     <div class="st-cl">
                                                          <b>StarTube 2.5.3 Changelog:</b>
@@ -1572,7 +1676,7 @@ actionsRow:`
 descTeaserRow:`
 <div id="st-desc-teaser-row" class="st-watch-row st-watch-row-no-padding flex polymer-row st-show-svgs st-wmr-row">
                     <div class="st-desc">
-                        <div class="st-desc-views-info st-views-info flex-bar">
+                        <div class="st-desc-views-info st-watch10-views-info st-views-info flex-bar yt-uix-tooltip">
                             <span class="st-view-count"></span>
                             <span class="st-short-view-count"></span>
                             <span class="st-dot">•</span>
@@ -1618,7 +1722,7 @@ descTeaserRow:`
 descRow:`
 <div id="st-desc-row" class="st-watch-row st-watch-row-no-padding flex-bar">
                     <div class="st-desc">
-                        <div class="st-desc-views-info st-watch10-views-info st-views-info flex-bar">
+                        <div class="st-desc-views-info st-watch10-views-info st-views-info flex-bar yt-uix-tooltip">
                             <span class="st-view-count"></span>
                             <span class="st-short-view-count"></span>
                             <span class="st-dot">•</span>
@@ -2305,7 +2409,7 @@ var defaultConfigs = {
 
 	"STPresetsAlsoSetV3Settings": true,
 
-	"show2point5": true,
+	"show2point6": true,
 
 	"expHideYoodles": false,
 	"expFixedXIcon": true,
@@ -2385,6 +2489,11 @@ var defaultConfigs = {
         },
         rndPlayer:{
             name:"rndPlayer",
+            tValue:"off",
+            visValue:"auto"
+        },
+        ambientMode:{
+            name:"ambientMode",
             tValue:"off",
             visValue:"auto"
         },
@@ -2544,8 +2653,8 @@ function applyNewSettings(){
 	if(STS.configNoCast == null){
 		STS.configNoCast = true;
 	}
-	if(STS.show2point5 == null){
-		STS.show2point5 = true;
+	if(STS.show2point6 == null){
+		STS.show2point6 = true;
 	}
     if(STS.radioSettings.newStructure2==null){
        if(STS.newConfig==false){
@@ -2748,6 +2857,13 @@ function applyNewSettings(){
             visValue:"auto"
         }
     }
+    if(STS.radioSettings.ambientMode==null){
+        STS.radioSettings.ambientMode={
+            name:"ambientMode",
+            tValue:"off",
+            visValue:"auto"
+        }
+    }
     if(STS.radioSettings.rndThumbs==null){
         STS.radioSettings.rndThumbs={
             name:"rndThumbs",
@@ -2845,9 +2961,9 @@ let ScFa={
 		name:"expAdaptiveLayout2024HH",
 		desc:"(For the adaptive layout) Use 2024 Hitchhiker for videos uploaded in 2024 and 2025."
 	},
-	"show2point5":{
-		name:"show2point5",
-		desc:"Show the 2.5.0 update card."
+	"show2point6":{
+		name:"show2point6",
+		desc:"Show the 2.6.0 update card."
 	},
 	"polymerWarningBanner":{
 		name:"polymerWarningBanner",
@@ -3196,6 +3312,11 @@ pages:[
                     },
                     opts:[
                         {opt:{
+                            name:"2024",
+                            value:"amst2024_1",
+                            new:true
+                        }},
+                        {opt:{
                             name:"2024 (Custom ver)",
                             value:"amst2024c"
                         }},
@@ -3460,12 +3581,11 @@ pages:[
 		}},
         {section:{
 			id:"superScale",
-            new:true,
 			title:{
 				text:"Super Scaled UI"
 			},
 			desc:{
-				text:"[BETA] Makes 2014 onwards layouts work better on screens above 1920x1080, namely 2560x1440."
+				text:"Makes 2014 onwards layouts work better on screens above 1920x1080, namely 2560x1440."
 			},
 			opts:[
 				{opt:{
@@ -3941,8 +4061,7 @@ pages:[
 				}},
                 {opt:{
 					name:"2012",
-					value:"cosmic2012",
-                    new:true
+					value:"cosmic2012"
 				}},
                 {opt:{
 					name:"Flash7",
@@ -4066,7 +4185,35 @@ pages:[
 					value:"off"
 				}}
 			]
-		}}
+		}},
+        {section:{
+			id:"ambientMode",
+            new:true,
+			title:{
+				text:"Ambient Mode"
+			},
+			desc:{
+				text:"The colors of the video bleed out of the player."
+			},
+			opts:[
+				{opt:{
+					name:"Auto",
+					value:"auto",
+                    mText:{
+                        text:"Enabled on Amsterdam layouts in dark mode.",
+                        color:"grey"
+                    }
+				}},
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
 	]
 }},
 {page:{
@@ -4095,7 +4242,6 @@ pages:[
                 {opt:{
 					name:"Watch4A (2008)",
 					value:"watch4a",
-                    new:true,
                     mText:{
                         text:"<span>Star ratings, title on top, description on right</span>",
                         color:"normal"
@@ -4403,6 +4549,13 @@ function executeRadios(i, x, K){
 			ST2021Settings();
 			ST2022Settings();
 			STAmsterdamSettings();
+		}else if(x == "amst2024_1"){
+			ST2019Settings();
+			ST2020Settings();
+			ST2021Settings();
+			ST2022Settings();
+			STAmsterdamSettings();
+            ST2024Settings();
 		}else if(x == "amst2023_1"){
 			ST2019Settings();
 			ST2020Settings();
@@ -4615,6 +4768,7 @@ function executeRadios(i, x, K){
 					SRS.layoutSelect.visValue=="poly2022"||
                     SRS.layoutSelect.visValue=="amst2023_1"||
 					SRS.layoutSelect.visValue=="amst2024c"||
+                    SRS.layoutSelect.visValue=="amst2024_1"||
                     SRS.layoutSelect.visValue=="amst2025p"
 				){
 					setV3Settings("flexwatchLarge");
@@ -4790,6 +4944,7 @@ function executeRadios(i, x, K){
 				SRS.layoutSelect.visValue=="poly2022"||
                 SRS.layoutSelect.visValue=="amst2023_1"||
                 SRS.layoutSelect.visValue=="amst2024c"||
+                SRS.layoutSelect.visValue=="amst2024_1"||
                 SRS.layoutSelect.visValue=="amst2025p"
 			){
 				SRS.outlineIcons.tValue="on";
@@ -4817,6 +4972,7 @@ function executeRadiosParent(s){
     executeRadios("appsBtn",s.appsBtn,true);
 	executeRadios("accountMenu",s.accountMenu,true);
     executeRadios("rndPlayer",s.rndPlayer,true);
+    executeRadios("ambientMode",s.ambientMode,true);
 	executeRadios("playerVersion",s.playerVersion,true);
     executeRadios("playerSpinner",s.playerSpinner,true);
 	executeRadios("playerSizerules",s.playerSizerules,true);
@@ -4968,6 +5124,7 @@ function STAltWatch9Fancy(){
         SRS.guideSubsAutoExpand.tValue="on";
         SRS.subsGrid.tValue="grid";
         SRS.rndPlayer.tValue="off";
+        SRS.ambientMode.tValue="off";
         SRS.playerVersion.tValue="modernV1";
         SRS.watchLayout.tValue="watch8";
         SRS.relatedTabs.tValue="off";
@@ -5206,6 +5363,7 @@ function STRingo2(){
         SRS.guideAlwaysPinned.tValue="off";
         SRS.subsGrid.tValue="list";
         SRS.rndPlayer.tValue="off";
+        SRS.ambientMode.tValue="off";
         SRS.playerVersion.tValue="cosmic2012";
         SRS.watchLayout.tValue="watch7beta";
         SRS.relatedTabs.tValue="off";
@@ -5309,6 +5467,7 @@ function STEpicPandaRealSettings(){
         SRS.guideAlwaysPinned.tValue="off";
         SRS.subsGrid.tValue="list";
         SRS.rndPlayer.tValue="off";
+        SRS.ambientMode.tValue="off";
         SRS.playerVersion.tValue="cosmic2012";
         SRS.watchLayout.tValue="watch5d";
         SRS.relatedTabs.tValue="off";
@@ -5406,6 +5565,7 @@ function STAozoraSettings(){
     SRS.logoLink.tValue="home";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
+    SRS.ambientMode.tValue="off";
     SRS.playerVersion.tValue="cosmic2012";
     SRS.watchLayout.tValue="watch5c";
     SRS.relatedTabs.tValue="off";
@@ -5450,6 +5610,7 @@ function STStargazerSettings(){
     SRS.guideSubsAutoExpand.tValue="off";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
+    SRS.ambientMode.tValue="off";
     SRS.playerVersion.tValue="cosmic2012";
     SRS.watchLayout.tValue="watch4b";
     SRS.relatedTabs.tValue="off";
@@ -5553,6 +5714,7 @@ function STStargazer2008Settings(){
     SRS.guideSubsAutoExpand.tValue="off";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
+        SRS.ambientMode.tValue="off";
     SRS.playerVersion.tValue="cosmic2012";
     SRS.watchLayout.tValue="watch4a";
     SRS.relatedTabs.tValue="off";
@@ -5642,6 +5804,7 @@ function ST2019Settings(){
     SRS.guideSubsAutoExpand.tValue="off";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
+    SRS.ambientMode.tValue="off";
     SRS.playerVersion.tValue="modernV2";
     SRS.watchLayout.tValue="watch9a";
     SRS.relatedTabs.tValue="off";
@@ -5810,6 +5973,7 @@ function STAmsterdamSettings(){
     SRS.appsBtn.tValue="off";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="on";
+    SRS.ambientMode.tValue="on";
     SRS.playerVersion.tValue="modernV4";
     SRS.compactDate.tValue="off";
     SRS.compactName.tValue="off";
@@ -5824,6 +5988,15 @@ function STAmsterdamSettings(){
     STS.expCreateIcon=false;
 
 	if(STS.STPresetsAlsoSetV3Settings == true){
+		setV3Settings("poly17");
+	}
+}
+function ST2024Settings(){
+    SRS.layoutSelect.tValue="amst2024_1";
+    SRS.frostedGlass.tValue="on";
+    SRS.watchLayout.tValue="watch10";
+    STS.expBlackSubscribe=true;
+    if(STS.STPresetsAlsoSetV3Settings == true){
 		setV3Settings("poly17");
 	}
 }
@@ -5870,6 +6043,7 @@ function ST2025Settings(){
         SRS.guideSubsAutoExpand.tValue="off";
         SRS.subsGrid.tValue="grid";
         SRS.rndPlayer.tValue="off";
+        SRS.ambientMode.tValue="off";
         SRS.playerVersion.tValue="modernV2";
         SRS.watchLayout.tValue="watch9b";
         SRS.relatedTabs.tValue="off";
@@ -7185,20 +7359,28 @@ function getWatchMetadata(x){
             CWD.joinedDate="Joined July 7, 1992 1";
             let chanNavEnd = "";
             let videosNavEnd = "";
-            if(result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.description!=null){
-                let desc=result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.description;
-                CWD.channelDesc=desc.replace(/\n/g,"<br>");
+            let handle="";
+            if(result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel){
+                let ab=result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel;
+                if(ab.description!=null){
+                    let desc=ab.description;
+                    CWD.channelDesc=desc.replace(/\n/g,"<br>");
+                }
+                if(ab.subscriberCountText != null){
+                    subCount=ab.subscriberCountText;
+                }
+                if(ab.canonicalChannelUrl){
+                    handle=ab.canonicalChannelUrl;
+                }
+                videoCount=ab.videoCountText;
+                viewCount=ab.viewCountText;
+                CWD.joinedDate=ab.joinedDateText.content;
+                CWD.shortJoinedDate=CWD.joinedDate.split("d ")[1];
+                CWD.channelSubCount=subCount.split('s')[0];
+                CWD.channelVideoCount=videoCount.split('v')[0];
+                CWD.channelViewCount=viewCount.split(' v')[0];
+                CWD.channelHandle=handle.split(".com/")[1];
             }
-            if(result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.subscriberCountText != null){
-                subCount = result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.subscriberCountText;
-            }
-            videoCount = result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.videoCountText;
-            viewCount = result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.viewCountText;
-            CWD.joinedDate=result.onResponseReceivedEndpoints[0].appendContinuationItemsAction.continuationItems[0].aboutChannelRenderer.metadata.aboutChannelViewModel.joinedDateText.content;
-            CWD.shortJoinedDate=CWD.joinedDate.split("d ")[1];
-            CWD.channelSubCount=subCount.split('s')[0];
-            CWD.channelVideoCount=videoCount.split('v')[0];
-            CWD.channelViewCount=viewCount.split(' v')[0];
             applyWatchMetadata(CWD);
 		});
     }
@@ -7447,6 +7629,7 @@ function getWatchMetadata(x){
             $("#watch7-subscription-container").classList.add("st-poly-sub");
             if(
                 SRS.layoutSelect.tValue=="amst2024c"||
+                SRS.layoutSelect.tValue=="amst2024_1"||
                 SRS.layoutSelect.tValue=="amst2023_1"
             ){
                 if($(".st-sub-button")){
@@ -7486,6 +7669,7 @@ function getWatchMetadata(x){
             if(
                 SRS.layoutSelect.tValue=="amst2023_1"||
                 SRS.layoutSelect.tValue=="amst2024c"||
+                SRS.layoutSelect.tValue=="amst2024_1"||
                 SRS.layoutSelect.tValue=="amst2025p"
             ){
                 if($(".st-sub-button")){
@@ -7528,6 +7712,7 @@ function getWatchMetadata(x){
                 SRS.layoutSelect.tValue=="poly2022"||
                 SRS.layoutSelect.tValue=="amst2023_1"||
                 SRS.layoutSelect.tValue=="amst2024c"||
+                SRS.layoutSelect.tValue=="amst2024_1"||
                 SRS.layoutSelect.tValue=="amst2025p"
             ){
                 if($(".st-sub-button")){
@@ -7658,7 +7843,11 @@ function getWatchMetadata(x){
             btn.setAttribute("data-tooltip-text","Save");
             btn.querySelector(".st-svg").innerHTML=STH0.SVG;
             btn.querySelector(".filled-icon path").setAttribute("d",svgDefs.save.f);
-            btn.querySelector(".outline-icon path").setAttribute("d",svgDefs.save.o);
+            if(SRS.layoutSelect.tValue=="amst2024_1"){
+                btn.querySelector(".outline-icon path").setAttribute("d",svgDefs.bookmark.o);
+            }else{
+                btn.querySelector(".outline-icon path").setAttribute("d",svgDefs.save.o);
+            }
             btn.addEventListener("click",function(){
                 if($("[state='addto']")){
                     mS.setAttribute("state","normal");
@@ -8280,6 +8469,11 @@ function getWatchMetadata(x){
         if(gdp.watchLayout=="watch4a"||gdp.watchLayout=="watch4b"||gdp.watchLayout=="watch4c"||gdp.watchLayout=="watch5a"||gdp.watchLayout=="watch5b"||gdp.watchLayout=="watch5c"||gdp.watchLayout=="watch5d"){
             ext="";
         }
+        if(gdp.watchLayout=="watch10"||gdp.watchLayout=="watch10teaser"||gdp.watchLayout=="watch10beta"){
+            document.querySelectorAll(".st-watch10-views-info").forEach(i=>{
+                i.title=w.viewCount + ext + " • " + w.date;
+            });
+        }
         document.querySelectorAll(".st-view-count").forEach(i=>{
             i.textContent=w.viewCount + ext;
         });
@@ -8338,6 +8532,13 @@ function getWatchMetadata(x){
         document.querySelectorAll(".st-owner-name-text").forEach(i=>{
             i.textContent=w.owner;
         });
+        if($(".st-owner-handle")){
+            document.querySelectorAll(".st-owner-handle").forEach(i=>{
+                i.textContent=w.channelHandle;
+                i.data=w.channelNav;
+                i.href=w.channelLink;
+            });
+        }
         if($(".st-sub-count")){
             if(CWD.subCount!==""&&CWD.subCount!=undefined){
                 $(".st-sub-count").textContent=CWD.subCount+" subscribers";
@@ -9163,10 +9364,61 @@ function createYTC(){
     let nE=document.createElement("li");
     nE.id="st-yt-c";
     nE.innerHTML=`
-    <span class="copyright" dir="ltr">© 2025 YouTube, LLC</span>
+    <span class="copyright" dir="ltr">© 2026 YouTube, LLC</span>
     `;
     cont.append(nE);
 }
+    function doAmbient(){
+        let conta=$("#player");
+        let nE=document.createElement("div");
+        nE.id="st-ambient";
+        nE.innerHTML=`
+        <canvas id="st-ambient-color-sampler" width="32" height="18" style="display:none;"></canvas>
+        `;
+        conta.append(nE);
+        const video = $("video");
+        const wrapper = $("#player-api_VORAPI_ELEMENT_ID");
+        const canvas = $("#st-ambient canvas");
+        const ctx = canvas.getContext('2d');
+
+        let animFrameId = null;
+
+        function sampleFrame() {
+            if($("video")==null){
+                cancelAnimationFrame(animFrameId);
+                animFrameId=null;
+                return;
+            }else{
+                const w = canvas.width;
+                const h = canvas.height;
+
+                ctx.drawImage(video, 0, 0, w, h);
+                const { data } = ctx.getImageData(0, 0, w, h);
+
+                let r = 0, g = 0, b = 0, count = 0;
+                const step = 4 * 4;
+
+                for (let i = 0; i < data.length; i += step) {
+                    r += data[i];
+                    g += data[i + 1];
+                    b += data[i + 2];
+                    count++;
+                }
+
+                if (count > 0) {
+                    r = Math.round(r / count);
+                    g = Math.round(g / count);
+                    b = Math.round(b / count);
+
+                    const glow = `rgba(${r}, ${g}, ${b}, 0.7)`;
+                    wrapper.style.setProperty('--glow-color', glow);
+                }
+
+                animFrameId = requestAnimationFrame(sampleFrame);
+            }
+        }
+        animFrameId = requestAnimationFrame(sampleFrame);
+    }
 let polyComment = false;
 function everyLoadNeo(x){
     if(x==="x"&&$("#st-related-header")==null){
@@ -9269,6 +9521,16 @@ function everyLoadNeo(x){
 				}
 			});
         }
+        if($("#st-ambient")==null&&$("[ambient-mode]")){
+            var elm = "video";
+            waitForElement10(elm).then(function(elm){
+                if(canGo != false){
+                    if($("#st-ambient")==null){
+                        doAmbient();
+                    }
+                }
+            });
+        }
 	}
 	if(sets.polymerComments==true){
 		polyComment=true;
@@ -9301,7 +9563,24 @@ function everyLoadNeo(x){
         }
 	}
     if(SRS.layoutSelect.tValue=="sb2016"||SRS.layoutSelect.tValue=="sb2017"||SRS.layoutSelect.tValue=="sb2024"){
-        setTimeout(doSubscribeIcons,100);
+    }
+    if($("[href='/feed/hype_leaderboard']") == null && $("#FEtrending-guide-item")){
+        $("#FEtrending-guide-item a").data={
+            abstractVorElement: {
+                navigationEndpoint: {
+                    browseEndpoint: {
+                        browseId: "FEhype_leaderboard",
+                        canonicalBaseUrl:"/feed/hype_leaderboard"
+                    },
+                    commandMetadata: {
+                        webCommandMetadata: {
+                            url:"/feed/hype_leaderboard"
+                        }
+                    }
+                }
+            }
+        }
+        $("#FEtrending-guide-item a").href="/feed/hype_leaderboard";
     }
 }
     function videosWatchedNow(){
@@ -9365,6 +9644,95 @@ function everyLoadNeo(x){
                 state=-1;
             }
         },6000);
+    }
+    function doPolyPlaylist(){
+        if($("#st-poly-playlist-owner")==null){
+            let container=$(".pl-header-content");
+            let newElem=document.createElement("div");
+            newElem.id="st-poly-playlist-owner";
+            newElem.classList="flex-bar";
+            newElem.innerHTML = `
+        <div id="st-pp-left" class="flex-bar">
+	    	<div id="st-pp-pfp">
+            </div>
+            <div id="st-pp-name">
+            </div>
+        </div>
+        <div id="st-pp-sub">
+        </div>
+		`;
+            container.append(newElem);
+            let nE=document.createElement("div");
+            nE.id="st-poly-playlist-actions";
+            nE.classList="flex-bar";
+            nE.innerHTML=`
+            <div id="st-pp-save" class="st-icon-button filled flex-bar yt-uix-tooltip" title="Save playlist">
+							    <div class="st-svg">
+					        		<div class="filled-icon">
+										<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon"><g mirror-in-rtl="" class="style-scope yt-icon">
+	<path d="${svgDefs.save.f}" class="style-scope yt-icon"></path>
+  </g></svg>
+                                    </div>
+									<div class="outline-icon">
+										<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none; display: inherit; width: 100%; height: 100%;"><path d="${svgDefs.save.o}"></path></svg>
+									</div>
+							    </div>
+							</div>
+            <div id="st-pp-shuffle" class="st-icon-button filled flex-bar yt-uix-tooltip" title="Shuffle play">
+							    <div class="st-svg">
+					        		<div class="filled-icon">
+										<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon"><g mirror-in-rtl="" class="style-scope yt-icon">
+	<path d="${svgDefs.shuffle.f}" class="style-scope yt-icon"></path>
+  </g></svg>
+                                    </div>
+									<div class="outline-icon">
+										<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none; display: inherit; width: 100%; height: 100%;"><path d="${svgDefs.shuffle.o}"></path></svg>
+									</div>
+							    </div>
+							</div>
+            <div id="st-pp-share" class="st-icon-button filled flex-bar yt-uix-tooltip" title="Share">
+							    <div class="st-svg">
+					        		<div class="filled-icon">
+										<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon"><g mirror-in-rtl="" class="style-scope yt-icon">
+	<path d="${svgDefs.share.f}" class="style-scope yt-icon"></path>
+  </g></svg>
+                                    </div>
+									<div class="outline-icon">
+										<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none; display: inherit; width: 100%; height: 100%;"><path d="${svgDefs.share.o}"></path></svg>
+									</div>
+							    </div>
+							</div>
+            <div id="st-pp-more" class="st-icon-button filled flex-bar">
+							    <div class="st-svg">
+					        		<div class="filled-icon">
+										<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon"><g>
+	             <circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle>
+            </g></svg>
+                                    </div>
+									<div class="outline-icon">
+										<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none; display: inherit; width: 100%; height: 100%;"><path d="${svgDefs.more.o}"></path></svg>
+									</div>
+							    </div>
+							</div>
+            `;
+            container.insertBefore(nE,container.children[2]);
+            let pfp=$(".channel-header-profile-image-container");
+            let name=$(".pl-header-details li");
+            let nH=$("#st-pp-pfp");
+            nH.append(pfp);
+            nH=$("#st-pp-name");
+            nH.append(name);
+            var elm="#c4-primary-header-contents .yt-uix-button-subscription-container";
+            waitForElement(elm).then(function(elm){
+                if(canGo != false){
+                    let subscribe=$("#c4-primary-header-contents .yt-uix-button-subscription-container");
+                    if(subscribe){
+                        nH=$("#st-pp-sub");
+                        nH.append(subscribe);
+                    }
+                }
+            });
+        }
     }
 function modComments(ver){
 	document.querySelectorAll(".comment:not(.startube-comment)").forEach(i=>{
@@ -12184,6 +12552,54 @@ Search
 				}
 			};
 		}
+        if(renderer == "hypeVideo"){
+			let id = i.onTap.innertubeCommand.watchEndpoint.videoId;
+			let href = "/watch?v=" + id;
+			let container = $("#st-hype-list");
+			let title = i.videoData.metadata.title;
+			let time = i.videoData.thumbnail.timestampText;
+			let thumbnail = i.videoData.thumbnail.image.sources[2].url;
+            let hype = i.videoData.metadata.bottomBadge[0].badgeText;
+            let owner = i.videoData.metadata.byline;
+			let newElem = document.createElement("li");
+			newElem.classList = "video-list-item related-list-item context-data-item hype-list-item";
+			newElem.innerHTML = `
+			<a href="${href}" class="related-video yt-uix-contextlink yt-uix-sessionlink"><span class="ux-thumb-wrap contains-addto " href="${href}">    <span class="video-thumb yt-thumb yt-thumb-175"><span class="yt-thumb-default">
+	<span class="yt-thumb-clip">
+	  <span class="yt-thumb-clip-inner">
+		<img alt="Thumbnail" src="${thumbnail}" width="175">
+		<span class="vertical-align"></span>
+	  </span>
+	</span>
+  </span></span>
+<span class="video-time">${time}</span>
+
+
+
+<button class="yt-uix-button yt-uix-button-size-default yt-uix-button-default addto-button video-actions addto-watch-later-button yt-uix-button-size-small yt-uix-button-empty"><span class="yt-uix-button-content"><img src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"></span></button>
+</span><span dir="ltr" class="title" title="${title}">${title}</span>
+<span class="stat attribution"><span class="g-hovercard" data-name="watch-vrec">
+<span class="run run-text">by </span><span class="run run-text"><b>${owner}</b></span></span></span>
+<span class="stat hype-badge badge"> <span class="yt-badge ">${hype}</span>
+</span></a>
+				`;
+			container.insertBefore(newElem,container.children[number]);
+			newElem.querySelector("a").data = {
+				abstractVorElement: {
+					navigationEndpoint: {
+						watchEndpoint: {
+							videoId: id,
+							canonicalBaseUrl: href
+						},
+						commandMetadata: {
+							webCommandMetadata: {
+								url: href
+							}
+						}
+					}
+				}
+			};
+		}
 		if(renderer == "videosTabCompactVideo"){
 			let id = i.navigationEndpoint.watchEndpoint.videoId;
 			let href = "/watch?v=" + id;
@@ -13196,6 +13612,9 @@ if($(".v3")){
 }else if(STS.polymerWarningBanner == false){
 	doStarTube();
 }else if(STS.polymerWarningBanner == true){
+    if(document.URL.includes("v3cv")){
+        $("html").setAttribute("has-v3","");
+    }
 	setTimeout(function(){
 		if($(".v3")){
 			doStarTube();
@@ -13372,6 +13791,11 @@ function dupeDetect(){
         }
     }
 }
+    function onNav(){
+        if($("#st-ambient")){
+            $("#st-ambient").remove();
+        }
+    }
 function doStarTube(){
 document.addEventListener("V3_NAVITRONIC_STARTED", function(e){
     if(e.detail.isPopstateCached==true){
@@ -13381,6 +13805,7 @@ document.addEventListener("V3_NAVITRONIC_STARTED", function(e){
     }
 	setTimeout(checkContentMargin, 500);
 	setTimeout(checkContentMargin, 1500);
+    onNav();
 });
 document.addEventListener("V3_SERVERCONTRACT_FLUSH_DOCEL_ATTRIB", function(e){
     everyLoad();
@@ -14042,6 +14467,54 @@ function deleteTitleOnTop(){
 					$("#VLLL-guide-item").classList.add("startube");
 				}
 			}
+        if($("#FEguide_builder-guide-item.startube") == null){
+				if($("#FEguide_builder-guide-item") != null){
+					let container = $("#FEguide_builder-guide-item .yt-valign-container");
+					let newElem = document.createElement("div");
+					newElem.setAttribute("class","st-svg thumb");
+					container.classList.add("startube-has-icon");
+					newElem.innerHTML = `
+		<div class="filled-icon">
+			<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon">
+				<g>
+					<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"></path>
+				</g>
+			</svg>
+		</div>
+		<div class="outline-icon">
+			<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon">
+				<g><path d="M17,13h-4v4h-2v-4H7v-2h4V7h2v4h4V13z M12,3c-4.96,0-9,4.04-9,9s4.04,9,9,9c4.96,0,9-4.04,9-9S16.96,3,12,3 M12,2 c5.52,0,10,4.48,10,10s-4.48,10-10,10C6.48,22,2,17.52,2,12S6.48,2,12,2L12,2z"></path></g>
+			</svg>
+		</div>
+					`;
+					container.insertBefore(newElem, container.children[0]);
+					$("#FEguide_builder-guide-item").classList.add("startube");
+				}
+			}
+        if($("#FEchannels-guide-item.startube") == null){
+				if($("#FEchannels-guide-item") != null){
+					let container = $("#FEchannels-guide-item .yt-valign-container");
+					let newElem = document.createElement("div");
+					newElem.setAttribute("class","st-svg thumb");
+					container.classList.add("startube-has-icon");
+					newElem.innerHTML = `
+		<div class="filled-icon">
+			<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon">
+				<g id="settings_material">
+					<path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.1-1.65c.2-.15.25-.42.13-.64l-2-3.46c-.12-.22-.4-.3-.6-.22l-2.5 1c-.52-.4-1.08-.73-1.7-.98l-.37-2.65c-.06-.24-.27-.42-.5-.42h-4c-.27 0-.48.18-.5.42l-.4 2.65c-.6.25-1.17.6-1.7.98l-2.48-1c-.23-.1-.5 0-.6.22l-2 3.46c-.14.22-.08.5.1.64l2.12 1.65c-.04.32-.07.65-.07.98s.02.66.06.98l-2.1 1.65c-.2.15-.25.42-.13.64l2 3.46c.12.22.4.3.6.22l2.5-1c.52.4 1.08.73 1.7.98l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.6-.25 1.17-.6 1.7-.98l2.48 1c.23.1.5 0 .6-.22l2-3.46c.13-.22.08-.5-.1-.64l-2.12-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path>
+				</g>
+			</svg>
+		</div>
+		<div class="outline-icon">
+			<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon">
+				<g id="settings"><path d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,8c-2.21,0-4,1.79-4,4s1.79,4,4,4s4-1.79,4-4 S14.21,8,12,8L12,8z M13.22,3l0.55,2.2l0.13,0.51l0.5,0.18c0.61,0.23,1.19,0.56,1.72,0.98l0.4,0.32l0.5-0.14l2.17-0.62l1.22,2.11 l-1.63,1.59l-0.37,0.36l0.08,0.51c0.05,0.32,0.08,0.64,0.08,0.98s-0.03,0.66-0.08,0.98l-0.08,0.51l0.37,0.36l1.63,1.59l-1.22,2.11 l-2.17-0.62l-0.5-0.14l-0.4,0.32c-0.53,0.43-1.11,0.76-1.72,0.98l-0.5,0.18l-0.13,0.51L13.22,21h-2.44l-0.55-2.2l-0.13-0.51 l-0.5-0.18C9,17.88,8.42,17.55,7.88,17.12l-0.4-0.32l-0.5,0.14l-2.17,0.62L3.6,15.44l1.63-1.59l0.37-0.36l-0.08-0.51 C5.47,12.66,5.44,12.33,5.44,12s0.03-0.66,0.08-0.98l0.08-0.51l-0.37-0.36L3.6,8.56l1.22-2.11l2.17,0.62l0.5,0.14l0.4-0.32 C8.42,6.45,9,6.12,9.61,5.9l0.5-0.18l0.13-0.51L10.78,3H13.22 M14,2h-4L9.26,4.96c-0.73,0.27-1.4,0.66-2,1.14L4.34,5.27l-2,3.46 l2.19,2.13C4.47,11.23,4.44,11.61,4.44,12s0.03,0.77,0.09,1.14l-2.19,2.13l2,3.46l2.92-0.83c0.6,0.48,1.27,0.87,2,1.14L10,22h4 l0.74-2.96c0.73-0.27,1.4-0.66,2-1.14l2.92,0.83l2-3.46l-2.19-2.13c0.06-0.37,0.09-0.75,0.09-1.14s-0.03-0.77-0.09-1.14l2.19-2.13 l-2-3.46L16.74,6.1c-0.6-0.48-1.27-0.87-2-1.14L14,2L14,2z"></path></g>
+			</svg>
+		</div>
+					`;
+					container.insertBefore(newElem, container.children[0]);
+					$("#FEchannels-guide-item").classList.add("startube");
+				}
+			}
 			if($(".guide-user-links .guide-channel[id^='UC']") != null){
 				if($(".startube-mychan > a") == null){
 					let container1 = $(".guide-user-links .guide-channel[id^='UC']");
@@ -14224,7 +14697,9 @@ function deleteTitleOnTop(){
 			if(
 				$(".appbar-nav-menu") != null &&
 				!window.location.href.includes("feed/history") &&
-				!window.location.href.includes("distiller_post_history")
+				!window.location.href.includes("distiller_post_history") &&
+                !window.location.href.includes("feed/social") &&
+                !window.location.href.includes("feed/hype")
 			){
 				if(
 					$(".home") != null ||
@@ -14442,6 +14917,22 @@ function deleteTitleOnTop(){
 				}
 			});
 		}
+        if($("#startube-guide-footer")==null && sets.polymerShell==true && $(".guide-toplevel")){
+            let conta=$(".guide-toplevel");
+            let nE=document.createElement("li");
+            nE.classList="guide-section";
+            nE.id="startube-guide-footer";
+            nE.innerHTML=`
+            <div id="guide-links-primary" class="style-scope ytd-guide-renderer">
+    <a slot="guide-links-primary" href="https://www.youtube.com/about/" style="display: none;">About</a><a slot="guide-links-primary" href="https://www.youtube.com/about/press/" style="display: none;">Press</a><a slot="guide-links-primary" href="https://www.youtube.com/about/copyright/" style="display: none;">Copyright</a><a slot="guide-links-primary" href="https://www.youtube.com/t/contact_us/" style="display: none;">Contact us</a><a slot="guide-links-primary" href="https://www.youtube.com/creators/" style="display: none;">Creators</a><a slot="guide-links-primary" href="https://www.youtube.com/ads/" style="display: none;">Advertise</a><a slot="guide-links-primary" href="https://developers.google.com/youtube" style="display: none;">Developers</a>
+  </div>
+  <div id="guide-links-secondary" class="style-scope ytd-guide-renderer">
+    <a slot="guide-links-secondary" href="https://www.youtube.com/t/terms" style="display: none;">Terms</a><a slot="guide-links-secondary" href="https://policies.google.com/privacy?hl=en" style="display: none;">Privacy</a><a slot="guide-links-secondary" href="https://www.youtube.com/about/policies/" style="display: none;">Policy &amp; Safety</a><a slot="guide-links-secondary" href="https://www.youtube.com/howyoutubeworks?utm_campaign=ytgen&amp;utm_source=ythp&amp;utm_medium=LeftNav&amp;utm_content=txt&amp;u=https%3A%2F%2Fwww.youtube.com%2Fhowyoutubeworks%3Futm_source%3Dythp%26utm_medium%3DLeftNav%26utm_campaign%3Dytgen" style="display: none;">How YouTube works</a><a slot="guide-links-secondary" href="https://www.youtube.com/new" style="display: none;">Test new features</a>
+  </div>
+  <div id="copyright" slot="copyright" style="display: none;"><div dir="ltr" style="display:inline">© 2026 Google LLC</div></div>
+            `;
+            conta.append(nE);
+        }
 	}
     function toggleSetting(setting){
         let ap=$("body .v3").getAttribute(setting);
@@ -15455,6 +15946,123 @@ border-width: 12px;
 			});
 		}
 	}
+    function createHypeChip(i,n){
+        let conta=$("#st-hype-dd");
+        let nE=document.createElement("li");
+        nE.id="st-" + i.text + "-hype-chip";
+        nE.setAttribute("role","menuitem");
+        nE.innerHTML = `
+            <span class="yt-uix-button-menu-item">${i.text}</span>
+					`;
+        conta.insertBefore(nE,conta.children[n]);
+        let continuation=i.onSelected.innertubeCommand.browseSectionListReloadEndpoint.continuation.reloadContinuationData.continuation;
+        //nE.data.continuation=continuation;
+        nE.addEventListener("click", function(){
+            $("#st-hype-list .yt-spinner").classList.remove("hid");
+            document.querySelectorAll(".hype-list-item").forEach(i => {
+                i.remove();
+            });
+            mobileFetch("none","single","browse","browseId","FEhype_leaderboard","continuation",continuation).then(result => {
+                console.log(result);
+                gdp.currHypeData=result;
+                fillHypePage(true);
+            });
+        });
+    }
+    function createHypePage(){
+        var elm = "#FEhype_leaderboard";
+		waitForElement10(elm).then(function(elm){
+			if(canGo != false){
+                let container = $("#content .feed-list");
+                let newElem = document.createElement("div");
+                newElem.id="st-hype-page";
+                newElem.classList="yt-card";
+                newElem.innerHTML = `
+                <div id="st-hype-list" class="section-list-contents">
+                    <p class="yt-spinner">
+            <img class="yt-spinner-img" src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif">
+            <span class="yt-spinner-message">Loading...</span>
+          </p>
+                </div>
+					`;
+                container.insertBefore(newElem, container.children[0]);
+                container = $(".branded-page-v2-primary-col > div");
+                newElem = document.createElement("div");
+                newElem.id="st-hype-page-header";
+                newElem.innerHTML=`
+                <div id="st-hype-header">
+                    <div id="st-hype-top">
+                        <span>Hype</span>
+                    </div>
+                    <div id="st-hype-middle">
+                        <span>Check out the videos that fans hyped the most this week!</span>
+                    </div>
+                    <div id="st-hype-bottom">
+                        <span>Updates every 5 minutes</span>
+                    </div>
+                </div>
+                <div class="branded-page-v2-primary-col-header-container branded-page-v2-primary-column-content"><div class="feed-header clearfix collection"><div class="feed-header-feed-filter"><ul id="channel-navigation-menu"><li><h2 class="epic-nav-item-heading">Top 100</h2></li>
+</ul></div></div></div>
+                `;
+                container.insertBefore(newElem, container.children[0]);
+                container = $("#gh-activityfeed");
+                newElem = document.createElement("div");
+                newElem.id="st-hype-page-subnav";
+                newElem.innerHTML=`
+                <div class="branded-page-v2-subnav-container branded-page-gutter-padding clearfix"><button class="yt-uix-button yt-uix-button-default yt-uix-button-size-default" data-button-menu-indicate-selected="true" role="button" aria-expanded="false" aria-haspopup="true">
+<span class="yt-uix-button-content">All</span>
+<img class="yt-uix-button-arrow" src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif">
+<ul id="st-hype-dd" class="yt-uix-button-menu yt-uix-button-menu-default goog-scrollbar hid" role="menu" aria-haspopup="true" style="max-height: 50vh"></ul></button>
+<div id="st-hype-chip-bar" class="flex-bar chip-bar">
+</div>
+</div>
+                `;
+                container.insertBefore(newElem, container.children[0]);
+                if($("#masthead-appbar")){
+                    container = $("#appbar-content");
+                    newElem = document.createElement("div");
+                    newElem.id="appbar-nav";
+                    newElem.innerHTML=`<ul class="appbar-nav-menu"><li><h2 class="epic-nav-item-heading">Top 100</h2></li>
+<!--li><a class="yt-uix-button yt-uix-button-size-default yt-uix-button-default yt-uix-button-epic-nav-item" href="/feed/hype_leaderboard"><span class="yt-uix-button-content"><span class="run">My hyped</span></span></a></li-->
+</ul>`;
+                    container.insertBefore(newElem, container.children[0]);
+                }
+            }
+        });
+    }
+    function fillHypePage(isCont){
+        document.title="Hype - YouTube";
+        let list;
+        let number=0;
+        if(isCont){
+            list=gdp.currHypeData.continuationContents.sectionListContinuation.contents;
+            list.forEach(i => {
+                if(i.itemSectionRenderer.contents[0].elementRenderer.newElement.type.componentType.model.compactVideoModel){
+                    createRenderer(i.itemSectionRenderer.contents[0].elementRenderer.newElement.type.componentType.model.compactVideoModel.compactVideoData, "hypeVideo", number);
+                    number++;
+                }
+            });
+            $("#st-hype-list .yt-spinner").classList.add("hid");
+        }else{
+            list=gdp.currHypeData.contents.singleColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents;
+            list.forEach(i => {
+                if(i.itemSectionRenderer.contents[0].elementRenderer.newElement.type.componentType.model.compactVideoModel){
+                    createRenderer(i.itemSectionRenderer.contents[0].elementRenderer.newElement.type.componentType.model.compactVideoModel.compactVideoData, "hypeVideo", number);
+                    number++;
+                }
+            });
+            $("#st-hype-list .yt-spinner").classList.add("hid");
+            let number2=0;
+            let chips=gdp.currHypeData.contents.singleColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.subMenu.elementRenderer.newElement.type.componentType.model.chipBarModel.sortOptions[0].filterOptions;
+            console.log(chips);
+            chips.forEach(i => {
+                if(i.onSelected){
+                    createHypeChip(i,number2);
+                    number2++;
+                }
+            });
+        }
+    }
 	function createAccountMenu(){
 		if($(".st-acme") == null && $(".yt-masthead-user-icon") != null && $(".yt-masthead-user-icon.startube-evented") == null){
 			$(".yt-masthead-user-icon").classList.add("startube-evented");
@@ -16310,7 +16918,7 @@ border-width: 12px;
                     }
                 });
             }
-            if($("[location='feed-recs'] .branded-page-v2-subnav-container ul:not(.st-chip-bar)")){
+            if($("[location^='feed'] .branded-page-v2-subnav-container ul:not(.st-chip-bar)")){
                 let container = $(".branded-page-v2-subnav-container");
                 let newElem = document.createElement("div");
                 newElem.setAttribute("class","st-chip-bar-container");
@@ -16874,7 +17482,7 @@ border-width: 12px;
 			container.insertBefore(newElem, container.children[0]);
             newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.search.f);
             newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.search.o);
-            if(SRS.layoutSelect.tValue=="amst2024c"){
+            if(SRS.layoutSelect.tValue=="amst2024c"||SRS.layoutSelect.tValue=="amst2024_1"){
                 newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.prominentSearch.c);
                 newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.prominentSearch.o);
                 newElem.querySelector(".filled-icon path").setAttribute("fill-rule","evenodd");
@@ -16893,7 +17501,7 @@ border-width: 12px;
 			container.insertBefore(newElem, container.children[0]);
             newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.search.f);
             newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.search.o);
-            if(SRS.layoutSelect.tValue=="amst2024c"){
+            if(SRS.layoutSelect.tValue=="amst2024c"||SRS.layoutSelect.tValue=="amst2024_1"){
                 newElem.querySelector(".filled-icon path").setAttribute("d",svgDefs.prominentSearch.c);
                 newElem.querySelector(".outline-icon path").setAttribute("d",svgDefs.prominentSearch.o);
                 newElem.querySelector(".filled-icon path").setAttribute("fill-rule","evenodd");
@@ -18053,8 +18661,8 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					if(SRS.layoutSelect.visValue!="hh2017"){
 						setAdaptiveLayout("hh2017");
 					}
-				}else if(SRS.layoutSelect.visValue!="amst2024c"){
-					setAdaptiveLayout("amst2024c");
+				}else if(SRS.layoutSelect.visValue!="amst2024_1"){
+					setAdaptiveLayout("amst2024_1");
 				}
 			}
             if(
@@ -18483,6 +19091,16 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		}
 		if(window.location.href.includes("/playlist") && !window.location.href.includes("/channel")){
 			$("html").setAttribute("location","playlist");
+            if(!window.location.href.includes("&page")){
+                $("html").setAttribute("pl-page","1");
+                $("html").removeAttribute("pl-page-over-10");
+            }else{
+                let page=window.location.href.split("&page=")[1].split("&")[0];
+                $("html").setAttribute("pl-page",page);
+                if(page>10){
+                    $("html").setAttribute("pl-page-over-10","");
+                }
+            }
 			if($("#content")){
 				grabPlaylistData(x);
 			}else{
@@ -18498,6 +19116,18 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					$(".stargazer-tab.active").classList.remove("active");
 				}
 			}
+            if(sets.polyPlaylists && $("#st-pp-pfp") == null){
+                if($(".channel-header-profile-image-container")){
+                    setTimeout(doPolyPlaylist,10);
+                }else{
+                    var elm = ".channel-header-profile-image-container";
+                    waitForElement10(elm).then(function(elm){
+                        if(canGo != false && $("#st-pp-pfp") == null){
+                            setTimeout(doPolyPlaylist,10);
+                        }
+                    });
+                }
+            }
 		}
 		if(window.location.href.includes("feed/guide")){
 			$("html").setAttribute("location","feed-guide-builder");
@@ -18703,8 +19333,6 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 						}
 					});
 				}
-			}
-			if(sets.polymerChannels==true){
 				if($(".yt-subscription-button-subscriber-count-branded-horizontal") && $(".startube-poly-sub-count") == null){
 					var theBtn = document.querySelector(".yt-subscription-button-subscriber-count-branded-horizontal");
 					theBtn.textContent = theBtn.textContent + " subscribers";
@@ -18723,10 +19351,8 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 						}
 					});
 				}
-			}
-            if(sets.polymerChannels==true){
                 let srch="search";
-                if(SRS.layoutSelect.tValue=="amst2024c"){
+                if(SRS.layoutSelect.tValue=="amst2024c"||SRS.layoutSelect.tValue=="amst2024_1"){
                     srch="prominentSearch";
                 }
 				if($("#channel-search")&&$("#channel-search svg")==null){
@@ -18794,6 +19420,27 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		}
 		if($("#page.search")){
 			$("html").setAttribute("location","search");
+		}
+        if(window.location.href.includes("hype_leaderboard")){
+			$("html").setAttribute("location","feed-hype");
+			if(document.title != "Hype - YouTube" && $("#content a") == null){
+                document.title="Hype - YouTube";
+                createHypePage();
+                if(gdp.currHypeData == null || isPopstate == false){
+                    mobileFetch("none","nomod","browse","browseId","FEhype_leaderboard").then(result => {
+                        console.log(result);
+                        gdp.currHypeData=result;
+                        fillHypePage();
+                    });
+                }else{
+                    var elm="#st-hype-page-header";
+                    waitForElement10(elm).then(function(elm){
+                        if(canGo!=false){
+                            fillHypePage();
+                        }
+                    });
+                }
+            }
 		}
         let feedLink="/feed/what_to_watch/recommended";
         if(SRS.logoLink.tValue=="feedGrid"){
@@ -19004,6 +19651,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 case "amst2024c":
                     layoutFactor=500000;
                     break;
+                case "amst2024_1":
+                    layoutFactor=510000;
+                    break;
             }
             switch (SRS.relatedTabs.tValue){
                 case "onNoSub":
@@ -19160,6 +19810,12 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
             if(SRS.rndPlayer.tValue=="on"){
                 html.setAttribute("round-player","");
             }
+            if(SRS.ambientMode.visValue=="on"){
+                html.setAttribute("ambient-mode","");
+            }
+            if(SRS.ambientMode.tValue=="on"&&SRS.ambientMode.visValue=="auto"&&$(".dark-mode")){
+                html.setAttribute("ambient-mode","");
+            }
             if(SRS.rndThumbs.tValue=="on"){
                 html.setAttribute("round-thumbs","");
             }
@@ -19188,7 +19844,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
             /*thesets*/
             $(".spitfire-body-container").setAttribute("layout",SRS.layoutSelect.tValue);
             html.setAttribute("ly",SRS.layoutSelect.tValue);
-            if(SRS.layoutSelect.tValue=="poly2022"||SRS.layoutSelect.tValue=="amst2023_1"||SRS.layoutSelect.tValue=="amst2024c"){
+            if(SRS.layoutSelect.tValue=="poly2022"||SRS.layoutSelect.tValue=="amst2023_1"||SRS.layoutSelect.tValue=="amst2024c"||SRS.layoutSelect.tValue=="amst2024_1"){
                 html.setAttribute("exp-secondary-search-icon","");
                 createSearchTumor();
                 sets.secondarySearchIcon=true;
@@ -19241,7 +19897,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 sets.polymerShell=true;
                 html.setAttribute("poly-styles","");
                 html.setAttribute("exp-polymer-styles","");
+                html.setAttribute("poly-playlists","");
                 sets.polymerStyles=true;
+                sets.polyPlaylists=true;
             }
             if($("[layout^='hh']")){
                 if($("[layout^='hh2013']")==null&&$("[layout^='hh2014']")==null&&$("[layout^='hhE2015']")==null&&$("[layout^='hh2015']")==null&&$("[layout^='hhE2016']")==null){
@@ -19405,6 +20063,12 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 sets.roundStyles=true;
                 html.setAttribute("poly-g3-colors","");
                 sets.polyG3Colors=true;
+                if($("[layout^='amst2024_1']")){
+                    html.setAttribute("amsterdam-channels","");
+                    sets.amsterdamChannels=true;
+                    html.setAttribute("rich-grid-videos-tab","");
+                    sets.richGridVideosTab=true;
+                }
             }
             if($("[layout^='poly201']")){
                 html.setAttribute("exp-polymer-subscribe","");
@@ -19626,7 +20290,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		refreshCheck++;
 		if(
 			$("#st-nsp") === null &&
-			STS.show2point5 == true
+			STS.show2point6 == true
 		   ){
 			let container76=$('.spitfire-body-container.v3');
 let newElem76=document.createElement("div");
@@ -19707,7 +20371,7 @@ left:0
   <div class="image">
   <svg fill="#000000" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 4.588l2.833 8.719H28l-7.416 5.387 2.832 8.719L16 22.023l-7.417 5.389 2.833-8.719L4 13.307h9.167L16 4.588z" style="fill: #e63127;"/></svg>
   </div>
-  <div class="title">What's new in StarTube 2.5.0</div>
+  <div class="title">What's new in StarTube 2.6.0</div>
 
 
 <div class="text">
@@ -19724,25 +20388,25 @@ left:0
 container76.insertBefore(newElem76, container76.children[0]);
 			$("#close-st-nsp").addEventListener("click", function(){
 				$("#st-nsp").remove();
-				STS.show2point5 = false;
+				STS.show2point6 = false;
 				applySettings(0);
 				$("html").setAttribute("no-startube-popup","");
-				var elm = "#show2point5";
+				var elm = "#show2point6";
 				waitForElement10(elm).then(function(elm){
 					if(canGo != false){
-						$("#show2point5").setAttribute("checked","false");
+						$("#show2point6").setAttribute("checked","false");
 					}
 				});
 			});
             $("#overly-obvious-close-button").addEventListener("click", function(){
 				$("#st-nsp").remove();
-				STS.show2point5 = false;
+				STS.show2point6 = false;
 				applySettings(0);
 				$("html").setAttribute("no-startube-popup","");
-				var elm = "#show2point5";
+				var elm = "#show2point6";
 				waitForElement10(elm).then(function(elm){
 					if(canGo != false){
-						$("#show2point5").setAttribute("checked","false");
+						$("#show2point6").setAttribute("checked","false");
 					}
 				});
 			});
@@ -21671,7 +22335,8 @@ html{
   --666:#999;
   --606060:#aaa;
   --eee:#111;
-  --e2e2e2:#666
+  --e2e2e2:#666;
+  --poly-link:#3ea6ff
 }
 [modern-styles]{
   --link-color:#167ac6
@@ -21714,7 +22379,9 @@ html {
 --f1f1f1:#f1f1f1;
 --ccc:#ccc;
 --spec-menu-bg:rgba(255,255,255,0.98);
---ddd:#ddd
+--ddd:#ddd;
+--f9f9f9:#f9f9f9;
+--f1f1f1:#f1f1f1
 }
 [dark] {
 --fpl:rgba(255,255,255,0.05);
@@ -21730,7 +22397,9 @@ html {
 --f1f1f1:#222;
 --ccc:#333;
 --spec-menu-bg:rgba(33,33,33,0.98);
---ddd:#222
+--ddd:#222;
+--f9f9f9:#121212;
+--f1f1f1:#0f0f0f
 }
 [exp-roboto] {
 --bold: 500;
@@ -21752,6 +22421,9 @@ html {
 }
 [rel-size="stupid"]{
 --rel-width:385px
+}
+[poly-styles] [rel-size="stupid"]{
+--rel-width:375px
 }
 #page.watch .related-video .ux-thumb-wrap,
 #page.watch .yt-thumb-120,
@@ -23444,6 +24116,13 @@ padding:12px 15px 5px;
 margin-top:-1px;
 line-height:22px
 }
+[layout^="amst"]:not([exp-yt-sans-title]) #watch-headline-title{
+  font-size:20px;
+  font-weight:700
+}
+[layout^="amst"]:not([exp-yt-sans-title]) #st-below-title-row{
+  padding-top:12px
+}
 [exp-comments-full-width] .comments-iframe-container {
 max-width: 100%;
 }
@@ -23652,7 +24331,7 @@ height:20px
 }
 
 [exp-true-scrollable-guide]:not([static]) #appbar-guide-menu{
-overflow:scroll;
+overflow:auto;
 max-height:100vh;
 overscroll-behavior:contain
 }
@@ -26561,6 +27240,21 @@ background:#181818!important
 background: #fff;
 }*/
 /* polymer guide */
+[poly-styles] .exp-top-guide .guide-item .guide-count{
+  color:#999;
+  font-size:14px;
+  right:12px
+}
+[round-styles] .exp-top-guide .guide-item .guide-count{
+  right:8px
+}
+[poly-styles] .exp-top-guide .startube-has-icon > span:not([class]){
+  width:1.5px;
+  display:inline-block
+}
+[exp-modern-guide][poly-styles] .exp-top-guide .guide-item .display-name.no-count{
+  width:156px
+}
 /* guide swipe */
 @keyframes swipey{
 0%{
@@ -26676,7 +27370,7 @@ fill: #f00 !important;
 fill: #e62117 !important;
 }
 [exp-polymer-shell] #guide-container h3 {
-color: #606060 !important;
+color:var(--606060)!important;
 padding: 8px 20px;
 font-size: 14px;
 font-weight: 500;
@@ -26899,7 +27593,7 @@ margin-left: 55px !important;
 border: none;
 padding: 0;
 margin-left: 55px !important;
-background: #f9f9f9;
+background:var(--f9f9f9);
 margin-top: 4px;
 box-shadow: none;
 color:var(--030303);
@@ -27088,7 +27782,7 @@ box-shadow:none
 box-shadow:0px 4px 8px -3px rgba(17,17,17,.16)
 }
 [poly-g2-colors] body{
-background:#f9f9f9
+background:var(--f9f9f9)
 }
 [poly-g2-colors][exp-polymer-subscribe] .oz_frame .with-preferences.yt-uix-button-subscription-container:has(.yt-uix-button-subscribe-branded),
 [poly-g2-colors] .st-poly-sub .with-preferences.yt-uix-button-subscription-container:has(.yt-uix-button-subscribe-branded),
@@ -27239,6 +27933,10 @@ font-weight: 500;
 border-radius: 2px;
 color: #666;
 }
+[poly-styles] .dark-mode .yt-badge{
+  background:#333;
+  color:#ccc
+}
 
 [exp-polymer-shell] .guide-item > a {
 display: inline-flex;
@@ -27302,6 +28000,20 @@ border:none
 width: 100%;
 max-width: none;
 }
+[amsterdam-channels] .site-center-aligned.flex-width-enabled #page.channel .branded-page-v2-col-container,
+[amsterdam-channels] .site-center-aligned.flex-width-enabled #page.channel #channel-subheader,
+[amsterdam-channels] .site-center-aligned.flex-width-enabled #page.channel #c4-primary-header-contents,
+[amsterdam-channels] .site-center-aligned.flex-width-enabled #page.channel #gh-banner{
+width:1284px;
+margin:0 auto;
+max-width:1284px;
+min-width:0
+}
+[amsterdam-channels] #c4-header-bg-container{
+height:206px;
+border-radius:16px;
+border-bottom:none
+}
 [exp-polymer-channels] #c4-primary-header-contents,
 [exp-polymer-channels] #channel-subheader,
 [exp-polymer-channels] .channel .branded-page-v2-col-container {
@@ -27335,17 +28047,17 @@ align-items: center;
 [exp-polymer-channels] .channel-header-subscription-button-container {
 float: none;
 }
-[exp-polymer-channels] .branded-page-header-title {
+[exp-polymer-channels]:not([amsterdam-channels]) .branded-page-header-title {
 margin-right: auto;
 }
 [exp-polymer-channels] .branded-page-header-title span {
 font-weight: 400;
 }
-[exp-polymer-channels] #c4-header-bg-container.has-custom-banner {
+[exp-polymer-channels]:not([amsterdam-channels]) #c4-header-bg-container.has-custom-banner {
 height: fit-content;
 background: none !important;
 }
-[exp-polymer-channels] #c4-header-bg-container.has-custom-banner .c4-banner-img {
+[exp-polymer-channels]:not([amsterdam-channels]) #c4-header-bg-container.has-custom-banner .c4-banner-img {
 display: block;
 width: 100%;
 }
@@ -27377,6 +28089,7 @@ background: var(--material-background);
 [exp-polymer-shell][location="channel"] .material-c4 #yt-masthead svg path:not([fill="#FF0000"]){
 fill: #fff !important;
 }*/
+
 [exp-polymer-channels]:not([dark]) #page.channel{
 background:#fff !important
 }
@@ -27388,7 +28101,7 @@ border-bottom:none !important
 background:#f1f1f1 !important
 }
 [poly-g2-colors]:not([dark]) .site-center-aligned .branded-page-v2-top-row{
-background:#f9f9f9 !important
+background:var(--f9f9f9) !important
 }
 [exp-polymer-channels] #video-page-content{
 padding:0 !important
@@ -27402,6 +28115,18 @@ height:118px
 width:210px;
 margin-right:4px;
 margin-bottom:24px
+}
+[rich-grid-videos-tab] #page.channel #video-page-content .context-data-item{
+  width:310px;
+  margin-right:12px
+}
+[rich-grid-videos-tab] #page.channel #video-page-content .yt-lockup-thumbnail,
+[rich-grid-videos-tab] #page.channel #video-page-content .ux-thumb-wrap{
+  width:310px;
+  height:174px
+}
+[rich-grid-videos-tab] #page.channel #video-page-content .yt-lockup-title{
+  margin:12px 0 8px
 }
 [exp-polymer-channels] .branded-page-v2-subnav-container{
 margin:8px 0 !important;
@@ -27611,6 +28336,42 @@ html:not([exp-wmr-addto]) #wmr-addto-icon,
 [exp-wmr-addto] #wmr-save-text,
 [exp-wmr-addto] #wmr-save-icon{
 display:none
+}
+
+/* amst channel */
+[amsterdam-channels] #channel-subheader{
+  padding-top:8px
+}
+[amsterdam-channels] a.yt-uix-button.yt-uix-button-epic-nav-item,
+[amsterdam-channels] button.yt-uix-button-epic-nav-item,
+[amsterdam-channels] .epic-nav-item,
+[amsterdam-channels] .epic-nav-item-heading{
+  border-bottom-width:2px;
+  border-bottom-color:var(--606060)!important;
+  padding:0;
+  text-transform:unset;
+  font-size:16px;
+  margin-right:24px
+}
+[amsterdam-channels] .epic-nav-item-heading{
+  border-bottom-color:var(--0a0a0a)!important
+}
+[amsterdam-channels] .channel-header-profile-image-container,
+[amsterdam-channels] .channel-header-profile-image-container img{
+  width:160px;
+  height:160px;
+  max-width:160px
+}
+[amsterdam-channels] .channel-header .branded-page-header-title .spf-link{
+  font-size:36px;
+  line-height:50px
+}
+[amsterdam-channels] .branded-page-header-title span{
+  font-weight:700
+}
+[amsterdam-channels] .channel-header .primary-header-actions,
+[amsterdam-channels] .channel-header-subscription-button-container{
+  margin-right:auto
 }
 
 /*}*/
@@ -28112,6 +28873,10 @@ background:#0f0f0f!important
 background:#fff !important;
 border-bottom:1px solid rgba(0,0,0,0.1) !important
 }
+[poly-g3-colors][amsterdam-channels] .site-center-aligned .branded-page-v2-top-row{
+border-left:none;
+border-right:none
+}
 /* expAmsterdamGuide */
 [exp-modern-guide][exp-rounded-guide] .guide-section .startube-guide-expand-button,
 [exp-modern-guide][exp-rounded-guide] .guide-section li{
@@ -28137,6 +28902,12 @@ background:rgba(0,0,0,0.05) !important
 box-shadow:0 4px 32px 0 rgba(0,0,0,0.1);
 border-radius:12px
 }
+.dark-mode .startube-material-menu{
+  background:#222
+}
+.dark-mode .startube-menu-item{
+  color:#fff
+}
 [round-styles] #st-polymer-menu-main-header{
 border-radius:12px 12px 0 0
 }
@@ -28152,6 +28923,7 @@ background:#def1ff;
 border-color:#def1ff
 }
 /* exp-rounded-thumbnails */
+[round-player] .html5-video-player,
 [round-player] .player-api{
 border-radius:12px
 }
@@ -28161,6 +28933,7 @@ border-radius:12px
 [round-thumbs] .related-list-item .yt-pl-thumb{
 border-radius:8px
 }
+[round-thumbs][rich-grid-videos-tab][chan-loc="videos"] .context-data-item .ux-thumb-wrap,
 [round-thumbs] .result-item-padding .yt-pl-thumb,
 [round-thumbs] .result-item-padding .ux-thumb-wrap,
 [round-thumbs] .yt-rich-lockup-item .yt-pl-thumb,
@@ -28427,7 +29200,7 @@ background:#fafafa
 background:#121212!important
 }
 [poly-g2-colors] .distiller_yt-thread_user-content.yt-uix-expander-collapsed .cssAction_Expander{
-background:#f9f9f9
+background:var(--f9f9f9)
 }
 [poly-g2-colors][dark] .distiller_yt-thread_user-content.yt-uix-expander-collapsed .cssAction_Expander{
 background:#181818!important
@@ -33933,6 +34706,7 @@ html:not([exp-outline-icons]) [wl^="w11"] #watch-dislike.yt-uix-button-toggled s
 .st-polymer-owner{
   width:100%
 }
+[wl] .st-owner .st-owner-handle,
 [wl="w9a"] .st-owner .st-video-count,
 [wl="w9b"] .st-owner .st-video-count,
 [wl^="w11"] .st-owner .st-video-count,
@@ -33964,6 +34738,7 @@ html:not([exp-outline-icons]) [wl^="w11"] #watch-dislike.yt-uix-button-toggled s
   margin-left:3px;
   margin-top:-2px
 }
+.st-polymer-owner .st-owner-handle,
 .st-polymer-owner .st-owner-name a{
   color:var(--030303);
   font-size:14px;
@@ -33971,12 +34746,16 @@ html:not([exp-outline-icons]) [wl^="w11"] #watch-dislike.yt-uix-button-toggled s
   margin-bottom:4px;
   display:block;
   text-decoration:none;
-  width:fit-content
+  width:fit-content;
+  /*line-height:22px*/
 }
+[wl^="w11"] .st-polymer-owner .st-owner-handle,
+[wl^="w10final"] .st-polymer-owner .st-owner-handle,
 [wl^="w11"] .st-polymer-owner .st-owner-name a,
 [wl^="w10final"] .st-polymer-owner .st-owner-name a{
   font-size:16px;
   margin-bottom:4px;
+  /*line-height:22px*/
 }
 .st-polymer-owner .st-owner-info{
   margin-left:16px;
@@ -34269,7 +35048,7 @@ html:not([comment-teaser]) .st-teaser,
 [round-styles] [wl^="w10final"] .st-btn,
 [round-styles] [wl="w10beta"] .st-btn,
 [round-styles] [wl^="w9"] .st-btn{
-  padding:0 12px
+  padding:0 16px
 }
 [round-styles] [wl^="w11"] .st-btn:hover,
 [round-styles] [wl^="w10final"] .st-btn:hover,
@@ -34296,7 +35075,9 @@ html:not([comment-teaser]) .st-teaser,
 [round-styles] [wl="w10beta"] .st-btn-icon,
 [round-styles] [wl^="w9"] .st-btn-icon{
   padding:0;
-  margin-right:8px
+  margin-right:8px;
+  margin-right:6px;
+  margin-left:-6px
 }
 /* lss */
 .cardified-page.exp-individual-cards-watch .v3:not([wl^="w8"]):not([wl^="w9"]) #st-desc-row,
@@ -37740,7 +38521,413 @@ body.legacy-color.dark-mode,
   background:#050505!important
 }
 
+/* poly playlists 2.6.0 */
 
+[location="playlist"][poly-playlists] .branded-page-v2-secondary-col,
+[location="playlist"][poly-playlists] .branded-page-v2-top-row{
+  display:none
+}
+[location="playlist"][poly-playlists] .site-center-aligned.exp-responsive-page #page.feed #content{
+  width:100%!important;
+  max-width:100%;
+  min-width:100%
+}
+[poly-playlists] #pl-container{
+  display:flex;
+  padding-top:0
+}
+[poly-playlists] .pl-header{
+  width:312px;
+  min-width:312px;
+  position:fixed;
+  padding:24px;
+  z-index:1;
+  height:calc(100% - 384px);
+  min-height:450px;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  background:var(--f9f9f9)
+}
+[poly-playlists] .pl-header .pl-header-thumb{
+  overflow:hidden
+}
+[poly-playlists] .pl-header .pl-header-thumb::after{
+  content:"▶";
+  text-transform:uppercase;
+  position:absolute;
+  width:100%;
+  bottom:0;
+  margin-left:-39px;
+  color:#fff;
+  text-align:center;
+  font-size:18px;
+  line-height:20px;
+  padding:10px 0;
+  pointer-events:none
+}
+[poly-playlists] .pl-header .pl-header-thumb::before{
+  background:rgba(0,0,0,0.8);
+  content:"Play all";
+  text-transform:uppercase;
+  position:absolute;
+  width:100%;
+  bottom:0;
+  color:#fff;
+  text-align:center;
+  font-size:14px;
+  line-height:20px;
+  padding:10px 0 10px 12px;
+  pointer-events:none
+}
+[poly-playlists] .pl-header-thumb,
+[poly-playlists] .pl-header-thumb img{
+  width:312px
+}
+[poly-playlists] .pl-header .pl-header-content{
+  margin-top:16px
+}
+[poly-playlists] .pl-header .pl-header-title{
+  font-weight:400;
+  color:var(--030303);
+  font-size:24px;
+  line-height:32px
+}
+[poly-playlists] .pl-header .pl-header-details{
+  color:var(--606060);
+  font-size:14px;
+  line-height:20px;
+  margin:10px 0 5px
+}
+[typography-spacing][poly-playlists] .pl-header .pl-header-details{
+  letter-spacing:0.2px
+}
+[poly-playlists] .pl-header-details li:last-child{
+  display:contents
+}
+[poly-playlists] .pl-header .pl-header-description{
+  font-size:14px;
+  line-height:20px;
+  margin-top:10px
+}
+[poly-playlists] .pl-header .pl-header-description p{
+  color:var(--606060)
+}
+[poly-playlists] .pl-header-description .yt-ui-ellipsis-2{
+  max-height:50px
+}
+[poly-playlists] .pl-header-description.yt-uix-expander-collapsed .playlist-description-expander{
+  top:34px;
+  background:var(--f9f9f9)
+}
+[poly-playlists] .playlist-actions{
+  display:none
+}
+[poly-playlists] #st-poly-playlist-owner{
+  padding:16px 0;
+  border-top:1px solid var(--tpl);
+  margin-top:16px
+}
+[poly-playlists] #st-pp-sub{
+  margin-left:auto
+}
+[poly-playlists] #st-pp-pfp a,
+[poly-playlists] #st-pp-pfp img{
+  width:48px;
+  height:48px;
+  margin-right:0
+}
+[poly-playlists] #st-pp-name li{
+  display:block
+}
+[poly-playlists] #st-pp-name{
+  margin-left:16px
+}
+[poly-playlists] #st-pp-name li > span{
+  display:none
+}
+[poly-playlists] #st-pp-name a{
+  color:var(--030303);
+  text-decoration:none;
+  font-weight:var(--bold);
+  font-size:14px;
+  max-width:120px;
+  line-height:20px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:block
+}
+[location="playlist"][poly-playlists] .pl-video-list{
+  margin-left:360px;
+  background:var(--f1f1f1);
+  width:100%;
+  padding-top:8px;
+  border:none
+}
+[poly-playlists] #pl-container .pl-video-list.exp-video-list-rich-info .pl-video{
+  padding:16px 0 16px 36px;
+  background:none
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info.pl-video-list > li::before{
+  left:0;
+  top:36px;
+  color:var(--606060);
+  background:none;
+  font-size:14px;
+  font-weight:var(--bold);
+  opacity:1
+}
+/* single digit */
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(1)::before,
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(2)::before,
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(3)::before,
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(4)::before,
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(5)::before,
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(6)::before,
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(7)::before,
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(8)::before,
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(9)::before{
+  left:4px
+}
+/* double digit */
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li::before{
+  left:0
+}
+/* triple digit */
+[poly-playlists][pl-page="1"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(100)::before,
+[poly-playlists] #pl-container .exp-video-list-rich-info.pl-video-list > li::before{
+  left:-3.5px
+}
+/* quadruple digit */
+[poly-playlists][pl-page="10"] #pl-container .exp-video-list-rich-info.pl-video-list > li:nth-child(100)::before,
+[poly-playlists][pl-page-over-10] #pl-container .exp-video-list-rich-info.pl-video-list > li::before{
+  left:-8px
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video-content .yt-thumb-72,
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video-content .yt-thumb-72 img{
+  width:120px;
+  height:68px
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video-thumb{
+  margin-right:8px
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video-title-link{
+  color:var(--030303);
+  font-size:16px;
+  text-decoration:none;
+  line-height:22px
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video-detail-container{
+  position:relative;
+  float:unset;
+  width:unset;
+  left:unset;
+  margin-top:0
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video-owner{
+  left:128px;
+  margin-top:20px
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video .pl-video-detail-container .pl-video-owner a{
+  color:var(--606060)
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video .pl-video-detail-container .pl-video-owner a:hover{
+  color:var(--030303);
+  text-decoration:none
+}
+[poly-playlists] .pl-header-thumb .pl-header-thumb-overlay{
+  opacity:0
+}
+[poly-playlists] #pl-container .exp-video-list-rich-info .pl-video-description{
+  display:none
+}
+[poly-playlists] #st-pp-save{
+  margin-left:-8px
+}
+.st-icon-button.filled{
+  padding:8px;
+  cursor:pointer;
+  margin-right:8px
+}
+.st-icon-button.filled .filled-icon svg{
+  fill:#909090
+}
+[exp-no-by-text] #pl-container .exp-video-list-rich-info .pl-video-owner .owner::before{
+  display:none
+}
+
+/* hide footer on polymer */
+[exp-polymer-shell] #footer-container{
+  display:none
+}
+#startube-guide-footer > div{
+  padding:16px 24px 0
+}
+#startube-guide-footer #copyright{
+  color:#909090;
+  display:block!important
+}
+#guide-links-primary.ytd-guide-renderer > a:not(:last-child),
+#guide-links-secondary.ytd-guide-renderer > a:not(:last-child){
+  margin-right:8px;
+}
+#guide-links-primary.ytd-guide-renderer > a,
+#guide-links-secondary.ytd-guide-renderer > a{
+  display: inline-block !important;
+  text-decoration: none;
+  color:var(--606060);
+  white-space: nowrap;
+  font-size:13px;
+  font-weight:var(--bold);
+  line-height:18px;
+}
+/* polymer search pager */
+[poly-styles] .search-pager{
+  margin-bottom:24px
+}
+[poly-styles] .search-pager .yt-uix-button{
+  border:none;
+  background:transparent;
+  color:var(--666);
+  box-shadow:none!important;
+  font-size:14px;
+  padding:0 16px;
+  height:36px;
+  margin:0 2px;
+  border-radius:2px
+}
+[ly^="amst"] .search-pager .yt-uix-button{
+  background:var(--fpl);
+  color:var(--000);
+  border-radius:24px;
+}
+[poly-styles] .search-pager a.yt-uix-button{
+  padding:2px 14px 0;
+  border-radius:2px
+}
+[ly^="amst"] .search-pager a.yt-uix-button{
+  padding:3px 14px 0;
+  border-radius:50%
+}
+[poly-styles] .search-pager .yt-uix-button:hover{
+  background:var(--fpl)
+}
+[ly^="amst"] .search-pager .yt-uix-button:hover{
+  background:var(--tpl)
+}
+[poly-styles] .search-pager a.yt-uix-button-toggled{
+  background:var(--tpl)!important;
+  color:var(--333)
+}
+[ly^="amst"] .search-pager a.yt-uix-button-toggled{
+  background:var(--000)!important;
+  color:var(--fff)
+}
+/* hype */
+[location="feed-hype"] .site-center-aligned .branded-page-v2-secondary-col,
+[location="feed-hype"] .no-recent-activity{
+  display:none
+}
+#st-hype-page{
+  padding:15px 15px 0
+}
+#st-hype-page .hype-list-item a:visited .title,
+#st-hype-page .hype-list-item .title{
+  color:#2793e6;
+  font-weight:var(--bold)
+}
+#st-hype-header{
+  padding:20px 20px 0
+}
+#st-hype-top{
+  font-size:16px;
+  color:var(--333);
+  font-weight:var(--bold)
+}
+#st-hype-middle{
+  font-size:13px;
+  margin:10px 0
+}
+#st-hype-bottom{
+  font-size:12px;
+  margin:0 0px;
+  color:var(--666)
+}
+html:not([hide-appbar]) .site-center-aligned #st-hype-page-header .feed-header{
+  display:none
+}
+[poly-styles] #st-hype-header,
+[poly-styles] #st-hype-page{
+  padding-inline:0
+}
+[location="feed-hype"]:not([hide-appbar]) #masthead-positioner-height-offset{
+  height:90px!important
+}
+[location="feed-hype"]:not([hide-appbar]) #masthead-appbar-container.fusion{
+  overflow:unset!important;
+  height:40px!important
+}
+[location="feed-hype"]:not([hide-appbar]) #masthead-appbar-container.fusion #masthead-appbar{
+  margin-top:0
+}
+[poly-styles] #st-hype-page-header .feed-header{
+  padding:0
+}
+#st-hype-page .hype-list-item a:hover{
+  background:none!important
+}
+[poly-styles] #st-hype-top span{
+  font-size:24px;
+  font-weight:400;
+  color:var(--030303)
+}
+[round-styles] #st-hype-top span{
+  font-family:"YouTube Sans"!important;
+  font-size:36px;
+  font-weight:700
+}
+[poly-styles] #st-hype-middle{
+  font-size:16px;
+  margin:16px 0
+}
+[poly-styles] #st-hype-bottom{
+  font-size:14px
+}
+/* ambient mode */
+[ambient-mode] #player-api_VORAPI_ELEMENT_ID{
+  position: relative;
+  display: inline-block;
+  overflow:visible!important;
+  --glow-color: rgba(0, 0, 0, 0.7); /* default */
+}
+[ambient-mode] #player-api_VORAPI_ELEMENT_ID video {
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+@keyframes fadeIn{
+from{opacity:0}
+to{opacity:1}
+}
+[ambient-mode] #player-api_VORAPI_ELEMENT_ID::before {
+  content: "";
+  position: absolute;
+  inset: -100px;
+  z-index: 1;
+  border-radius: 32px;
+  filter:blur(150px)brightness(1.5)opacity(0.5);
+  opacity: 0.95;
+  pointer-events: none;
+  background: var(--glow-color);
+  animation:5s fadeIn 1;
+}
+[dark][ambient-mode] #player-api_VORAPI_ELEMENT_ID::before {
+  filter: blur(150px);
+ /* transition:3s ease-in-out; */
+}
+[ambient-mode] #movie_player:focus{
+  outline:none
+}
 
 .banner-promo-renderer{
   display:none
@@ -37750,90 +38937,150 @@ body.legacy-color.dark-mode,
 html.insertBefore(nE,html.children[0]);
 }
 function doBanner(){
-	var elm="#content.ytd-app";
+	var elm="ytd-popup-container";
     waitForElement(elm).then(function(elm){
 	if(canGo!=false){
-		let cont=$('#content.ytd-app');
+		let cont=$('ytd-popup-container');
 		let nE=document.createElement("div");
-		nE.id="nebula-return-banner";
+		nE.id="st-return-popup";
 		nE.innerHTML=`
 		<style>
-		[masthead-hidden] #nebula-return-banner{
-		  display:none
+        .flex{
+          display:flex
+        }
+        .flex-bar{
+          display:flex;
+          align-items:center
+        }
+		#st-return-popup{
+		  position:fixed;
+          box-shadow: 0 0 24px 12px var(--paper-dialog-shadow-color, rgba(0, 0, 0, .15));
+          bottom:24px;
+          left:24px;
+          background: var(--paper-dialog-background-color, var(--primary-background-color));
+          border-radius:12px;
+          padding:16px;
+          z-index:9999;
+          width:400px
 		}
-		#nebula-return-banner{
-		  margin-top:60px;
-		  margin-bottom:-56px;
-		  margin-left:240px;
-		  width:calc(100vw - 560px);
-		  background:#dff1ff;
-		  padding:14px;
-		  padding-left:20px;
-		  border-radius:8px;
-		  font-size:14px;
-		  position:relative;
-		  z-index:3000
-		}
-		#nebula-return-banner-inner{
-		  display:flex;
-		  align-items:center
-		}
-		#nebula-return-banner-button{
-		  margin-left:12px;
-		  background:#12619f;
-		  color:#fff;
-		  border:none;
-		  padding:0 16px;
-		  height:36px;
-		  font-size:14px;
-		  line-height:36px;
-		  border-radius:18px;
-		  font-weight:500;
-		  font-family:"Roboto","Arial",sans-serif;
-		  cursor:pointer;
-		  text-decoration:none!important
-		}
-		#nebula-return-banner-button:hover{
-		  background:#2479bb
-		}
-		#nebula-return-banner-button:active{
-		  background:#398cd1
-		}
-		#nebula-return-banner-close-button{
+        [has-v3] #st-return-popup{
+          width:300px
+        }
+		.st-return-popup-title{
+          font-size:20px;
+          font-weight:bold;
+          color: var(--yt-spec-text-primary);
+        }
+        .st-return-popup-text{
+          font-size:14px;
+          color: var(--yt-spec-text-secondary);
+        }
+		#st-return-popup-close-button{
 		  margin-left:auto;
 		  border:none;
 		  background:none;
 		  cursor:pointer;
 		  padding:8px;
-		  border-radius:50%
+		  border-radius:50%;
+          position: absolute;
+  right: 8px;
 		}
-		#nebula-return-banner-close-button:hover{
+		#st-return-popup-close-button:hover{
 		  background:var(--yt-spec-10-percent-layer)
 		}
+        #st-return-popup-img{
+          margin-left:auto
+        }
+        #st-return-popup-img img{
+          width:128px;
+          height:128px
+        }
+        html:not([has-v3]) .st-yes-v3,
+        [has-v3] .st-no-v3{
+          display:none
+        }
+        .st-return-popup-button{
+          color: #fff;
+          background: #0f0f0f;
+              padding: 0 16px;
+    height: 36px;
+    font-size: 14px;
+    line-height: 36px;
+    border-radius: 18px;
+    font-weight:500;
+    display: block;
+  width: fit-content;
+  cursor:pointer;
+            text-decoration:none
+        }
+        .st-return-popup-button:hover{
+            background: #272727;
+    border-color: transparent;
+        }
+        #st-return-popup-text-container {
+  padding: 8px 0 24px 0;
+  width: 250px;
+}
+        [dark] .st-return-popup-button{
+        background: #f1f1f1;
+        color:#010101
+        }
+        [dark] .st-return-popup-button:hover{
+        background: #d9d9d9;
+        }
+        [dark] #st-return-popup-close-button svg{
+          fill:#fff
+        }
+
 		</style>
-		<div id="nebula-return-banner-inner">
-			<div id="nebula-return-banner-text">
-				<span>StarTube requires Vorapis 2013 (V3) to function.</span>
-			</div>
-			<a id="nebula-return-banner-button" href="https://vorapis.pages.dev/#/">
-				<div id="nebula-return-banner-button-inner">
-					<span>Download V3</span>
-				</div>
-			</a>
-			<button id="nebula-return-banner-close-button">
+        <div id="st-return-popup-top" class="flex-bar">
+            <div class="st-no-v3 st-return-popup-title">
+                <span>StarTube doesn't work without V3</span>
+            </div>
+            <div class="st-yes-v3 st-return-popup-title">
+                <span>V3 is temporarily disabled</span>
+            </div>
+            <button id="st-return-popup-close-button">
 				<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;">
-					<path d="m12.71 12 8.15 8.15-.71.71L12 12.71l-8.15 8.15-.71-.71L11.29 12 3.15 3.85l.71-.71L12 11.29l8.15-8.15.71.71L12.71 12z">
+					<path d="M17.293 5.293 12 10.586 6.707 5.293a1 1 0 10-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 001.414 1.414L12 13.414l5.293 5.293a1 1 0 001.414-1.414L13.414 12l5.293-5.293a1 1 0 10-1.414-1.414Z">
 					</path>
 				</svg>
 			</button>
-		</div>
+        </div>
+        <div id="st-return-popup-bottom" class="flex">
+            <div id="st-return-popup-content">
+                <div id="st-return-popup-text-container">
+                    <div class="st-no-v3 st-return-popup-text">
+                        <span>Vorapis 2013 (V3) is a browser extension that brings back the 2013 YouTube layout. To use StarTube, you'll need to install V3 first.</span>
+                    </div>
+                    <div class="st-yes-v3 st-return-popup-text">
+                        <span>StarTube doesn't work in this state. Reload the page to return to V3.</span>
+                    </div>
+                </div>
+                <div id="st-return-popup-buttons">
+                    <a id="st-return-popup-rl" class="st-yes-v3 st-return-popup-button">
+			        	<div id="st-return-popup-button-inner">
+			        		<span>Return to V3</span>
+			         	</div>
+		        	</a>
+                    <a id="st-return-popup-dl" class="st-no-v3 st-return-popup-button" href="https://vorapis.pages.dev/#/">
+		         		<div id="st-return-popup-button-inner">
+		         			<span>Download V3</span>
+			        	</div>
+		        	</a>
+                </div>
+            </div>
+            <div id="st-return-popup-img" class="st-no-v3">
+                <img src="https://camo.githubusercontent.com/de3eb162383d5b727bbec8649361f03af48d5e391273ba5182df61adc9501c5a/68747470733a2f2f766f72617069732e70616765732e6465762f70726f647563742f76332f67616d655f736572766963652f70726f6d6f2f4c4f474f5f56332e706e67">
+            </div>
+        </div>
 		`;
 		cont.insertBefore(nE,cont.children[0]);
-		nE.querySelector("#nebula-return-banner-button").addEventListener("click",()=>{
+		nE.querySelector("#st-return-popup-rl").addEventListener("click",()=>{
 			window.location.reload();
 		});
-		nE.querySelector("#nebula-return-banner-close-button").addEventListener("click",()=>{
-			$("#nebula-return-banner").remove();
+		nE.querySelector("#st-return-popup-close-button").addEventListener("click",()=>{
+			$("#st-return-popup").remove();
 		});
 	}
 });
