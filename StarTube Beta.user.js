@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.6.0.10
+// @version      2.6.0.20
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -131,7 +131,7 @@ if (window.wrappedJSObject) {
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.6.0 Beta 1";
+let currStarVer="2.6.0 Beta 2";
     let updateStarVer="2.6.0";
 let currStarChan="Beta";
     let currStarDetails="Standard Beta Release";
@@ -586,16 +586,16 @@ subbed:{
 }
 var STH0={
 ST_OWNER:`
-<a class="st-pfp">
+<a class="st-pfp stx-link" stx-ep="browse">
                             <img></img>
                         </a>
                         <div class="st-owner-info">
                             <div class="st-owner-title">
                                 <span class="st-owner-from st-owner-before-text hid">From: </span>
                                 <span class="st-owner-name"></span>
-                                <a class="st-owner-name-spec hid"></a>
+                                <a class="st-owner-name-spec hid stx-link" stx-ep="browse"></a>
                                 <span class="st-owner-icon"></span>
-                                <a class="st-video-count st-video-count-link"></a>
+                                <a class="st-video-count st-video-count-link stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA"></a>
                             </div>
                             <div class="st-owner-subtitle">
                                 <span class="st-sub-count"></span>
@@ -605,8 +605,8 @@ ST_OWNER:`
                                 <span class="st-upload-date hid"></span>
                                 <div class="st-owner-vid-part">
                                     <span class="st-videos-before-text st-owner-before-text hid">Videos: </span>
-                                    <a class="st-video-count-link st-video-count hid"></a>
-                                    <a class="st-video-count-link st-short-video-count hid"></a>
+                                    <a class="st-video-count-link st-video-count hid stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA"></a>
+                                    <a class="st-video-count-link st-short-video-count hid stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA"></a>
                                 </div>
                             </div>
                             <div class="st-owner-desc-sub-expander-outer flex-bar">
@@ -628,21 +628,21 @@ ST_OWNER:`
                         </div>
 `,
 ST_POLY_OWNER:`
-<a class="st-pfp">
+<a class="st-pfp stx-link" stx-ep="browse">
                             <img></img>
                         </a>
                         <div class="st-owner-info">
                             <div class="st-owner-title flex-bar">
                                 <span class="st-owner-from st-owner-before-text hid">From: </span>
                                 <span class="st-owner-name"></span>
-                                <a class="st-owner-handle"></a>
+                                <a class="st-owner-handle stx-link" stx-ep="browse"></a>
                                 <span class="st-owner-icon"></span>
-                                <a class="st-video-count st-video-count-link"></a>
+                                <a class="st-video-count st-video-count-link stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA"></a>
                             </div>
                             <div class="st-owner-subtitle">
                                 <span class="st-sub-count"></span>
                                 <span class="st-pub-date"></span>
-                                <a class="st-video-count-link st-video-count"></a>
+                                <a class="st-video-count-link st-video-count stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA"></a>
                             </div>
                         </div>
                          <div class="st-sub-area st-sub-button">
@@ -807,6 +807,7 @@ astroSettings:`
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Misc</span>
 							</div>
+                            <span class="st-sb-new"></span>
 						</div>
 						<div id="st-astro-topbar" class="astro-sidebar-item flex-bar" p="topbar">
 							<div class="astro-sidebar-item-inner flex-bar">
@@ -906,7 +907,54 @@ astroSettings:`
 											    	<span>Reset StarTube config</span>
 											    </a>
                                             </div>
-                                            <div id="st-changelog">\
+                                            <div id="st-changelog">
+                                                <div class="st-cl-sect">
+                                                    <div class="st-cl">
+                                                         <b>StarTube 2.6.0 Beta 2 Changelog:</b>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Added 2010-2011 player style</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Added option to choose to use <a href="/feed/recommended_for_you">https://www.youtube.com/feed/recommended_for_you</a> in place of <a href="/feed/what_to_watch/recommended">https://www.youtube.com/feed/what_to_watch/recommended</a>, as some people experience issues with the latter.</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Added Hype item to guide on 2016 and later</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Removed the embed player option, as it is no longer supported by V3</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-This changelog can now be expanded and collapsed</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Minor code optimizations</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed 2008-2009 search bars and 2008 search button using the wrong font on macOS</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed related videos title height on Polymer and Amsterdam layouts</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed featured playlists not showing up on channels3</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed lohp video being too big</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed rounded player setting applying in fullscreen</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed Mid 2016 having large size related videos, making it the same as Late 2016</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Fixed 2012 guide having white bars on it on low resolutions</span>
+                                                    </div>
+                                                    <div class="st-cl">
+                                                         <span>-Other fixes</span>
+                                                    </div>
+                                                </div>
                                                 <div class="st-cl-sect">
                                                     <div class="st-cl">
                                                          <b>StarTube 2.6.0 Beta 1 Changelog:</b>
@@ -1036,6 +1084,10 @@ astroSettings:`
                                                     <span>-Other fixes</span>
                                                 </div>
                                                 </div>
+                                                <button id="st-cl-expander" class="stx-trigger" stx-target="#st-changelog" stx-trigger-type="attrib-tog" stx-attrib="expanded">
+                                                    <div id="st-cl-expand" style="TEXT"><span class="yt-uix-button-content"><span class="run">Show more</span></span></div>
+                                                    <div id="st-cl-collapse" style="TEXT"><span class="yt-uix-button-content"><span class="run">Show less</span></span></div>
+                                                </button>
                                             </div>
 										</div>
 										<!--div id="startube-save-files" class="astro-section">
@@ -1267,19 +1319,19 @@ aboveTitleRow:`
 aboveOwnerRow:`
 <div id="st-above-owner-row" class="st-watch-row">
                     <div class="st-owner flex-bar">
-                        <a class="st-pfp">
+                        <a class="st-pfp stx-link" stx-ep="browse">
                             <img></img>
                         </a>
                         <div class="st-owner-info">
                             <div class="st-owner-title flex-bar">
                                 <div class="st-owner-name"></div>
                                 <span class="st-owner-icon"></span>
-                                <a class="st-video-count st-video-count-link hid"></a>
+                                <a class="st-video-count st-video-count-link hid stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA"></a>
                             </div>
                             <div class="st-owner-subtitle none">
                                 <span class="st-sub-count"></span>
                                 <span class="st-pub-date none"></span>
-                                <a class="st-video-count-link none"></a>
+                                <a class="st-video-count-link none stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA"></a>
                             </div>
                         </div>
                         <div class="st-sub-button">
@@ -1308,7 +1360,7 @@ aboveVideosRow:`
 				</div>
 				<div id="videos-dd-center">
 					<div id="videos-dd-top" class="flex-bar">
-						<a id="videos-dd-link" class="st-video-count-link">
+						<a id="videos-dd-link" class="st-video-count-link stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA">
 							<span>See all </span>
 							<span id="videos-dd-count" class="st-video-count">videos</span>
 							<span> »</span>
@@ -1733,7 +1785,7 @@ descRow:`
                         <div class="st-desc-views-info st-watch5-upload-info st-fancy-upload-date">
                             <b id="first-part">
 		    				    <span>Uploaded by </span>
-								<a class="st-owner-name-spec"></a>
+								<a class="st-owner-name-spec stx-link" stx-ep="browse"></a>
 								<span>on </span>
 							</b>
 							<b id="second-part">
@@ -1741,7 +1793,7 @@ descRow:`
 							</b>
 							<b id="third-part">
 								<span>by </span>
-								<a class="st-owner-name-spec"></a>
+								<a class="st-owner-name-spec stx-link" stx-ep="browse"></a>
 							</b>
                             <div class="st-ltod-bar st-right-ltod">
                             </div>
@@ -1811,7 +1863,7 @@ sliderRow:`
                                     <div class="st-slider-header st-fancy-upload-date">
                                         <b id="first-part">
 											<span>Uploaded by </span>
-											<a class="st-owner-name-spec"></a>
+											<a class="st-owner-name-spec stx-link" stx-ep="browse"></a>
 											<span>on </span>
 										</b>
 										<b id="second-part">
@@ -1819,7 +1871,7 @@ sliderRow:`
 										</b>
 										<b id="third-part">
 											<span>by </span>
-											<a class="st-owner-name-spec"></a>
+											<a class="st-owner-name-spec stx-link" stx-ep="browse"></a>
 										</b>
                                     </div>
                                     <div class="st-desc-snippet-content">
@@ -1910,7 +1962,7 @@ sliderRow:`
 							<img src="https://s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif" class="yt-uix-button-icon yt-uix-button-arrow">
 						</span>
                     </button>
-                    <a class="st-video-count-link">See all</a>
+                    <a class="st-video-count-link stx-link" stx-ep="browse" stx-params="EgZ2aWRlb3PyBgQKAjoA">See all</a>
                 </div>
                 <div class="st-scroller hid">
                     <div class="st-scroller-inner">
@@ -2021,7 +2073,7 @@ sideBannerRow:`
 <div id="st-side-banner-row" class="st-watch-row flex-bar">
     <div class="related-channel">
 <div class="related-banner">
-	<a class="related-banner-pfp st-pfp">
+	<a class="related-banner-pfp st-pfp stx-link" stx-ep="browse">
 		<img></img>
 	</a>
 	<div class="related-banner-bg">
@@ -2329,7 +2381,112 @@ var STS = localStorage.getItem(theSets);
 if (STS !== null) {
     SRS = STS.radioSettings;
 }
+function STX_checkClick(e){
+    if(e.target){
+        if(e.target.classList.contains("stx-trigger")){
+            let type=e.target.getAttribute("stx-trigger-type");
+            if(type=="attrib-tog"){
+                $(e.target.getAttribute("stx-target")).toggleAttribute(e.target.getAttribute("stx-attrib"));
+            }
+        }
+    }
+}
+
+async function STX_craftLink(elm,ep,id,href,params){
+    return new Promise((resolve, reject) => {
+        ep!==null&&elm.setAttribute("stx-ep",ep);
+        id!==null&&elm.setAttribute("stx-id",id);
+        href!==null&&elm.setAttribute("href",href);
+        href!==null&&elm.setAttribute("stx-href",href);
+        if(params){
+            elm.setAttribute("stx-params",params);
+        }
+        elm.classList.add("stx-link");
+        resolve(elm);
+    });
+}
+function STX_warmLink(a){
+    let ep=a.getAttribute("stx-ep");
+    let id=a.getAttribute("stx-id");
+    let href=a.href;
+    if(href.includes("youtube.com")){
+       href=href.split("youtube.com")[1];
+    }
+    let params=a.getAttribute("stx-params");
+    if(ep=="browse"){
+        if(params){
+            a.data = {
+                abstractVorElement: {
+                    navigationEndpoint: {
+                        browseEndpoint: {
+                            browseId:id,
+                            canonicalBaseUrl:href,
+                            params:params
+                        },
+                        commandMetadata: {
+                            webCommandMetadata: {
+                                url:href
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            a.data = {
+                abstractVorElement: {
+                    navigationEndpoint: {
+                        browseEndpoint: {
+                            browseId:id,
+                            canonicalBaseUrl:href
+                        },
+                        commandMetadata: {
+                            webCommandMetadata: {
+                                url:href
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }else if(ep=="watch"){
+        if(params){
+            a.data={
+                abstractVorElement:{
+                    navigationEndpoint:{
+                        watchEndpoint:{
+                            videoId:id,
+                            playlistId:params,
+                            canonicalBaseUrl:href
+                        },
+                        commandMetadata:{
+                            webCommandMetadata:{
+                                url:href
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            a.data = {
+                abstractVorElement: {
+                    navigationEndpoint: {
+                        watchEndpoint: {
+                            videoId:id,
+                            canonicalBaseUrl:href
+                        },
+                        commandMetadata: {
+                            webCommandMetadata: {
+                                url:href
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 window.addEventListener("resize",getVideoSize);
+window.addEventListener("click",STX_checkClick);
 var defaultConfigs = {
 	"newConfig": true,
 	"configNoCast": true,
@@ -2594,6 +2751,11 @@ var defaultConfigs = {
         },
         superScale:{
             name:"superScale",
+            tValue:"off",
+            visValue:"off"
+        },
+        altFeed:{
+            name:"altFeed",
             tValue:"off",
             visValue:"off"
         },
@@ -2904,6 +3066,20 @@ function applyNewSettings(){
             name:"autoLoop",
             tValue:"off",
             visValue:"off"
+        }
+    }
+    if(STS.radioSettings.altFeed==null){
+        STS.radioSettings.altFeed={
+            name:"altFeed",
+            tValue:"off",
+            visValue:"off"
+        }
+    }
+    if(STS.radioSettings.playerVersion.tValue=="embed"){
+        STS.radioSettings.playerVersion={
+            name:"playerVersion",
+            tValue:"default2014",
+            visValue:"auto"
         }
     }
 }
@@ -3653,6 +3829,26 @@ pages:[
 			]
 		}},
         {section:{
+			id:"altFeed",
+            new:true,
+			title:{
+				text:"Alternate recommended feed page"
+			},
+			desc:{
+				text:`Use <a href="/feed/recommended_for_you">/feed/recommended_for_you</a> instead of <a href="/feed/what_to_watch/recommended">/feed/what_to_watch/recommended</a>. Enable this if you experience issues with the default feed.`
+			},
+			opts:[
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
 			id:"rndThumbs",
 			title:{
 				text:"Rounded Thumbnails"
@@ -4064,12 +4260,13 @@ pages:[
 					value:"cosmic2012"
 				}},
                 {opt:{
-					name:"Flash7",
-					value:"flash7"
+					name:"2010-2011",
+					value:"aozora2010",
+                    new:true
 				}},
                 {opt:{
-					name:"Embed Player (use this if the player isn't working)",
-					value:"embed"
+					name:"Flash7",
+					value:"flash7"
 				}},
                 {opt:{
 					name:"None of the above; do not allow StarTube to change V3's player settings (will not undo previous changes made by StarTube)",
@@ -4729,8 +4926,6 @@ function executeRadios(i, x, K){
 			setV3Settings("defaultPlayer");
         }else if(x=="flash7"){
 			setV3Settings("flash7Player");
-		}else if(x=="embed"){
-			setV3Settings("embedPlayer");
 		}
 	}else if(i=="playerSizerules"){
 		if(STS.expStaticSite==true&&STS.expStaticSiteForcesSmallPlayer==true){
@@ -4993,6 +5188,7 @@ function executeRadiosParent(s){
 	executeRadios("colorfulChannels",s.colorfulChannels,true);
     executeRadios("outlineIcons",s.outlineIcons,true);
     executeRadios("superScale",s.superScale,true);
+    executeRadios("altFeed",s.altFeed,true);
 }
 getIronSettings();
 function STAltWatch9(){
@@ -5244,6 +5440,7 @@ function STAltWatch9Fancy(){
 	}
 	function STMid2016Settings(){
         SRS.layoutSelect.tValue="hhM2016";
+        SRS.relatedSize.tValue="small";
 
 		if(STS.STPresetsAlsoSetV3Settings == true){
 			setV3Settings("nirvana16");
@@ -5566,7 +5763,7 @@ function STAozoraSettings(){
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
     SRS.ambientMode.tValue="off";
-    SRS.playerVersion.tValue="cosmic2012";
+    SRS.playerVersion.tValue="aozora2010";
     SRS.watchLayout.tValue="watch5c";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="smaller";
@@ -5611,7 +5808,7 @@ function STStargazerSettings(){
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
     SRS.ambientMode.tValue="off";
-    SRS.playerVersion.tValue="cosmic2012";
+    SRS.playerVersion.tValue="aozora2010";
     SRS.watchLayout.tValue="watch4b";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="smaller";
@@ -5715,7 +5912,7 @@ function STStargazer2008Settings(){
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
         SRS.ambientMode.tValue="off";
-    SRS.playerVersion.tValue="cosmic2012";
+    SRS.playerVersion.tValue="aozora2010";
     SRS.watchLayout.tValue="watch4a";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="smaller";
@@ -6638,12 +6835,17 @@ arra.forEach(i => {
 		});
 	}
 });
-
+let feedHref="/feed/what_to_watch/recommended";
+let feedId="FEwhat_to_watch";
+if(SRS.altFeed.tValue=="on"){
+    feedHref="/feed/recommended_for_you";
+    feedId="FErecommended_for_you";
+}
 if(window.location.href == "https://www.youtube.com/" && SRS.homeRedir.tValue !== "off"){
     if(SRS.homeRedir.tValue=="feedGrid"){
-        window.location = "https://www.youtube.com/feed/what_to_watch/recommended?flow=grid";
+        window.location = "https://www.youtube.com"+feedHref+"?flow=grid";
     }else{
-        window.location = "https://www.youtube.com/feed/what_to_watch/recommended";
+        window.location = "https://www.youtube.com"+feedHref;
     }
 }
 	var canGo = false;
@@ -6734,23 +6936,10 @@ function fillVideosDD(){
 				$(".st-video-dd-trigger").removeAttribute("disabled");
 				$(".st-video-dd-trigger .run").textContent = CWD.videoCount;
 				$(".st-video-count").textContent = CWD.videoCount;
-				$(".st-video-count-link").href = "/channel/" + CWD.channelId + "/videos?view=0";
-				$(".st-video-count-link").data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: CWD.channelId,
-								canonicalBaseUrl: "/channel/" + CWD.channelId + "/videos?view=0",
-								params: "EgZ2aWRlb3PyBgQKAjoA"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/channel/" + CWD.channelId + "/videos?view=0"
-								}
-							}
-						}
-					}
-				}
+                let vcl=$(".st-video-count-link");
+				vcl.href="/channel/"+CWD.channelId+"/videos?view=0";
+                vcl.setAttribute("stx-id",CWD.channelId);
+				STX_warmLink(vcl);
 			}
 			currNumb++;
 			pageVid++;
@@ -6807,23 +6996,10 @@ function fillVideoList(list, renderer, purpose, prevNumb){
 				$(".st-video-dd-trigger").removeAttribute("disabled");
 				$(".st-video-dd-trigger .run").textContent = CWD.videoCount;
 				$(".st-video-count").textContent = CWD.videoCount;
-				$(".st-video-count-link").href = "/channel/" + CWD.channelId + "/videos?view=0";
-				$(".st-video-count-link").data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: CWD.channelId,
-								canonicalBaseUrl: "/channel/" + CWD.channelId + "/videos?view=0",
-								params: "EgZ2aWRlb3PyBgQKAjoA"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/channel/" + CWD.channelId + "/videos?view=0"
-								}
-							}
-						}
-					}
-				}
+				let vcl=$(".st-video-count-link");
+				vcl.href="/channel/"+CWD.channelId+"/videos?view=0";
+                vcl.setAttribute("stx-id",CWD.channelId);
+				STX_warmLink(vcl);
 			}
 		}
 		currNumb++;
@@ -7243,53 +7419,6 @@ function getWatchMetadata(x){
             let chanLink="/channel/"+theHref;
             CWD.channelLink=chanLink;
             CWD.videosLink=chanLink+"/videos";
-            CWD.channelNav={
-                abstractVorElement:{
-                    navigationEndpoint:{
-                        browseEndpoint:{
-                            browseId:theHref,
-                            canonicalBaseUrl:"/channel/"+theHref
-                        },
-                        commandMetadata: {
-                            webCommandMetadata: {
-                                url:"/channel/"+theHref
-                            }
-                        }
-                    }
-                }
-            }
-            CWD.videosNav={
-                abstractVorElement:{
-                    navigationEndpoint:{
-                        browseEndpoint:{
-                            browseId:theHref,
-                            canonicalBaseUrl:"/channel/"+theHref+"/videos",
-                            params:"EgZ2aWRlb3PyBgQKAjoA"
-                        },
-                        commandMetadata: {
-                            webCommandMetadata: {
-                                url:"/channel/"+theHref+"/videos"
-                            }
-                        }
-                    }
-                }
-            }
-            CWD.videosNav2={
-                abstractVorElement:{
-                    navigationEndpoint:{
-                        browseEndpoint:{
-                            browseId:theHref,
-                            canonicalBaseUrl:"/channel/"+theHref+"/videos?view=0",
-                            params:"EgZ2aWRlb3PyBgQKAjoA"
-                        },
-                        commandMetadata: {
-                            webCommandMetadata: {
-                                url:"/channel/"+theHref+"/videos?view=0"
-                            }
-                        }
-                    }
-                }
-            }
             CWD.descSnippet=$("#eow-description").innerHTML;
             let sent=$("#watch7-user-header").data.watch7UserHeader.sentimentBar.continuationItemRenderer.placeholder.sentimentBarRenderer;
             CWD.avgRating=sent.averageRating;
@@ -7490,59 +7619,47 @@ function getWatchMetadata(x){
                 nH.insertBefore(tM,nH.children[0]);
             }
         }
-        setTimeout(function(){
-            if($("#watch-related-holder .watch-sidebar-section")==null&&$("#watch7-sidebar-contents > .watch-sidebar-section")){
-                if(SRS.watchLayout.tValue=="watch4a"||SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"){
+        if(SRS.watchLayout.tValue=="watch4a"||SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"||SRS.watchLayout.tValue=="watch11"){
+            let nH;
+            if(SRS.watchLayout.tValue=="watch11"){
+                nH=$("#below-related-holder");
+            }else{
+                nH=$("#watch-related-holder");
+            }
+            let e=".watch-sidebar-section:not(.st-moved):not(.new)";
+            wF(e,10).then(function(elm){
+                if(canGo!=false){
                     if($(".live_chat_box_iframe_holder")){
                         tM=document.querySelectorAll("#watch7-sidebar-contents > .watch-sidebar-section")[1];
-                        nH=$("#watch-related-holder");
                         nH.insertBefore(tM,nH.children[0]);
+                        tM.classList.add("st-moved");
                         tM=document.querySelectorAll("#watch7-sidebar-contents > .watch-sidebar-section")[1];
-                        nH=$("#watch-related-holder");
                         nH.insertBefore(tM,nH.children[1]);
+                        tM.classList.add("st-moved");
                         if($("#watch7-sidebar-contents > .watch-sidebar-section")){
                             tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
                             nH=$("#watch-chat-holder");
                             nH.insertBefore(tM,nH.children[2]);
+                            tM.classList.add("st-moved");
                         }
                         $("#st-chat-panel").classList.remove("hid");
                     }else{
                         tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
-                        nH=$("#watch-related-holder");
                         nH.insertBefore(tM,nH.children[0]);
+                        tM.classList.add("st-moved");
                         if($("#watch7-sidebar-contents > .watch-sidebar-section")){
                             tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
                             nH.insertBefore(tM,nH.children[1]);
+                            tM.classList.add("st-moved");
                         }
                     }
-                    $("#st-related-panel").classList.remove("hid");
-                    $("#st-videos-panel").classList.remove("hid");
-                }else if(SRS.watchLayout.tValue=="watch11"){
-                    if($(".live_chat_box_iframe_holder")){
-                        tM=document.querySelectorAll("#watch7-sidebar-contents > .watch-sidebar-section")[1];
-                        nH=$("#below-related-holder");
-                        nH.insertBefore(tM,nH.children[0]);
-                        tM=document.querySelectorAll("#watch7-sidebar-contents > .watch-sidebar-section")[1];
-                        nH=$("#below-related-holder");
-                        nH.insertBefore(tM,nH.children[1]);
-                        if($("#watch7-sidebar-contents > .watch-sidebar-section")){
-                            tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
-                            nH=$("#watch-chat-holder");
-                            nH.insertBefore(tM,nH.children[2]);
-                        }
-                        $("#st-chat-panel").classList.remove("hid");
-                    }else{
-                        tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
-                        nH=$("#below-related-holder");
-                        nH.insertBefore(tM,nH.children[0]);
-                        if($("#watch7-sidebar-contents > .watch-sidebar-section")){
-                            tM=$("#watch7-sidebar-contents > .watch-sidebar-section");
-                            nH.insertBefore(tM,nH.children[1]);
-                        }
+                    if(SRS.watchLayout.tValue!="watch11"){
+                        $("#st-related-panel").classList.remove("hid");
+                        $("#st-videos-panel").classList.remove("hid");
                     }
                 }
-            }
-        },500);
+            });
+        }
         if(SRS.watchLayout.tValue=="watch4a"||SRS.watchLayout.tValue=="watch4b"||SRS.watchLayout.tValue=="watch4c"){
             $(".st-owner .st-sub-count").classList.add("hid");
             $(".st-owner .st-upload-date").classList.remove("hid");
@@ -8516,13 +8633,15 @@ function getWatchMetadata(x){
         }
         document.querySelectorAll(".st-pfp").forEach(i=>{
             i.href=w.channelLink;
-            i.data=w.channelNav;
+            i.setAttribute("stx-id",w.channelId);
             i.querySelector("img").src=w.pfp;
+            STX_warmLink(i);
         });
         document.querySelectorAll(".st-owner-name-spec").forEach(i=>{
             i.textContent=w.owner;
             i.href=w.channelLink;
-            i.data=w.channelNav;
+            i.setAttribute("stx-id",w.channelId);
+            STX_warmLink(i);
         });
         if($(".st-title-spec")){
             document.querySelectorAll(".st-title-spec").forEach(i=>{
@@ -8535,8 +8654,9 @@ function getWatchMetadata(x){
         if($(".st-owner-handle")){
             document.querySelectorAll(".st-owner-handle").forEach(i=>{
                 i.textContent=w.channelHandle;
-                i.data=w.channelNav;
                 i.href=w.channelLink;
+                i.setAttribute("stx-id",w.channelId);
+                STX_warmLink(i);
             });
         }
         if($(".st-sub-count")){
@@ -8565,7 +8685,8 @@ function getWatchMetadata(x){
         if($(".st-video-count-link")){
             document.querySelectorAll(".st-video-count-link").forEach(i=>{
                 i.href=w.videosLink;
-                i.data=w.videosNav;
+                i.setAttribute("stx-id",w.channelId);
+                STX_warmLink(i);
             });
         }
         if($(".st-channel-video-count")){
@@ -9564,24 +9685,6 @@ function everyLoadNeo(x){
 	}
     if(SRS.layoutSelect.tValue=="sb2016"||SRS.layoutSelect.tValue=="sb2017"||SRS.layoutSelect.tValue=="sb2024"){
     }
-    if($("[href='/feed/hype_leaderboard']") == null && $("#FEtrending-guide-item")){
-        $("#FEtrending-guide-item a").data={
-            abstractVorElement: {
-                navigationEndpoint: {
-                    browseEndpoint: {
-                        browseId: "FEhype_leaderboard",
-                        canonicalBaseUrl:"/feed/hype_leaderboard"
-                    },
-                    commandMetadata: {
-                        webCommandMetadata: {
-                            url:"/feed/hype_leaderboard"
-                        }
-                    }
-                }
-            }
-        }
-        $("#FEtrending-guide-item a").href="/feed/hype_leaderboard";
-    }
 }
     function videosWatchedNow(){
         if($("#st-vids-watched-now")==null){
@@ -9599,7 +9702,7 @@ function everyLoadNeo(x){
 				`;
                 container.insertBefore(newElem, container.children[0]);
                 if(gdp.thirdColVideos==null){
-                    EXFetch("none","single","browse","browseId","FEtrending","params","6gQJRkVleHBsb3Jl").then(result=>{
+                    mobileFetch("none","nomod","browse","browseId","FEhype_leaderboard").then(result => {
                         fillVWN(result);
                         gdp.thirdColVideos=result;
                     });
@@ -9610,17 +9713,17 @@ function everyLoadNeo(x){
         }
     }
 	function fillVWN(result){
-		let shelf=result.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[1].itemSectionRenderer.contents[0].shelfRenderer.content.expandedShelfContentsRenderer.items;
         let nTT=0;
         let nPage=0;
-		shelf.forEach(i => {
-			if(i.videoRenderer){
+        let shelf=result.contents.singleColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents;
+        shelf.forEach(i => {
+			if(i.itemSectionRenderer.contents[0].elementRenderer.newElement.type.componentType.model.compactVideoModel){
                 setTimeout(function(){
                     nTT++;
                     if(nTT==6||nTT==11||nTT==16||nTT==21||nTT==26||nTT==31||nTT==36||nTT==41||nTT==46||nTT==51||nTT==56||nTT==61||nTT==66||nTT==71||nTT==76){
                         nPage++;
                     }
-                    createRenderer(i.videoRenderer,"videosWatchedNow",nPage);
+                    createRenderer(i.itemSectionRenderer.contents[0].elementRenderer.newElement.type.componentType.model.compactVideoModel.compactVideoData,"videosWatchedNow",nPage);
                 },10);
 			}
 		});
@@ -10272,7 +10375,7 @@ return gethash();
 					if(i.tabRenderer.title == "Feed" || i.tabRenderer.icon == "yt-uix-button-icon-c4-home-feed"){
 						resolve(i.tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents);
 					}
-					if(i.tabRenderer.endpoint.browseEndpoint.params == "Egljb21tdW5pdHnyBgQKAkoA" && i.tabRenderer.content){
+					if(i.tabRenderer.endpoint.browseEndpoint.params == "EgVwb3N0c_IGBAoCSgA%3D" && i.tabRenderer.content){
 						resolve(i.tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents);//backstage
 					}
 					if(i.tabRenderer.endpoint.browseEndpoint.params == "EglwbGF5bGlzdHPyBgQKAkIA" && i.tabRenderer.content && i.tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].gridRenderer.items){
@@ -11460,7 +11563,7 @@ position: relative;
 				<div id="c3-header">
 					<div id="c3-header-upper" class="flex-bar">
 						<div class="c3-header-left flex-bar">
-							<a id="c3-channel-pfp" href="/channel/${gdp.currChan.id}">
+							<a id="c3-channel-pfp" class="stx-link" stx-ep="browse" stx-id="${gdp.currChan.id}" href="/channel/${gdp.currChan.id}">
 								<img>
 							</a>
 							<div id="c3-details-area">
@@ -11470,7 +11573,7 @@ position: relative;
 								</div>
 								<div id="c3-channel-name">
 									<span class="c3-by">by</span>
-									<a class="c3-name-link" href="/channel/${gdp.currChan.id}"></a>
+									<a class="c3-name-link stx-link" stx-ep="browse" stx-id="${gdp.currChan.id}" href="/channel/${gdp.currChan.id}"></a>
 									<span class="c3-name"></span>
 								</div>
 								</div>
@@ -11495,13 +11598,13 @@ position: relative;
 					</div>
 					<div id="c3-header-lower" class="flex-bar">
 						<div id="c3-tabs" class="flex-bar">
-							<a id="c3-featured-tab" class="c3-tab flex-bar" href="/channel/${gdp.currChan.id}/featured">
+							<a id="c3-featured-tab" class="c3-tab flex-bar stx-link" stx-ep="browse" stx-id="${gdp.currChan.id}" href="/channel/${gdp.currChan.id}/featured">
 								<span>Featured</span>
 							</a>
-							<a id="c3-feed-tab" class="c3-tab flex-bar" href="/channel/${gdp.currChan.id}/feed">
+							<a id="c3-feed-tab" class="c3-tab flex-bar stx-link" stx-ep="browse" stx-id="${gdp.currChan.id}" stx-params="EghmZWF0dXJlZPIGBAoCMgA%3D" href="/channel/${gdp.currChan.id}/feed">
 								<span>Feed</span>
 							</a>
-							<a id="c3-videos-tab" class="c3-tab flex-bar" href="/channel/${gdp.currChan.id}/videos?view=0">
+							<a id="c3-videos-tab" class="c3-tab flex-bar stx-link" stx-ep="browse" stx-id="${gdp.currChan.id}" stx-params="EgZ2aWRlb3PyBgQKAjoA" href="/channel/${gdp.currChan.id}/videos?view=0">
 								<span>Videos</span>
 							</a>
 						</div>
@@ -11520,16 +11623,16 @@ Search
 				<div id="c3-below" class="flex">
 					<div id="c3-content">
 						<div id="c3-nav">
-							<a id="c3-uploads-nav" class="c3-nav-item c3-videos-tab" href="/channel/${gdp.currChan.id}/videos?view=0">
+							<a id="c3-uploads-nav" class="c3-nav-item c3-videos-tab stx-link" stx-ep="browse" stx-id="${gdp.currChan.id}" stx-params="EgZ2aWRlb3PyBgQKAjoA" href="/channel/${gdp.currChan.id}/videos?view=0">
 								<span>Uploaded Videos</span>
 							</a>
-							<a id="c3-playlists-nav" class="c3-nav-item c3-videos-tab" href="/channel/${gdp.currChan.id}/playlists">
+							<a id="c3-playlists-nav" class="c3-nav-item c3-videos-tab stx-link" stx-ep="browse" stx-id="${gdp.currChan.id}" stx-params="EglwbGF5bGlzdHPyBgQKAkIA" href="/channel/${gdp.currChan.id}/playlists">
 								<span>Playlists</span>
 							</a>
-							<a id="c3-activity-nav" class="c3-nav-item c3-feed-tab" href="/channel/${gdp.currChan.id}/feed">
+							<a id="c3-activity-nav" class="c3-nav-item c3-feed-tab stx-link" stx-ep="browse" stx-id="${gdp.currChan.id}" stx-params="EghmZWF0dXJlZPIGBAoCMgA%3D" href="/channel/${gdp.currChan.id}/feed">
 								<span>Channel Activity</span>
 							</a>
-							<a id="c3-backstage-nav" class="c3-nav-item c3-feed-tab" href="/channel/${gdp.currChan.id}/community">
+							<a id="c3-backstage-nav" class="c3-nav-item c3-feed-tab stx-link" stx-ep="browse"stx-id="${gdp.currChan.id}" stx-params="EgVwb3N0c_IGBAoCSgA%3D" href="/channel/${gdp.currChan.id}/posts">
 								<span>Backstage</span>
 							</a>
 						</div>
@@ -11575,6 +11678,9 @@ Search
 					$("#c3-playlist-title span").textContent = gdp.currPlaylist.title;
 					$(".c3-playall a").href = "/watch?v=" + gdp.currPlaylist.firstVideoId + "&list=" + gdp.currPlaylist.id;
 				}
+                document.querySelectorAll(".c3 .stx-link").forEach(a=>{
+                    STX_warmLink(a);
+                });
 
 
 				img.src = gdp.currChan.header.tvBanner;
@@ -11645,7 +11751,7 @@ Search
 						$(".c3").classList.add("is-videos");
 						fillC3Page("playlists");
 						break;
-					case "community":
+					case "posts":
 						$("#c3-feed-tab").classList.add("active");
 						$("#c3-backstage-nav").classList.add("active");
 						$(".c3").classList.add("is-feed");
@@ -11682,106 +11788,6 @@ Search
 					$(".c3").classList.add("is-home");
 					fillC3Page("home");
 				}
-				let homeData = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: gdp.currChan.id,
-								canonicalBaseUrl: "/channel/" + gdp.currChan.id
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/channel/" + gdp.currChan.id
-								}
-							}
-						}
-					}
-				}
-				$("#c3-channel-pfp").data = homeData;
-				$(".c3-name-link").data = homeData;
-				$("#c3-featured-tab").data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: gdp.currChan.id,
-								canonicalBaseUrl: "/channel/" + gdp.currChan.id + "/featured"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/channel/" + gdp.currChan.id + "/featured"
-								}
-							}
-						}
-					}
-				}
-				let c3FeedData = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: gdp.currChan.id,
-								canonicalBaseUrl: "/channel/" + gdp.currChan.id + "/feed",
-								params: "EghmZWF0dXJlZPIGBAoCMgA%3D"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/channel/" + gdp.currChan.id + "/feed"
-								}
-							}
-						}
-					}
-				}
-				let c3VidsData = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: gdp.currChan.id,
-								canonicalBaseUrl: "/channel/" + gdp.currChan.id + "/videos?view=0",
-								params: "EgZ2aWRlb3PyBgQKAjoA"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/channel/" + gdp.currChan.id + "/videos?view=0"
-								}
-							}
-						}
-					}
-				}
-				$("#c3-playlists-nav").data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: gdp.currChan.id,
-								canonicalBaseUrl: "/channel/" + gdp.currChan.id + "/playlists",
-								params: "EglwbGF5bGlzdHPyBgQKAkIA"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/channel/" + gdp.currChan.id + "/playlists"
-								}
-							}
-						}
-					}
-				}
-				$("#c3-backstage-nav").data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: gdp.currChan.id,
-								canonicalBaseUrl: "/channel/" + gdp.currChan.id + "/community",
-								params: "Egljb21tdW5pdHnyBgQKAkoA"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/channel/" + gdp.currChan.id + "/community"
-								}
-							}
-						}
-					}
-				}
-				$("#c3-videos-tab").data = c3VidsData;
-				$("#c3-uploads-nav").data = c3VidsData;
-				$("#c3-feed-tab").data = c3FeedData;
-				$("#c3-activity-nav").data = c3FeedData;
 
 				if($("[channel-about-fetched='true']")){
 					fillC3Blanks();
@@ -11870,37 +11876,12 @@ Search
 </div></div>
 				`;
 					container.insertBefore(newElem,container.children[number]);
+                    newElem.querySelectorAll("a").forEach(a=>{
+                        STX_craftLink(a,"watch",i.videoId,href).then(a=>{
+                            STX_warmLink(a);
+                        });
+                    });
 					newElem.querySelector(".yt-uix-sessionlink").setAttribute("title",title);
-					newElem.querySelector("a").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								watchEndpoint: {
-									videoId: i.videoId,
-									canonicalBaseUrl: href
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: href
-									}
-								}
-							}
-						}
-					};
-					newElem.querySelectorAll("a")[1].data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								watchEndpoint: {
-									videoId: i.videoId,
-									canonicalBaseUrl: href
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: href
-									}
-								}
-							}
-						}
-					};
 				}
 				if(i.continuationItemRenderer){
 					//continuationEndpoint.continuationCommand
@@ -12007,36 +11988,13 @@ Search
 				`;
                     container.insertBefore(newElem,container.children[number]);
                     let numberT=0;
-                    newElem.querySelector(".yt-pl-thumb-link").data={
-                        abstractVorElement:{
-                            navigationEndpoint:{
-                                watchEndpoint:{
-                                    videoId:videoId,
-                                    playlistId:playlistId,
-                                    canonicalBaseUrl: href
-                                },
-                                commandMetadata:{
-                                    webCommandMetadata:{
-                                        url:href
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    newElem.querySelector(".yt-uix-sessionlink").data={
-                        abstractVorElement:{
-                            navigationEndpoint:{
-                                browseEndpoint:{
-                                    browseId:"VL"+playlistId
-                                },
-                                commandMetadata:{
-                                    webCommandMetadata:{
-                                        url:"/playlist?list="+playlistId
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    STX_craftLink(newElem.querySelector(".yt-pl-thumb-link"),"watch",videoId,href,playlistId).then(a=>{
+                        STX_warmLink(a);
+                    });
+                    STX_craftLink(newElem.querySelector(".yt-uix-sessionlink"),"browse","VL"+playlistId,"/playlist?list="+playlistId).then(a=>{
+                        STX_warmLink(a);
+                    });
+
                     if(i.sidebarThumbnails){
                         i.sidebarThumbnails.forEach(xl=>{
                             if(xl.empty==null){
@@ -12051,8 +12009,7 @@ Search
                             c.classList.add("empty");
                         });
                     }
-                }
-				else if(i.gridPlaylistRenderer){
+                }else if(i.gridPlaylistRenderer){
 					i = i.gridPlaylistRenderer;
 					let i2 = i.contextItemData;
 					let href;
@@ -12118,36 +12075,12 @@ Search
 				`;
 					container.insertBefore(newElem,container.children[number]);
 					let numberT = 0;
-					newElem.querySelector(".yt-pl-thumb-link").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								watchEndpoint: {
-									videoId: videoId,
-									playlistId: i.playlistId,
-									canonicalBaseUrl: href
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: href
-									}
-								}
-							}
-						}
-					}
-					newElem.querySelector(".yt-uix-sessionlink").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: "VL" + i.playlistId
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: "/playlist?list=" + i.playlistId
-									}
-								}
-							}
-						}
-					}
+                    STX_craftLink(newElem.querySelector(".yt-pl-thumb-link"),"watch",videoId,href,i.playlistId).then(a=>{
+                        STX_warmLink(a);
+                    });
+                    STX_craftLink(newElem.querySelector(".yt-uix-sessionlink"),"browse","VL"+i.playlistId,"/playlist?list="+i.playlistId).then(a=>{
+                        STX_warmLink(a);
+                    });
 					if(i.sidebarThumbnails){
 						i.sidebarThumbnails.forEach(xl => {
 							if(xl.empty == null){
@@ -12228,23 +12161,9 @@ Search
 			$("#c3-backstage-warning .close").addEventListener("click", function(){
 				$("#c3-backstage-warning").remove();
 			});
-			$("#c3-redir").href = "/channel/" + gdp.currChan.id + "/community?force-c4";
-			$("#c3-redir").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						browseEndpoint: {
-							browseId: gdp.currChan.id,
-							canonicalBaseUrl: "/channel/" + gdp.currChan.id + "/community?force-c4",
-							params: "Egljb21tdW5pdHnyBgQKAkoA"
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: "/channel/" + gdp.currChan.id + "/community?force-c4"
-							}
-						}
-					}
-				}
-			};
+            STX_craftLink($("#c3-redir"),"browse",gdp.currChan.id,"/channel/"+gdp.currChan.id+"/community?force-c4","Egljb21tdW5pdHnyBgQKAkoA").then(a=>{
+                STX_warmLink(a);
+            });
 			gdp.currChan.content.forEach(i => {
 				if(i.__DOM_REFERENCE && i.backstagePostThreadRenderer){
 					setTimeout(function(){
@@ -12262,9 +12181,6 @@ Search
 				if(i.itemSectionRenderer){
 					if(i.itemSectionRenderer.contents[0].channelFeaturedContentRenderer){
 						buildFeaturedContent(i.itemSectionRenderer.contents[0].channelFeaturedContentRenderer, number);
-					}
-					if(i.itemSectionRenderer.contents[0].channelVideoPlayerRenderer){
-						//buildChannelPlayer(i.itemSectionRenderer.contents[0].channelVideoPlayerRenderer, number);
 					}
 					if(
 						i.itemSectionRenderer.contents[0].shelfRenderer &&
@@ -12298,59 +12214,6 @@ Search
 			});
 		}
         }
-	}
-	function buildChannelPlayer(Bdata, number){
-		let id = Bdata.videoId;
-		let container = $("#c3-featured-slot");
-		let newElem = document.createElement("div");
-		newElem.classList = "c3-featured-content";
-		newElem.id = "c3-player-container";
-		newElem.innerHTML = `
-		<div id="c3-player">
-			 <iframe width="640" height="390" src="https://www.youtube.com/embed/${Bdata.videoId}">
-			 </iframe>
-		</div>
-		<div id="c3-player-meta">
-		</div>
-		`;
-		container.insertBefore(newElem,container.children[0]);
-		/*let href = newElem.querySelector(".yt-lockup-title a").href;
-		let id = href.split("/watch?v=")[1];
-		let data = {
-			abstractVorElement: {
-				navigationEndpoint: {
-					watchEndpoint: {
-						videoId: id,
-						canonicalBaseUrl: href
-					},
-					commandMetadata: {
-						webCommandMetadata: {
-							url: href
-						}
-					}
-				}
-			}
-		};
-		let authorHref = newElem.querySelector(".yt-user-name").href;
-		let authorId = authorHref.split("/channel/")[1];
-		let authorData = {
-			abstractVorElement: {
-				navigationEndpoint: {
-					browseEndpoint: {
-						browseId: authorId,
-						canonicalBaseUrl: authorHref
-					},
-					commandMetadata: {
-						webCommandMetadata: {
-							url: authorHref
-						}
-					}
-				}
-			}
-		};
-		newElem.querySelector(".yt-lockup-title a").data = data;
-		newElem.querySelector(".yt-lockup-thumbnail a").data = data;
-		newElem.querySelector(".yt-user-name").data = authorData;*/
 	}
 	function buildFeaturedList(Bdata, number){
 		if($(".c3-featured-list") == null){
@@ -12485,18 +12348,15 @@ Search
 			let thumb = video.thumbnail.thumbnails[thumbl - 1].url;
 			let nav = video.navigationEndpoint;
 			let href = "/watch?v=" + video.videoId;
-			newElem.href = href;
+            STX_craftLink(newElem,"watch",video.videoId,href).then(a=>{
+                STX_warmLink(a);
+            });
 			newElem.querySelector(".sc-video-title span").textContent = title;
 			newElem.querySelector(".sc-video-title").title = title;
 			newElem.querySelector(".sc-video-time span").textContent = time;
 			newElem.querySelector(".sc-video-view-count span").textContent = views;
 			newElem.querySelector(".sc-video-date span").textContent = date;
 			newElem.querySelector(".sc-video-thumbnail img").src = thumb;
-			newElem.data = {
-				abstractVorElement: {
-					navigationEndpoint: nav
-				}
-			}
 		}
 		if(renderer == "altWatch9SCVid"){
 			let id = i.navigationEndpoint.watchEndpoint.videoId;
@@ -12536,21 +12396,9 @@ Search
 													</div>
 				`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						watchEndpoint: {
-							videoId: id,
-							canonicalBaseUrl: href
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href
-							}
-						}
-					}
-				}
-			};
+			STX_craftLink(newElem,"watch",id,href).then(a=>{
+                STX_warmLink(a);
+            });
 		}
         if(renderer == "hypeVideo"){
 			let id = i.onTap.innertubeCommand.watchEndpoint.videoId;
@@ -12584,21 +12432,9 @@ Search
 </span></a>
 				`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.querySelector("a").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						watchEndpoint: {
-							videoId: id,
-							canonicalBaseUrl: href
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href
-							}
-						}
-					}
-				}
-			};
+			STX_craftLink(newElem.querySelector("a"),"watch",id,href).then(a=>{
+                STX_warmLink(a);
+            });
 		}
 		if(renderer == "videosTabCompactVideo"){
 			let id = i.navigationEndpoint.watchEndpoint.videoId;
@@ -12639,21 +12475,9 @@ Search
 </span><span class="stat view-count">${viewCount}<span class="extra">${date}</span></span></a>
 				`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.querySelector("a").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						watchEndpoint: {
-							videoId: id,
-							canonicalBaseUrl: href
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href
-							}
-						}
-					}
-				}
-			};
+			STX_craftLink(newElem.querySelector("a"),"watch",id,href).then(a=>{
+                STX_warmLink(a);
+            });
 		}
         if(renderer=="videosPanelCompactVideo"){
 			let id = i.navigationEndpoint.watchEndpoint.videoId;
@@ -12694,35 +12518,22 @@ Search
 </span><span class="stat view-count">${viewCount}<span class="extra">${date}</span></span></a>
 				`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.querySelector("a").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						watchEndpoint: {
-							videoId: id,
-							canonicalBaseUrl: href
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href
-							}
-						}
-					}
-				}
-			};
+			STX_craftLink(newElem.querySelector("a"),"watch",id,href).then(a=>{
+                STX_warmLink(a);
+            });
             if(id == CWD.id){
                 newElem.classList.add("active");
             }
 		}
 		if(renderer == "thirdColCompactVideo"){
-			let id = i.navigationEndpoint.watchEndpoint.videoId;
-			let href = "/watch?v=" + id;
-			let date = i.publishedTimeText.simpleText;
-			let viewCount = i.viewCountText.simpleText;
-			let owner = i.ownerText.runs[0].text;
 			let container = $("#thirdcol-videos");
-			let title = i.title.runs[0].text;
-			let time = i.lengthText.simpleText;
-			let thumbnail = i.thumbnail.thumbnails[2].url;
+            let id = i.onTap.innertubeCommand.watchEndpoint.videoId;
+			let href = "/watch?v=" + id;
+			let title = i.videoData.metadata.title;
+			let time = i.videoData.thumbnail.timestampText;
+			let thumbnail = i.videoData.thumbnail.image.sources[2].url;
+            let hype = i.videoData.metadata.bottomBadge[0].badgeText;
+            let owner = i.videoData.metadata.byline;
 			let newElem = document.createElement("li");
 			newElem.classList = "thirdcol-video video-list-item related-list-item context-data-item";
 			newElem.innerHTML = `
@@ -12740,24 +12551,12 @@ Search
 
 <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-default addto-button video-actions addto-watch-later-button yt-uix-button-size-small yt-uix-button-empty"><span class="yt-uix-button-content"><img src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"></span></button>
 </span><span dir="ltr" class="title" title="${title}">${title}</span><span class="stat attribution"><span class="g-hovercard" data-name="watch-vrec">
-<span class="run run-text">by </span><span class="run run-text"><b>${owner}</b></span></span></span><span class="stat view-count">${viewCount}<span class="extra">${date}</span></span></a>
+<span class="run run-text">by </span><span class="run run-text"><b>${owner}</b></span></span></span></a>
 				`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.querySelector("a").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						watchEndpoint: {
-							videoId: id,
-							canonicalBaseUrl: href
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href
-							}
-						}
-					}
-				}
-			};
+			STX_craftLink(newElem.querySelector("a"),"watch",id,href).then(a=>{
+                STX_warmLink(a);
+            });
 		}
         if(renderer=="videosWatchedNow"){
             // number is page
@@ -12769,15 +12568,14 @@ Search
                 nE.setAttribute("page",number);
                 conta.append(nE);
             }
-			let id = i.navigationEndpoint.watchEndpoint.videoId;
+            let id = i.onTap.innertubeCommand.watchEndpoint.videoId;
 			let href = "/watch?v=" + id;
-			let date = i.publishedTimeText.simpleText;
-			let viewCount = i.viewCountText.simpleText;
-			let owner = i.ownerText.runs[0].text;
+			let title = i.videoData.metadata.title;
+			let time = i.videoData.thumbnail.timestampText;
+			let thumbnail = i.videoData.thumbnail.image.sources[2].url;
+            let hype = i.videoData.metadata.bottomBadge[0].badgeText;
+            let owner = i.videoData.metadata.byline;
 			let container = $("#st-vwn-s"+number);
-			let title = i.title.runs[0].text;
-			let time = i.lengthText.simpleText;
-			let thumbnail = i.thumbnail.thumbnails[2].url;
 			let newElem = document.createElement("li");
 			newElem.classList = "vwn-video context-data-item video-list-item related-list-item context-data-item";
 			newElem.innerHTML = `
@@ -12795,26 +12593,14 @@ Search
 
 <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-default addto-button video-actions addto-watch-later-button yt-uix-button-size-small yt-uix-button-empty"><span class="yt-uix-button-content"><img src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"></span></button>
 </span><span dir="ltr" class="title" title="${title}">${title}</span><span class="stat attribution"><span class="g-hovercard" data-name="watch-vrec">
-<span class="run run-text">by </span><span class="run run-text"><b>${owner}</b></span></span></span><span class="stat view-count">${viewCount}<span class="extra">${date}</span></span></a>
+<span class="run run-text">by </span><span class="run run-text"><b>${owner}</b></span></span></span></a>
 <div class="st-thumb-echo" style="background-image:url(${thumbnail});">
 </div>
 				`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.querySelector("a").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						watchEndpoint: {
-							videoId: id,
-							canonicalBaseUrl: href
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href
-							}
-						}
-					}
-				}
-			};
+			STX_craftLink(newElem.querySelector("a"),"watch",id,href).then(a=>{
+                STX_warmLink(a);
+            });
 		}
 		if(renderer == "channelGridVideo"){
 			let i2 = i.contextItemData;
@@ -12852,38 +12638,13 @@ Search
 <li class="yt-lockup-deemphasized-text">${publishDate}</li></ul></div>
 </div></div>
 				`;
-					container.insertBefore(newElem,container.children[number]);
-									newElem.querySelector(".yt-uix-sessionlink").setAttribute("title",title);
-					newElem.querySelector("a").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								watchEndpoint: {
-									videoId: i.videoId,
-									canonicalBaseUrl: href
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: href
-									}
-								}
-							}
-						}
-					};
-					newElem.querySelectorAll("a")[1].data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								watchEndpoint: {
-									videoId: i.videoId,
-									canonicalBaseUrl: href
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: href
-									}
-								}
-							}
-						}
-					};
+            container.insertBefore(newElem,container.children[number]);
+            newElem.querySelector(".yt-uix-sessionlink").setAttribute("title",title);
+            newElem.querySelectorAll("a").forEach(a=>{
+                STX_craftLink(a,"watch",i.videoId,href).then(a=>{
+                    STX_warmLink(a);
+                });
+            });
 		}
         if(renderer == "relatedRichItem"){
             if($("[video-id='"+i.videoId+"']")==null){
@@ -12948,59 +12709,23 @@ Search
 </div>
 </div></div>
 				`;
-					container.insertBefore(newElem,container.children[number]);
-									newElem.querySelector(".yt-uix-sessionlink").setAttribute("title",title);
-            newElem.setAttribute("video-id",i.videoId);
-					newElem.querySelector("a").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								watchEndpoint: {
-									videoId: i.videoId,
-									canonicalBaseUrl: href
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: href
-									}
-								}
-							}
-						}
-					};
-					newElem.querySelectorAll("a")[1].data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								watchEndpoint: {
-									videoId: i.videoId,
-									canonicalBaseUrl: href
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: href
-									}
-								}
-							}
-						}
-					};
-            newElem.querySelectorAll("a")[2].data={
-						abstractVorElement:authorNav
-					};
-            newElem.querySelector(".g-hovercard").data={
-                abstractVorElement: {
-							cardNavigationEndpoint: {
-								browseEndpoint: {
-									browseId:authorId,
-									canonicalBaseUrl:"/channel/"+authorId
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url:"/channel/"+authorId
-									}
-								}
-							}
-						}
+                container.insertBefore(newElem,container.children[number]);
+                newElem.querySelector(".yt-uix-sessionlink").setAttribute("title",title);
+                newElem.setAttribute("video-id",i.videoId);
+                STX_craftLink(newElem.querySelector("a"),"browse",i.videoId,href).then(a=>{
+                    STX_warmLink(a);
+                });
+                STX_craftLink(newElem.querySelectorAll("a")[1],"browse",i.videoId,href).then(a=>{
+                    STX_warmLink(a);
+                });
+                STX_craftLink(newElem.querySelectorAll("a")[2],"browse",authorId,"/channel/"+authorId).then(a=>{
+                    STX_warmLink(a);
+                });
+                STX_craftLink(newElem.querySelector(".g-hovercard"),"browse",authorId,"/channel/"+authorId).then(a=>{
+                    STX_warmLink(a);
+                });
             }
-            }
-		}
+        }
 		if(renderer == "featuredPlaylist"){
 			let id = i.contextItemData.playlistId;
 			let href = "/playlist?list=" + id;
@@ -13009,8 +12734,8 @@ Search
 			let href3 = "/channel/" + author;
 			let videoId = href2.split("v=")[1].split("&")[0];
 			let thumb1 = i.thumbnail.thumbnails[0].url;
-			let vidCount = i.videoCountShortText.simpleText;
-			let title = i.title.runs[0].text;
+			let vidCount = i.videoCount;
+			let title = i.title.simpleText;
 			let byline = i.contextItemData.byLine;
 			let container = $("#c3-featured-playlists-slot .c3-sidebar-content");
 			let newElem = document.createElement("div");
@@ -13061,51 +12786,15 @@ Search
 </div>
 			`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.querySelector(".c3-playlist-thumbnails").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						watchEndpoint: {
-							videoId: videoId,
-							playlistId: i.contextItemData.playlistId,
-							canonicalBaseUrl: href2
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href2
-							}
-						}
-					}
-				}
-			}
-			newElem.querySelector(".c3-playlist-title").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						browseEndpoint: {
-							browseId: "VL" + id
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href
-							}
-						}
-					}
-				}
-			}
-			newElem.querySelector(".c3-playlist-byline").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						browseEndpoint: {
-							browseId: author,
-							canonicalBaseUrl: href3
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: href3
-							}
-						}
-					}
-				}
-			}
+            STX_craftLink(newElem.querySelector(".c3-playlist-thumbnails"),"watch",videoId,href2,i.contextItemData.playlistId).then(a=>{
+                STX_warmLink(a);
+            });
+            STX_craftLink(newElem.querySelector(".c3-playlist-title"),"browse","VL"+id,href).then(a=>{
+                STX_warmLink(a);
+            });
+            STX_craftLink(newElem.querySelector(".c3-playlist-byline"),"browse",author,href3).then(a=>{
+                STX_warmLink(a);
+            });
 			if(vidCount == 1){
 				newElem.querySelector(".c3-videos-string").textContent = "video";
 			}
@@ -13132,7 +12821,7 @@ Search
 			let newElem = document.createElement("div");
 			newElem.classList = "c3-featured-channel";
 			newElem.innerHTML = `
-<a href="/channel/${i.channelId}" class="channel-tile tile tile-link-block">
+<a href="/channel/${i.channelId}" class="channel-tile tile tile-link-block stx-link" stx-ep="browse" stx-id="${i.channelId}">
 <span class="thumb-container">
   <span class="video-thumb ux-thumb ux-thumb-profile-46"><span class="clip"><span class="profile-centering-wrap"><img src="${i.thumbnail.thumbnails[1].url}" data-group-key="thumb-group-2"></span></span></span>
 </span>
@@ -13146,21 +12835,7 @@ Search
 </a>
 			`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.querySelector("a").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						browseEndpoint: {
-							browseId: i.channelId,
-							canonicalBaseUrl: "/channel/" + i.channelId
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: "/channel/" + i.channelId
-							}
-						}
-					}
-				}
-			};
+			STX_warmLink(newElem.querySelector("a"));
 		}
 		if(renderer == "bigListVideo"){
 			let desc = "";
@@ -13186,7 +12861,7 @@ Search
 			newElem.innerHTML = `
 	   <li class="blogger-video">
 	  <span class="video tile">
-<a href="/watch?v=${id}" class="tile-link-block">
+<a href="/watch?v=${id}" class="tile-link-block stx-link" stx-ep="watch" stx-id="${id}">
   <span class="video-thumb ux-thumb ux-thumb-288 "><span class="clip"><img src="${Bdata.thumbnail.thumbnails[3].url}" alt="Thumbnail
 "></span><span class="video-time">${i.lengthText.simpleText}</span></span>
   <span class="video-item-content">
@@ -13212,21 +12887,7 @@ ${date}
 		`;
 			container.insertBefore(newElem,container.children[number]);
 			newElem.querySelector(".video-overview").setAttribute("title",i.title.runs[0].text);
-			newElem.querySelector("a").data = {
-				abstractVorElement: {
-					navigationEndpoint: {
-						watchEndpoint: {
-							videoId: id,
-							canonicalBaseUrl: "/watch?v=" + id
-						},
-						commandMetadata: {
-							webCommandMetadata: {
-								url: "/watch?v=" + id
-							}
-						}
-					}
-				}
-			};
+			STX_warmLink(newElem.querySelector("a"));
 			if(number == 0){
 				if(length == 31){
 					length = 30;
@@ -13246,7 +12907,7 @@ ${date}
 			<span>1-${length} of ${gdp.currChan.sidebar.shortVideoCount}</span>
 		</div>
 		<div class="c3-featured-playall c3-playall">
-			<a href="/watch?v=${id}&list=UU${gdp.currChan.shortId}">
+			<a href="/watch?v=${id}&list=UU${gdp.currChan.shortId}" class="stx-link" stx-ep="watch" stx-id="${id}" stx-params="UU${gdp.currChan.shortId}">
 				<span class="c3-arrow"></span>
 				<span>Play all</span>
 			</a>
@@ -13255,22 +12916,7 @@ ${date}
 		<div class="horizontal-rule"></div>
 		`;
 						container.insertBefore(newElem,container.children[0]);
-						newElem.querySelector("a").data = {
-							abstractVorElement: {
-								navigationEndpoint: {
-									watchEndpoint: {
-										videoId: id,
-										playlistId: "UU" + gdp.currChan.shortId,
-										canonicalBaseUrl: "/watch?v=" + id + "&list=UU" + gdp.currChan.shortId
-									},
-									commandMetadata: {
-										webCommandMetadata: {
-											url: "/watch?v=" + id + "&list=UU" + gdp.currChan.shortId
-										}
-									}
-								}
-							}
-						}
+						STX_warmLink(newElem.querySelector("a"));
 					}
 				});
 			}
@@ -13288,41 +12934,17 @@ ${date}
 			if(canGo != false){
 				let href = newElem.querySelector(".yt-lockup-title a").href;
 				let id = href.split("/watch?v=")[1];
-				let data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							watchEndpoint: {
-								videoId: id,
-								canonicalBaseUrl: href
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: href
-								}
-							}
-						}
-					}
-				};
-				let authorHref = newElem.querySelector(".g-hovercard .run-link").href;
+				let authorHref = newElem.querySelector(".g-hovercard a").href;
 				let authorId = authorHref.split("/channel/")[1];
-				let authorData = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: authorId,
-								canonicalBaseUrl: authorHref
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: authorHref
-								}
-							}
-						}
-					}
-				};
-				newElem.querySelector(".yt-lockup-title a").data = data;
-				newElem.querySelector(".yt-lockup-thumbnail a").data = data;
-				newElem.querySelector(".g-hovercard .run-link").data = authorData;
+                STX_craftLink(newElem.querySelector(".yt-lockup-title a"),"watch",id,href).then(a=>{
+                    STX_warmLink(a);
+                });
+                STX_craftLink(newElem.querySelector(".yt-lockup-thumbnail a"),"watch",id,href).then(a=>{
+                    STX_warmLink(a);
+                });
+                STX_craftLink(newElem.querySelector(".g-hovercard a"),"browse",authorId,authorHref).then(a=>{
+                    STX_warmLink(a);
+                });
 			}
 		});
 	}
@@ -14314,6 +13936,40 @@ function deleteTitleOnTop(){
 					`;
 					container.insertBefore(newElem, container.children[0]);
 					$("#FEsubscriptions-guide-item").classList.add("startube");
+				}
+			}
+        if($("#FEhype_leaderboard-guide-item.startube") == null){
+				if($("#FEhype_leaderboard-guide-item") == null){
+					let conta=$(".guide-user-links");
+					let nE=document.createElement("li");
+                    nE.id="FEhype_leaderboard-guide-item";
+					nE.classList="guide-channel startube";
+					nE.innerHTML=`
+                        <a class="guide-item yt-uix-sessionlink yt-valign stx-link" stx-ep="browse" stx-id="FEhype_leaderboard" title="Hype" alt="hype leaderboard" href="/feed/hype_leaderboard"><span class="yt-valign-container startube-has-icon"><img class="thumb guide-trending-icon" src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"><div class="st-svg thumb">
+                                <div class="filled-icon">
+<svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon"><g class="style-scope yt-icon">
+
+	<path d="M17.53 11.2c-.23-.3-.5-.56-.76-.82-.65-.6-1.4-1.03-2.03-1.66-1.46-1.46-1.78-3.87-.85-5.72-.9.23-1.75.75-2.45 1.32C8.9 6.4 7.9 10.07 9.1 13.22c.04.1.08.2.08.33 0 .22-.15.42-.35.5-.22.1-.46.04-.64-.12-.06-.05-.1-.1-.15-.17-1.1-1.43-1.28-3.48-.53-5.12C5.87 10 5 12.3 5.12 14.47c.04.5.1 1 .27 1.5.14.6.4 1.2.72 1.73 1.04 1.73 2.87 2.97 4.84 3.22 2.1.27 4.35-.12 5.96-1.6 1.8-1.66 2.45-4.3 1.5-6.6l-.13-.26c-.2-.45-.47-.87-.78-1.25zm-3.1 6.3c-.28.24-.73.5-1.08.6-1.1.38-2.2-.16-2.88-.82 1.2-.28 1.9-1.16 2.1-2.05.17-.8-.14-1.46-.27-2.23-.12-.74-.1-1.37.2-2.06.15.38.35.76.58 1.06.76 1 1.95 1.44 2.2 2.8.04.14.06.28.06.43.03.82-.32 1.72-.92 2.26z" class="style-scope yt-icon"></path>
+  </g></svg>
+  </div>
+					<div class="outline-icon">
+	  <div class="regular-icon">
+	  <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon"><g class="style-scope yt-icon">
+<g id="trending"><path d="M14.72,17.84c-0.32,0.27-0.83,0.53-1.23,0.66c-1.34,0.33-2.41-0.34-2.62-0.46c-0.21-0.11-0.78-0.38-0.78-0.38 s0.35-0.11,0.41-0.13c1.34-0.54,1.89-1.24,2.09-2.11c0.2-0.84-0.16-1.56-0.31-2.39c-0.12-0.69-0.11-1.28,0.12-1.9 c0.02-0.05,0.12-0.43,0.12-0.43s0.11,0.35,0.13,0.41c0.71,1.51,2.72,2.18,3.07,3.84c0.03,0.15,0.05,0.3,0.05,0.46 C15.8,16.3,15.4,17.26,14.72,17.84z M12.4,4.34c-0.12,0.08-0.22,0.15-0.31,0.22c-2.99,2.31-2.91,5.93-2.31,8.55l0.01,0.03l0.01,0.03 c0.06,0.35-0.05,0.7-0.28,0.96c-0.24,0.26-0.58,0.41-0.95,0.41c-0.44,0-0.85-0.2-1.22-0.6c-0.67-0.73-1.17-1.57-1.5-2.46 c-0.36,0.77-0.75,1.98-0.67,3.19c0.04,0.51,0.12,1,0.25,1.43c0.18,0.6,0.43,1.16,0.75,1.65c1.05,1.66,2.88,2.82,4.78,3.05 c0.42,0.05,0.85,0.08,1.26,0.08c1.34,0,3.25-0.27,4.74-1.57c1.77-1.56,2.35-3.99,1.44-6.06c-0.04-0.1-0.06-0.14-0.09-0.19 l-0.04-0.08c-0.21-0.42-0.47-0.81-0.75-1.14c-0.24-0.3-0.48-0.56-0.79-0.83c-0.3-0.27-0.64-0.51-1-0.77 c-0.46-0.33-0.93-0.67-1.38-1.09C12.98,7.83,12.3,6.11,12.4,4.34 M14.41,2c0,0-0.2,0.2-0.56,0.99c-0.66,1.92-0.15,3.95,1.34,5.39 c0.73,0.69,1.61,1.17,2.36,1.84c0.32,0.29,0.62,0.59,0.89,0.93c0.36,0.42,0.66,0.89,0.91,1.38c0.05,0.1,0.1,0.2,0.14,0.3 c1.12,2.55,0.36,5.47-1.73,7.31C16.23,21.47,14.22,22,12.22,22c-0.47,0-0.95-0.03-1.41-0.09c-2.29-0.28-4.42-1.66-5.63-3.57 c-0.39-0.6-0.68-1.26-0.88-1.93c-0.16-0.54-0.25-1.1-0.29-1.67c-0.12-1.88,0.67-3.63,1.08-4.31c0.41-0.69,1.55-2.18,1.55-2.18 s0,0.03-0.01,0.09C6.41,10.11,7,11.88,8.22,13.22c0.15,0.17,0.27,0.22,0.34,0.22c0.06,0,0.09-0.04,0.08-0.09 C7.79,9.59,8.37,6,11.35,3.7c0.59-0.46,1.51-0.94,1.98-1.18C13.8,2.28,14.41,2,14.41,2L14.41,2z"></path></g>
+</svg>
+	  </div>
+	  <div class="active-icon">
+	  <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" style="pointer-events: none; display: block; width: 100%; height: 100%;" class="style-scope yt-icon"><g class="style-scope yt-icon">
+<g id="trending-filled"><path d="M19.48,12.83c-0.04-0.1-0.09-0.2-0.14-0.3c-0.25-0.49-0.55-0.96-0.91-1.38c-0.27-0.34-0.57-0.65-0.89-0.93 c-0.75-0.67-1.63-1.14-2.36-1.84c-1.49-1.44-2-3.46-1.34-5.39C14.2,2.2,14.41,2,14.41,2s-0.6,0.28-1.07,0.52 c-0.47,0.24-1.39,0.72-1.98,1.18C8.37,6,7.79,9.59,8.64,13.35c0.01,0.05-0.02,0.09-0.08,0.09c-0.07,0-0.18-0.06-0.34-0.22 C7,11.88,6.41,10.11,6.64,8.35c0.01-0.06,0.01-0.09,0.01-0.09S5.51,9.74,5.1,10.43c-0.41,0.69-1.2,2.43-1.08,4.31 c0.04,0.56,0.13,1.12,0.29,1.67c0.2,0.68,0.49,1.33,0.88,1.93c1.21,1.91,3.34,3.29,5.63,3.57c0.47,0.06,0.94,0.09,1.41,0.09 c2,0,4.01-0.53,5.53-1.87C19.84,18.3,20.6,15.38,19.48,12.83z M14.72,17.84c-0.32,0.27-0.83,0.53-1.23,0.66 c-1.34,0.33-2.41-0.34-2.62-0.46c-0.21-0.11-0.78-0.38-0.78-0.38s0.35-0.11,0.41-0.13c1.34-0.54,1.89-1.24,2.09-2.11 c0.2-0.84-0.16-1.56-0.31-2.39c-0.12-0.69-0.11-1.28,0.12-1.9c0.02-0.05,0.12-0.43,0.12-0.43s0.11,0.35,0.13,0.41 c0.71,1.51,2.72,2.18,3.07,3.84c0.03,0.15,0.05,0.3,0.05,0.46C15.8,16.3,15.4,17.26,14.72,17.84z"></path></g>
+</svg>
+	  </div>
+  </div>
+  </div><span>&nbsp;</span><span class="display-name no-count"><span>Hype</span></span>
+                            </span>
+                        </a>
+					`;
+					conta.insertBefore(nE,conta.children[2]);
+                    STX_warmLink(nE.querySelector(".stx-link"));
 				}
 			}
 			if($("#FEhistory-guide-item.startube") == null){
@@ -15963,7 +15619,6 @@ border-width: 12px;
                 i.remove();
             });
             mobileFetch("none","single","browse","browseId","FEhype_leaderboard","continuation",continuation).then(result => {
-                console.log(result);
                 gdp.currHypeData=result;
                 fillHypePage(true);
             });
@@ -15972,7 +15627,7 @@ border-width: 12px;
     function createHypePage(){
         var elm = "#FEhype_leaderboard";
 		waitForElement10(elm).then(function(elm){
-			if(canGo != false){
+			if(canGo != false&&$("#st-hype-page")==null){
                 let container = $("#content .feed-list");
                 let newElem = document.createElement("div");
                 newElem.id="st-hype-page";
@@ -16054,7 +15709,6 @@ border-width: 12px;
             $("#st-hype-list .yt-spinner").classList.add("hid");
             let number2=0;
             let chips=gdp.currHypeData.contents.singleColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.subMenu.elementRenderer.newElement.type.componentType.model.chipBarModel.sortOptions[0].filterOptions;
-            console.log(chips);
             chips.forEach(i => {
                 if(i.onSelected){
                     createHypeChip(i,number2);
@@ -16539,25 +16193,12 @@ border-width: 12px;
 				$("#st-account-menu-sub-count span").textContent = gdp.subs;
 				$("#st-account-menu-pfp img").src = gdp.pfp;
 				$("#st-polymer-menu-pfp img").src = gdp.pfp;
-				$("#st-account-menu-pfp").href = gdp.myChanUrl;
-				$("#st-polymer-my-channel").href = gdp.myChanUrl;
-				let myChanData = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId:  gdp.myChanId,
-								canonicalBaseUrl:  gdp.myChanUrl
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url:  gdp.myChanUrl
-								}
-							}
-						}
-					}
-				}
-				$("#st-account-menu-pfp").data = myChanData;
-				$("#st-polymer-my-channel").data = myChanData;
+                STX_craftLink($("#st-account-menu-pfp"),"browse",gdp.myChanId,gdp.myChanUrl).then(a=>{
+                    STX_warmLink(a);
+                });
+                STX_craftLink($("#st-polymer-my-channel"),"browse",gdp.myChanId,gdp.myChanUrl).then(a=>{
+                    STX_warmLink(a);
+                });
 			}
 		});
 	}
@@ -16568,7 +16209,7 @@ border-width: 12px;
 				newElem.id = "startube-guide-cosmic-section";
 				newElem.innerHTML = `
 				<div id="startube-guide-top-left">
-<a id="startube-guide-browse-button" href="/feed/guide_builder">
+<a id="startube-guide-browse-button" class="stx-link" stx-ep="browse" stx-id="FEguide_builder" href="/feed/guide_builder">
 	<span id="startube-guide-browse-icon"></span>
 	<span id="startube-guide-browse-text">Browse Channels</span>
 </a>
@@ -16585,13 +16226,13 @@ border-width: 12px;
 		<a class="startube-guide-profile-item" id="st-g-my-videos">
 			<span>My Videos</span>
 		</a>
-		<a class="startube-guide-profile-item" id="st-g-likes" href="/playlist?list=LL">
+		<a class="startube-guide-profile-item stx-link" stx-ep="browse" stx-id="VLLL" id="st-g-likes" href="/playlist?list=LL">
 			<span>Liked Videos</span>
 		</a>
-		<a class="startube-guide-profile-item" id="st-g-history" href="/feed/history">
+		<a class="startube-guide-profile-item stx-link" stx-ep="browse" stx-id="FEhistory" id="st-g-history" href="/feed/history">
 			<span>History</span>
 		</a>
-		<a class="startube-guide-profile-item" id="st-g-watch-later" href="/playlist?list=WL">
+		<a class="startube-guide-profile-item stx-link" stx-ep="browse" stx-id="VLWL" id="st-g-watch-later" href="/playlist?list=WL">
 			<span>Watch Later</span>
 		</a>
 	</div>
@@ -16604,7 +16245,7 @@ border-width: 12px;
 				newElem2.innerHTML = `
    <div class="guide-channels-content">
 	   <div class="guide-channels-list guide-item-container yt-uix-scroller yt-uix-tdl filter-has-matches parent-list guide-infinite-list optimized">
-	   <li id="recommended-guide-item" class="guide-channel"><a class="guide-item yt-uix-sessionlink yt-valign" title="From YouTube" alt="my subscriptions" href="/feed/what_to_watch/recommended"><span class="yt-valign-container"><img class="thumb guide-my-subscriptions-icon" src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"><span>&nbsp;</span><span class="display-name no-count"><span>From YouTube</span></span></span></a></div></li>
+	   <li id="recommended-guide-item" class="guide-channel"><a class="guide-item yt-uix-sessionlink yt-valign stx-link" stx-ep="browse" stx-id="${feedId}" title="From YouTube" alt="my subscriptions" href="${feedHref}"><span class="yt-valign-container"><img class="thumb guide-my-subscriptions-icon" src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"><span>&nbsp;</span><span class="display-name no-count"><span>From YouTube</span></span></span></a></div></li>
    </div>
 `;
 				container2.insertBefore(newElem2, container2.children[0]);
@@ -16627,127 +16268,18 @@ border-width: 12px;
 					$("#startube-guide-pfp").href = guideUrl;
 					$("#st-g-my-channel").href = guideUrl;
 					$("#st-g-my-videos").href = guideUrlVids;
-					$("#recommended-guide-item").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: "FEwhat_to_watch",
-									canonicalBaseUrl: "/feed/what_to_watch/recommended"
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: "/feed/what_to_watch/recommended"
-									}
-								}
-							}
-						}
-					}
-					$("#startube-guide-browse-button").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: "FEguide_builder",
-									canonicalBaseUrl: "/feed/guide_builder"
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: "/feed/guide_builder"
-									}
-								}
-							}
-						}
-					}
-					$("#st-g-history").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: "FEhistory",
-									canonicalBaseUrl: "/feed/history"
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: "/feed/history"
-									}
-								}
-							}
-						}
-					}
-					$("#st-g-watch-later").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: "VLWL",
-									canonicalBaseUrl: "/playlist?list=WL"
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: "/playlist?list=WL"
-									}
-								}
-							}
-						}
-					}
-					$("#st-g-likes").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: "VLLL",
-									canonicalBaseUrl: "/playlist?list=LL"
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: "/playlist?list=LL"
-									}
-								}
-							}
-						}
-					}
-					$("#st-g-my-channel").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: guideId,
-									canonicalBaseUrl: guideUrl
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: guideUrl
-									}
-								}
-							}
-						}
-					}
-					$("#startube-guide-pfp").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: guideId,
-									canonicalBaseUrl: guideUrl
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: guideUrl
-									}
-								}
-							}
-						}
-					}
-					$("#st-g-my-videos").data = {
-						abstractVorElement: {
-							navigationEndpoint: {
-								browseEndpoint: {
-									browseId: guideId,
-									canonicalBaseUrl: guideUrlVids,
-									params: "EgZ2aWRlb3PyBgQKAjoA"
-								},
-								commandMetadata: {
-									webCommandMetadata: {
-										url: guideUrlVids
-									}
-								}
-							}
-						}
-					}
+					document.querySelectorAll("#guide .stx-link").forEach(a=>{
+                        STX_warmLink(a);
+                    });
+                    STX_craftLink($("#st-g-my-channel"),"browse",guideId,guideUrl).then(a=>{
+                        STX_warmLink(a);
+                    });
+                    STX_craftLink($("#startube-guide-pfp"),"browse",guideId,guideUrl).then(a=>{
+                        STX_warmLink(a);
+                    });
+                    STX_craftLink($("#st-g-my-videos"),"browse",guideId,guideUrlVids,"EgZ2aWRlb3PyBgQKAjoA").then(a=>{
+                        STX_warmLink(a);
+                    });
 					if($("#FEsubscriptions-guide-item.startube") == null){
 						if($("#FEsubscriptions-guide-item") != null){
 							$("#FEsubscriptions-guide-item .display-name span").textContent = "Subscriptions";
@@ -17008,29 +16540,38 @@ border-width: 12px;
 			newElem.id = "startube-third-column";
 			newElem.innerHTML = `
 			<div id="startube-spotlight">
-				<h3>Trending</h3>
+				<h3>Hype</h3>
 			</div>
 			<ul id="thirdcol-videos" class="video-list">
 			</ul>
 				`;
 			container.insertBefore(newElem, container.children[0]);
 			if(gdp.thirdColVideos == null){
-				EXFetch("none","single","browse","browseId","FEtrending","params","6gQJRkVleHBsb3Jl").then(result => {
-					fillThirdCol(result);
+                mobileFetch("none","nomod","browse","browseId","FEhype_leaderboard").then(result => {
+                    fillThirdCol(result);
 					gdp.thirdColVideos = result;
-				});
+                });
 			}else{
 				fillThirdCol(gdp.thirdColVideos);
 			}
 		}
 	}
 	function fillThirdCol(result){
-		let shelf=result.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[1].itemSectionRenderer.contents[0].shelfRenderer.content.expandedShelfContentsRenderer.items;
+		/*let shelf=result.contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[1].itemSectionRenderer.contents[0].shelfRenderer.content.expandedShelfContentsRenderer.items;
 		shelf.forEach(i => {
 			if(i.videoRenderer){
 				createRenderer(i.videoRenderer, "thirdColCompactVideo");
 			}
-		});
+		});*/
+        let list;
+        let number=0;
+        list=result.contents.singleColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents;
+        list.forEach(i => {
+            if(i.itemSectionRenderer.contents[0].elementRenderer.newElement.type.componentType.model.compactVideoModel){
+                createRenderer(i.itemSectionRenderer.contents[0].elementRenderer.newElement.type.componentType.model.compactVideoModel.compactVideoData, "thirdColCompactVideo", number);
+                number++;
+            }
+        });
 	}
     // EXfunct
 	function replaceFavicon(favi){
@@ -17549,7 +17090,7 @@ border-width: 12px;
 			newElem.id = "aozora-topbar-links";
 			newElem.setAttribute("class","flex-bar");
 			newElem.innerHTML = `
-				<a class="aozora-topbar-link" href="/feed/recommended_for_you">
+				<a class="aozora-topbar-link stx-link" stx-ep="browse" stx-id="${feedId}" href="${feedHref}">
 					<span class="run">Browse</span>
 				</a>
 				<a class="aozora-topbar-link" href="/movies">
@@ -17560,6 +17101,7 @@ border-width: 12px;
 				</a>
 				`;
 			container.insertBefore(newElem, container.children[2]);
+            STX_warmLink($(".aozora-topbar-link.stx-link"));
 		}
 	}
 	// EXfunct
@@ -17865,7 +17407,7 @@ margin-left:auto
 #stargazer-header #masthead-search input{
 position:relative;
 top:-3px;
-font-family:MS Shell Dlg, Noto Sans !important;
+font-family:MS Shell Dlg, Noto Sans, Arial !important;
 font-size:13px;
 padding:0 1px;
 }
@@ -17913,7 +17455,7 @@ opacity:1 !important;
 font-weight:normal;
 font-size:13.33px;
 color:#000;
-font-family:MS Shell Dlg, Noto Sans !important
+font-family:MS Shell Dlg, Noto Sans, Arial !important
 }
 .st-ssh #masthead-search .search-btn-component .yt-uix-button-content span,
 .st-sbh #masthead-search .search-btn-component .yt-uix-button-content span{
@@ -18112,16 +17654,16 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 							<div class="stargazer-logo-container">
 							</div>
 							<div class="stargazer-tabs flex">
-								<a id="stargazer-home" class="stargazer-tab active" href="/">
+								<a id="stargazer-home" class="stargazer-tab active stx-link" stx-ep="browse" stx-id="FEwhat_to_watch" href="/">
 									<span>Home</span>
 								</a>
-								<a id="stargazer-videos" class="stargazer-tab" href="/feed/subscriptions?flow=grid">
+								<a id="stargazer-videos" class="stargazer-tab stx-link" stx-ep="browse" stx-id="FEsubscriptions" href="/feed/subscriptions?flow=grid">
 									<span>Videos</span>
 								</a>
-								<a id="stargazer-channels" class="stargazer-tab" href="/feed/guide_builder">
+								<a id="stargazer-channels" class="stargazer-tab stx-link" stx-ep="browse" stx-id="FEguide_builder" href="/feed/guide_builder">
 									<span>Channels</span>
 								</a>
-								<a id="stargazer-community" class="stargazer-tab" href="/feed/social">
+								<a id="stargazer-community" class="stargazer-tab stx-link" stx-ep="browse" stx-id="FEsocial" href="/feed/social">
 									<span>Community</span>
 								</a>
 							</div>
@@ -18173,22 +17715,22 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 						</div>
 						<div class="stargazer-header-lower flex-bar">
 							<div class="stargazer-navs flex">
-								<a id="stargazer-home" class="stargazer-nav" href="/">
+								<a id="stargazer-home" class="stargazer-nav stx-link" stx-ep="browse" stx-id="${feedId}" href="${feedHref}">
 									<span>Home</span>
 								</a>
-								<a id="stargazer-videos" class="stargazer-nav" href="/feed/history">
+								<a id="stargazer-videos" class="stargazer-nav stx-link" stx-ep="browse" stx-id="FEhistory" href="/feed/history">
 									<span>Videos</span>
 								</a>
-                                <a id="stargazer-history" class="stargazer-nav none" href="/feed/subscriptions?flow=grid">
+                                <a id="stargazer-history" class="stargazer-nav none stx-link" stx-ep="browse" stx-id="FEsubscriptions" href="/feed/subscriptions?flow=grid">
 									<span>History</span>
 								</a>
-								<a id="stargazer-shows" class="stargazer-nav none" href="/movies">
+								<a id="stargazer-shows" class="stargazer-nav none stx-link" stx-ep="browse" stx-id="FEmovies" href="/movies">
 									<span>Shows</span>
 								</a>
-								<a id="stargazer-channels" class="stargazer-nav" href="/feed/guide_builder">
+								<a id="stargazer-channels" class="stargazer-nav stx-link" stx-ep="browse" stx-id="FEguide_builder" href="/feed/guide_builder">
 									<span>Channels</span>
 								</a>
-								<a id="stargazer-community" class="stargazer-nav" href="/feed/social">
+								<a id="stargazer-community" class="stargazer-nav stx-link" stx-ep="browse" stx-id="FEsocial" href="/feed/social">
 									<span>Community</span>
 								</a>
 							</div>
@@ -18243,27 +17785,27 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 						</div>
 						<div class="stargazer-header-lower flex-bar">
 							<div class="stargazer-links flex">
-								<a id="stargazer-home" class="stargazer-link" href="/">
+								<a id="stargazer-home" class="stargazer-link stx-link" stx-ep="browse" stx-id="FEwhat_to_watch" href="/">
 									<span>Home</span>
 								</a>
-								<a id="stargazer-videos" class="stargazer-link" href="/feed/what_to_watch/recommended">
+								<a id="stargazer-videos" class="stargazer-link stx-link" stx-ep="browse" stx-id="${feedId}" href="${feedHref}">
 									<span>Videos</span>
 								</a>
-								<a id="stargazer-channels" class="stargazer-link" href="/feed/guide_builder">
+								<a id="stargazer-channels" class="stargazer-link stx-link" stx-ep="browse" stx-id="FEguide_builder" href="/feed/guide_builder">
 									<span>Channels</span>
 								</a>
-								<a id="stargazer-community" class="stargazer-link" href="/feed/social">
+								<a id="stargazer-community" class="stargazer-link stx-link" stx-ep="browse" stx-id="FEsocial" href="/feed/social">
 									<span>Community</span>
 								</a>
-								<a id="stargazer-shows" class="stargazer-link none" href="/movies">
+								<a id="stargazer-shows" class="stargazer-link none stx-link" stx-ep="browse" stx-id="FEmovies" href="/movies">
 									<span>Shows</span>
 								</a>
 							</div>
 							<div class="stargazer-links-right flex-bar">
-								<a id="stargazer-subs" class="stargazer-link" href="/feed/subscriptions">
+								<a id="stargazer-subs" class="stargazer-link stx-link" stx-ep="browse" stx-id="FEsubscriptions" href="/feed/subscriptions">
 									<span>Subscriptions</span>
 								</a>
-								<a id="stargazer-history" class="stargazer-link" href="/feed/history">
+								<a id="stargazer-history" class="stargazer-link stx-link" stx-ep="browse" stx-id="FEhistory" href="/feed/history">
 									<span>History</span>
 								</a>
 								<a id="stargazer-upload" class="stargazer-button stargazer-yellow-button stargazer-small-button stargazer-shiny-button" href="/upload">
@@ -18310,177 +17852,14 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 			}else{
 				newElem.classList.add("logged-in");
 			}
-			document.querySelectorAll("#stargazer-my-channel").forEach(i => {
-				i.querySelector(".run").textContent = gdp.myChanName;
-				i.href = gdp.myChanUrl;
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId:gdp.myChanId,
-								canonicalBaseUrl:gdp.myChanUrl
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url:gdp.myChanUrl
-								}
-							}
-						}
-					}
-				}
+            document.querySelectorAll("#stargazer-header .stx-link").forEach(a=>{
+                STX_warmLink(a);
 			});
-			document.querySelectorAll("#stargazer-home").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEwhat_to_watch",
-								canonicalBaseUrl: "/"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/"
-								}
-							}
-						}
-					}
-				}
-			});
-            document.querySelectorAll("#stargazer-home.stargazer-tab").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEwhat_to_watch",
-								canonicalBaseUrl: "/feed/what_to_watch/recommended"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/feed/what_to_watch/recommended"
-								}
-							}
-						}
-					}
-				}
-			});
-			document.querySelectorAll("#stargazer-videos").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEsubscriptions",
-								canonicalBaseUrl: "/feed/subscriptions?flow=grid"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/feed/subscriptions?flow=grid"
-								}
-							}
-						}
-					}
-				}
-			});
-            /*document.querySelectorAll("#stargazer-videos").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEhistory",
-								canonicalBaseUrl: "/feed/history"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/feed/history"
-								}
-							}
-						}
-					}
-				}
-			});*/
-			document.querySelectorAll("#stargazer-videos.stargazer-link").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEwhat_to_watch",
-								canonicalBaseUrl: "/feed/what_to_watch/recommended?flow=grid"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/feed/what_to_watch/recommended?flow=grid"
-								}
-							}
-						}
-					}
-				}
-			});
-			document.querySelectorAll("#stargazer-channels").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEguide_builder",
-								canonicalBaseUrl: "/feed/guide_builder"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/feed/guide_builder"
-								}
-							}
-						}
-					}
-				}
-			});
-			document.querySelectorAll("#stargazer-community").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEsocial",
-								canonicalBaseUrl: "/feed/social"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/feed/social"
-								}
-							}
-						}
-					}
-				}
-			});
-			document.querySelectorAll("#stargazer-subs").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEsubscriptions",
-								canonicalBaseUrl: "/feed/subscriptions?flow=grid"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/feed/subscriptions?flow=grid"
-								}
-							}
-						}
-					}
-				}
-			});
-			document.querySelectorAll("#stargazer-history").forEach(i => {
-				i.data = {
-					abstractVorElement: {
-						navigationEndpoint: {
-							browseEndpoint: {
-								browseId: "FEhistory",
-								canonicalBaseUrl: "/feed/history"
-							},
-							commandMetadata: {
-								webCommandMetadata: {
-									url: "/feed/history"
-								}
-							}
-						}
-					}
-				}
+			document.querySelectorAll("#stargazer-my-channel").forEach(i=>{
+				i.querySelector(".run").textContent=gdp.myChanName;
+                STX_craftLink(i,"browse",gdp.myChanId,gdp.myChanUrl).then(a=>{
+                    STX_warmLink(a);
+                });
 			});
 		}
     }
@@ -18499,14 +17878,14 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 						    	<span>Featured Videos</span>
 					    	</div>
 						    <div class="stargazer-feed-header-actions">
-                                <a href="/feed/trending" class="stargazer-feed-top-link">
+                                <a href="/feed/hype_leaderboard" class="stargazer-feed-top-link">
                                     <span>See more featured videos</span>
                                 </a>
 					    	</div>
                         </div>
                         <div class="stargazer-feed-header-bottom flex-bar">
 						    <div class="stargazer-feed-header-links flex-bar">
-                                <a id="stf-featured" href="/feed/what_to_watch/recommended" class="stargazer-feed-link disabled">
+                                <a id="stf-featured" href="${feedHref}" class="stargazer-feed-link disabled">
                                     <span>Featured</span>
                                 </a>
                                 <a id="stf-history" href="/feed/history" class="stargazer-feed-link">
@@ -19165,7 +18544,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 				$("#stargazer-videos.stargazer-tab").classList.add("active");
 			}
 		}
-		if(window.location.href.includes("/what_to_watch/recommended")){
+		if(window.location.href.includes("what_to_watch/recommended")){
 			$("html").setAttribute("location","feed-recs");
 			if($("#stargazer-header")){
 				if($(".stargazer-tab.active")){
@@ -19308,7 +18687,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 			if(window.location.href.includes("/playlists")){
 				$("html").setAttribute("chan-loc","playlists");
 			}
-			if(window.location.href.includes("/community")){
+			if(window.location.href.includes("/posts")){
 				$("html").setAttribute("chan-loc","backstage");
 			}
 			if(window.location.href.includes("/about")){
@@ -19423,12 +18802,11 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		}
         if(window.location.href.includes("hype_leaderboard")){
 			$("html").setAttribute("location","feed-hype");
-			if(document.title != "Hype - YouTube" && $("#content a") == null){
+			if($("#st-hype-page") == null){
                 document.title="Hype - YouTube";
                 createHypePage();
                 if(gdp.currHypeData == null || isPopstate == false){
                     mobileFetch("none","nomod","browse","browseId","FEhype_leaderboard").then(result => {
-                        console.log(result);
                         gdp.currHypeData=result;
                         fillHypePage();
                     });
@@ -19442,94 +18820,34 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 }
             }
 		}
-        let feedLink="/feed/what_to_watch/recommended";
+        let feedLink=feedHref;
         if(SRS.logoLink.tValue=="feedGrid"){
-            feedLink="/feed/what_to_watch/recommended?flow=grid";
+            feedLink=feedHref+"flow=grid";
         }
-		if($("#logo-container")){
-            if(SRS.logoLink.tValue=="feedList"||SRS.logoLink.tValue=="feedGrid"){
-                $("#logo-container").href=feedLink;
-                $("#logo-container").data={
-                    abstractVorElement:{
-                        navigationEndpoint:{
-                            browseEndpoint:{
-                                browseId:"FEwhat_to_watch",
-                                canonicalBaseUrl:feedLink
-                            },
-                            commandMetadata:{
-                                webCommandMetadata:{
-                                    url:feedLink
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-		}
         let subsLink = "/feed/subscriptions";
         if(SRS.subsGrid.tValue=="grid"){
             subsLink = "/feed/subscriptions?flow=grid";
         }
-        if(SRS.logoLink.tValue=="feedGrid"){
-            var elm="#FEwhat_to_watch-guide-item";
-            waitForElement10(elm).then(function(elm){
-                if(canGo!=false){
-                    $("#FEwhat_to_watch-guide-item a").href="/feed/what_to_watch/recommended?flow=grid";
-                    $("#FEwhat_to_watch-guide-item a").data={
-                        abstractVorElement:{
-                            navigationEndpoint:{
-                                browseEndpoint:{
-                                    browseId:"FEwhat_to_watch",
-                                    canonicalBaseUrl:"/feed/what_to_watch/recommended?flow=grid"
-                                },
-                                commandMetadata:{
-                                    webCommandMetadata:{
-                                        url:"/feed/what_to_watch/recommended?flow=grid"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+        if(SRS.logoLink.tValue=="feedGrid"&&$("#FEwhat_to_watch-guide-item a")){
+            STX_craftLink($("#FEwhat_to_watch-guide-item a"),"browse",feedId,feedLink).then(a=>{
+                STX_warmLink(a);
             });
 		}
-		if($("#logo-container")){
-            if(SRS.logoLink.tValue=="subs"){
-			$("#logo-container").href=subsLink;
-                $("#logo-container").data={
-                    abstractVorElement:{
-                        navigationEndpoint:{
-                            browseEndpoint:{
-                                browseId:"FEsubscriptions",
-                                canonicalBaseUrl:subsLink
-                            },
-                            commandMetadata:{
-                                webCommandMetadata:{
-                                    url:subsLink
-                                }
-                            }
-                        }
-                    }
-                }
+        if($("#logo-container")){
+            if(SRS.logoLink.tValue=="feedList"||SRS.logoLink.tValue=="feedGrid"){
+                STX_craftLink($("#logo-container"),"browse",feedId,feedLink).then(a=>{
+                    STX_warmLink(a);
+                });
+            }else if(SRS.logoLink.tValue=="subs"){
+                STX_craftLink($("#logo-container"),"browse","FEsubscriptions",subsLink).then(a=>{
+                    STX_warmLink(a);
+                });
             }
-		}
-		if(SRS.subsGrid.tValue=="grid"&&$("#FEsubscriptions-guide-item")){
-			$("#FEsubscriptions-guide-item a").href=subsLink;
-			$("#FEsubscriptions-guide-item a").data={
-				abstractVorElement:{
-					navigationEndpoint:{
-						browseEndpoint:{
-							browseId:"FEsubscriptions",
-							canonicalBaseUrl:subsLink
-						},
-						commandMetadata:{
-							webCommandMetadata:{
-								url:subsLink
-							}
-						}
-					}
-				}
-			}
+        }
+        if(SRS.subsGrid.tValue=="grid"&&$("#FEsubscriptions-guide-item")){
+            STX_craftLink($("#FEsubscriptions-guide-item a"),"browse","FEsubscriptions",subsLink).then(a=>{
+                STX_warmLink(a);
+            });
 		}
         let theDelay=1;
         if(isPopstate==true){
@@ -19742,6 +19060,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                     break;
             }
             switch (SRS.playerVersion.tValue){
+                case "aozora2010":
+                    html.setAttribute("pl-ver","aozora2010");
+                    break;
                 case "cosmic2012":
                     html.setAttribute("pl-ver","cosmic2012");
                     break;
@@ -20200,7 +19521,12 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 					html.setAttribute("exp-no-videos-link","");
 				}else if(value == true && name == "expModernGuide"){
 					html.setAttribute("exp-modern-guide","");
-					doModernGuide();
+                    var e=".guide-channel";
+                    wF(e,10).then(function(elm){
+                        if(canGo!=false){
+                            doModernGuide();
+                        }
+                    });
 				}else if(value == true && name == "expPlaylistRedBorder"){
 					html.setAttribute("exp-playlist-red-border","");
 				}else if(value == true && name == "expPlaylistTimestamps"){
@@ -21320,9 +20646,10 @@ filter: invert(1);
 }
 #st-changelog{
   margin:8px 0;
-  padding:10px;
+  padding:10px 10px 30px;
   border:1px solid var(--ccc);
-  background:var(--f1f1f1)
+  background:var(--f1f1f1);
+  position:relative
 }
 .st-cl b{
   font-size:16px;
@@ -21336,6 +20663,39 @@ filter: invert(1);
   margin:4px 0 4px 10px;
   font-size:14px;
   color:var(--333)
+}
+#st-cl-expand,
+#st-cl-collapse{
+  pointer-events:none
+}
+[expanded] #st-cl-expand,
+#st-changelog:not([expanded]) #st-cl-collapse{
+  display:none
+}
+#st-changelog:not([expanded]){
+  max-height:180px;
+  overflow:hidden
+}
+#st-changelog:not([expanded]) #st-cl-expander{
+  top:190px;
+}
+#st-cl-expander{
+  bottom:0;
+  position:absolute;
+  left:0;
+  width:100%;
+  height:30px;
+  background:linear-gradient(to top,var(--f1f1f1),transparent);
+  font-size:13px;
+  color:var(--333);
+  font-weight:var(--bold);
+  backdrop-filter:blur(0.5px)
+}
+#st-cl-expander:hover{
+  background:linear-gradient(to top,var(--f1f1f1),var(--tpl))
+}
+#st-cl-expander:active{
+  background:linear-gradient(to top,var(--f1f1f1),var(--twpl))
 }
 	</style>
     ${STH.astroSettings}
@@ -22370,6 +21730,7 @@ html {
 --tpl:rgba(0,0,0,0.1);
 --ftpl:rgba(0,0,0,0.15);
 --twpl:rgba(0,0,0,0.2);
+--thpl:rgba(0,0,0,0.3);
 --additive:rgba(0,0,0,.05);
 --fff:#fff;
 --030303:#030303;
@@ -22388,6 +21749,7 @@ html {
 --tpl:rgba(255,255,255,0.1);
 --ftpl:rgba(255,255,255,0.15);
 --twpl:rgba(255,255,255,0.2);
+--thpl:rgba(255,255,255,0.3);
 --additive:rgba(255,255,255,.1);
 --fff:#000;
 --030303:#fff;
@@ -25137,7 +24499,7 @@ width:50%;
 padding:0;
 margin-bottom:10px
 }
-[modern-cards] .lohp-large-shelf-container .lohp-thumb-wrap{
+[modern-cards] .flex-width-enabled .lohp-large-shelf-container .lohp-thumb-wrap{
 width:402px;
 height:226px
 }
@@ -25164,7 +24526,7 @@ min-height:70px
 [modern-cards] .lohp-large-shelf-container .context-data-item > div:not(.lohp-media-object-content){
 width:336px
 }
-[modern-cards] .lohp-large-shelf-container .lohp-thumb-wrap{
+[modern-cards] .flex-width-enabled .lohp-large-shelf-container .lohp-thumb-wrap{
 width:336px;
 height:auto
 }
@@ -27806,7 +27168,8 @@ font-size:14px!important;
 line-height:16px;
 font-weight:500;
 color:#0a0a0a!important;
-text-decoration:none!important
+text-decoration:none!important;
+max-height:2.3em
 }
 [poly-styles] .dark-mode .yt-lockup-title a,
 [poly-styles] .dark-mode .context-data-item .title{
@@ -28923,7 +28286,7 @@ background:#def1ff;
 border-color:#def1ff
 }
 /* exp-rounded-thumbnails */
-[round-player] .html5-video-player,
+[round-player]:not([data-player-size="fullscreen"]) .html5-video-player,
 [round-player] .player-api{
 border-radius:12px
 }
@@ -38396,7 +37759,12 @@ html:not([location="feed-recs"]) #st-vids-watched-now,
 [state="9"] #st-vwn-s9 .vwn-video,
 [state="10"] #st-vwn-s10 .vwn-video,
 [state="11"] #st-vwn-s11 .vwn-video,
-[state="12"] #st-vwn-s12 .vwn-video{
+[state="12"] #st-vwn-s12 .vwn-video,
+[state="13"] #st-vwn-s13 .vwn-video,
+[state="14"] #st-vwn-s14 .vwn-video,
+[state="15"] #st-vwn-s15 .vwn-video,
+[state="16"] #st-vwn-s16 .vwn-video,
+[state="17"] #st-vwn-s17 .vwn-video{
   display:block;
   animation:40s STINANIM 1
 }
@@ -38412,7 +37780,11 @@ html:not([location="feed-recs"]) #st-vids-watched-now,
 [state="10"] #st-vwn-s9 .vwn-video,
 [state="11"] #st-vwn-s10 .vwn-video,
 [state="12"] #st-vwn-s11 .vwn-video,
-[state="13"] #st-vwn-s12 .vwn-video{
+[state="13"] #st-vwn-s12 .vwn-video,
+[state="14"] #st-vwn-s13 .vwn-video,
+[state="15"] #st-vwn-s14 .vwn-video,
+[state="16"] #st-vwn-s15 .vwn-video,
+[state="17"] #st-vwn-s16 .vwn-video{
   display:block;
   animation:0.8s STOUTANIM 1!important
 }
@@ -38428,7 +37800,11 @@ html:not([location="feed-recs"]) #st-vids-watched-now,
 [state="10"] #st-vwn-s9,
 [state="11"] #st-vwn-s10,
 [state="12"] #st-vwn-s11,
-[state="13"] #st-vwn-s12{
+[state="13"] #st-vwn-s12,
+[state="14"] #st-vwn-s13,
+[state="15"] #st-vwn-s14,
+[state="16"] #st-vwn-s15,
+[state="17"] #st-vwn-s16{
   position:absolute;
   height:80px;
   overflow:hidden
@@ -38928,9 +38304,371 @@ to{opacity:1}
 [ambient-mode] #movie_player:focus{
   outline:none
 }
+/* 2011 player 2.6.0 */
+[pl-ver="aozora2010"] .html5-player-chrome{
+  background: -webkit-gradient(linear,left top,left bottom,from(#d6d6d6),to(white));
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  height:30px;
+  border-top:1px solid #fff
+}
+[pl-ver="aozora2010"] .ytp-volume-slider,
+[pl-ver="aozora2010"] .ytp-play-progress,
+[pl-ver="aozora2010"] .ytp-time-display,
+[pl-ver="aozora2010"] .ytp-button{
+  opacity:0.5;
+  transition:opacity 0.5s
+}
+[pl-ver="aozora2010"] .ytp-block-autohide .ytp-volume-slider,
+[pl-ver="aozora2010"] .ytp-block-autohide .ytp-play-progress,
+[pl-ver="aozora2010"] .ytp-block-autohide .ytp-button,
+[pl-ver="aozora2010"] .ytp-block-autohide .ytp-time-display{
+  opacity:1
+}
+[pl-ver="aozora2010"] .ytp-time-display{
+  line-height:30px
+}
+[pl-ver="aozora2010"] .ytp-time-display span{
+  color:#000
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button{
+  width:29px!important;
+  height:30px!important;
+  position:relative;
+  z-index:0;
+  background:-webkit-gradient(linear,left top,left bottom,from(white),color-stop(0.5,white),to(#d8d8d8))!important;
+  background-color: #f7f7f7;
+  border-right: 1px solid #ccc;
+  top:0;
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button-volume{
+  width:30px!important
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button-watch-later,
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-subtitles-button-active,
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-subtitles-button{
+  background:none!important;
+  border:none!important;
+  box-shadow:none!important
+}
+[pl-ver="aozora2010"] .html5-player-chrome .html5-scrubber-button::after,
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button::after{
+  content:"";
+  display:block;
+  width:29px!important;
+  height:30px
+}
+[pl-ver="aozora2010"] .ytp-button-play::after,
+[pl-ver="aozora2010"] .ytp-button-pause::after,
+[pl-ver="aozora2010"] .ytp-button-fullscreen-enter::after,
+[pl-ver="aozora2010"] .ytp-button-fullscreen-exit::after,
+[pl-ver="aozora2010"] .ytp-subtitles-button::after,
+[pl-ver="aozora2010"] .ytp-subtitles-button-active::after,
+[pl-ver="aozora2010"] .ytp-size-toggle-large::after,
+[pl-ver="aozora2010"] .ytp-size-toggle-small::after,
+[pl-ver="aozora2010"] .ytp-button-volume::after,
+[pl-ver="aozora2010"] .html5-scrubber-button::after{
+  content:"";
+  background-image: url(data:image/png;base64,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)!important;
+  display:block;
+  width:29px!important;
+  height:24px!important;
+  top:3px;
+  position:absolute
+}
+
+[pl-ver="aozora2010"] .ytp-settings-button::after,
+[pl-ver="aozora2010"] .ytp-settings-button-active::after,
+[pl-ver="aozora2010"] .ytp-button-watch-later:after{
+  content:"";
+  background: no-repeat url(//s.ytimg.com/yts/imgbin/player-lighthh-vfldfmTwX.png) 0 -1023px;
+  display:block;
+  width:29px!important;
+  height:24px!important;
+  top:3px;
+  position:absolute
+}
+[pl-ver="aozora2010"] .ytp-settings-button-active::after{
+  background-position:0 -1488px;
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button-watch-later::after{
+  content: "+";
+  font-weight: bold;
+  position: absolute;
+  margin-left: 8px;
+  top: 4px;
+  background: -webkit-linear-gradient(#888, #333333);
+  background-clip: border-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 22px;
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button-watch-later:hover::after{
+  background: -webkit-linear-gradient(#f88, #800);
+    background-clip: border-box;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+[pl-ver="aozora2010"] .ytp-button-watch-later:active::after,
+[pl-ver="aozora2010"] .ytp-button-watch-later:hover::after{
+  background-position:0 -1147px;
+}
+[pl-ver="aozora2010"] .html5-scrubber-button::after{
+  top:0
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button:hover{
+  opacity:1
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button:active{
+  box-shadow: inset 1px 1px 4px #aaa;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+  opacity:1
+}
+[pl-ver="aozora2010"] .ytp-button-play:active,
+[pl-ver="aozora2010"] .ytp-button-play{
+  width:29px!important
+}
+[pl-ver="aozora2010"] .ytp-button-play:active::after,
+[pl-ver="aozora2010"] .ytp-button-play::after{
+  background-position:0 0
+}
+[pl-ver="aozora2010"] .ytp-button-play:hover{
+  width:29px;
+}
+[pl-ver="aozora2010"] .ytp-button-play:hover::after{
+  background-position:-29px 0
+}
+[pl-ver="aozora2010"] .ytp-button-pause:active::after,
+[pl-ver="aozora2010"] .ytp-button-pause::after{
+  background-position:0 -24px
+}
+[pl-ver="aozora2010"] .ytp-button-pause:hover::after{
+  background-position:-29px -24px
+}
+[pl-ver="aozora2010"] .ytp-button-fullscreen-enter:active::after,
+[pl-ver="aozora2010"] .ytp-button-fullscreen-enter::after{
+  background-position:0 -192px
+}
+[pl-ver="aozora2010"] .ytp-button-fullscreen-enter:hover::after{
+  background-position:-29px -192px
+}
+[pl-ver="aozora2010"] .ytp-button-fullscreen-exit:active::after,
+[pl-ver="aozora2010"] .ytp-button-fullscreen-exit::after{
+  background-position:0 -218px
+}
+[pl-ver="aozora2010"] .ytp-button-fullscreen-exit:hover::after{
+  background-position:-29px -218px
+}
+[pl-ver="aozora2010"] .ytp-size-toggle-large:active::after,
+[pl-ver="aozora2010"] .ytp-size-toggle-large::after{
+  background-position:0 -144px
+}
+[pl-ver="aozora2010"] .ytp-size-toggle-large:hover::after{
+  background-position:-29px -144px
+}
+[pl-ver="aozora2010"] .ytp-size-toggle-small:active::after,
+[pl-ver="aozora2010"] .ytp-size-toggle-small::after{
+  background-position:0 -168px
+}
+[pl-ver="aozora2010"] .ytp-size-toggle-small:hover::after{
+  background-position:-29px -168px
+}
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="off"]:active::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="off"]::after{
+  background-position:0 -120px
+}
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="off"]:hover::after{
+  background-position:-29px -120px
+}
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="min"]:active::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="min"]::after{
+  background-position:0 -96px
+}
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="min"]:hover::after{
+  background-position:-29px -96px
+}
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="quiet"]:active::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="quiet"]::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="normal"]:active::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="normal"]::after{
+  background-position:0 -72px
+}
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="quiet"]:hover::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="normal"]:hover::after{
+  background-position:-29px -72px
+}
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="loud"]:active::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="loud"]::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="max"]:active::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="max"]::after{
+  background-position:0 -48px
+}
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="loud"]:hover::after,
+[pl-ver="aozora2010"] .ytp-button-volume[data-value="max"]:hover::after{
+  background-position:-29px -48px
+}
+[pl-ver="aozora2010"] .ytp-button-watch-later:active::after,
+[pl-ver="aozora2010"] .ytp-button-watch-later::after{
+  background-position:0 -168px
+}
+
+[pl-ver="aozora2010"] .ytp-subtitles-button:active::after,
+[pl-ver="aozora2010"] .ytp-subtitles-button:hover::after,
+[pl-ver="aozora2010"] .ytp-subtitles-button::after{
+  background-position:-76px -276px;
+  height:12px!important;
+  width:17px!important;
+  margin-top: 6px;
+  margin-left: 5px;
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-subtitles-button-active:active::after,
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-subtitles-button-active:hover::after,
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-subtitles-button-active::after{
+  background-position:-54px -276px;
+  height:12px!important;
+  width:17px!important;
+  margin-top: 6px;
+  margin-left: 5px;
+}
+[pl-ver="aozora2010"] .ytp-progress-list{
+  height:4px!important;
+  transition:height 0.5s!important;
+  transform:unset!important;
+  background:none
+}
+[pl-ver="aozora2010"] .ytp-block-autohide .ytp-progress-list{
+  height:12px!important;
+  transition:height 0.5s;
+}
+[pl-ver="aozora2010"] .ytp-force-transform{
+  transform:unset!important
+}
+[pl-ver="aozora2010"] .ytp-unloaded-progress{
+  background: rgba(255,255,255,.5)!important;
+}
+[pl-ver="aozora2010"] .ytp-load-progress{
+  background: rgba(255,255,255,.5)!important;
+}
+[pl-ver="aozora2010"] .ytp-play-progress{
+  background:#c80000
+}
+[pl-ver="aozora2010"] .html5-scrubber-button{
+  border:none;
+  background:transparent!important;
+}
+[pl-ver="aozora2010"] .html5-scrubber-button::after{
+  background-position: -14px -274px;
+  transition:all 0.5s, background-position 0s !important;
+  height: 16px!important;
+  width: 16px!important;
+  margin-top:2px;
+  margin-left:0px;
+  -webkit-transform: scale(0);
+  -webkit-transform-origin: 50% 50%;
+}
+[pl-ver="aozora2010"] .ytp-block-autohide .html5-scrubber-button::after{
+  margin-top:-2px;
+  -webkit-transform: scale(1)
+}
+[pl-ver="aozora2010"] .html5-scrubber-button:active::after,
+[pl-ver="aozora2010"] .html5-scrubber-button:hover::after{
+  background-position: -34px -274px;
+}
+[pl-ver="aozora2010"] .ytp-menu-container{
+  z-index:900
+}
+[pl-ver="aozora2010"] #movie_player .yt-uix-range-tooltip-tip-content,
+[pl-ver="aozora2010"] #movie_player .yt-uix-tooltip-tip-content {
+    position: relative;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    border-width: 0px;
+    border-style: initial;
+    border-color: initial;
+    border-image: initial;
+    background: linear-gradient(rgb(74,74,74) 0px,rgb(0,0,0) 100%) !important;
+    padding: 0.75em;
+    border-radius: 2px;
+}
+[pl-ver="aozora2010"] #movie_player .ytp-tooltip-body {
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    border-width: 0px;
+    border-style: initial;
+    border-color: initial;
+    border-image: initial;
+    background: linear-gradient(rgb(74,74,74) 0px,rgb(0,0,0) 100%) !important;
+    border-radius: 2px;
+}
+[pl-ver="aozora2010"] #movie_player .ytp-tooltip-arrow {
+    border-top-color: #000;
+}
+[pl-ver="aozora2010"] .ytp-button-volume{
+  box-shadow:1px 0 1px #0004
+}
+[pl-ver="aozora2010"] .ytp-settings-button{
+  box-shadow:-1px 0 1px #0004
+}
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button-next,
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button-prev,
+[pl-ver="aozora2010"] .html5-player-chrome .ytp-button-playlist{
+  display:none!important
+}
+[pl-ver="aozora2010"] .ytp-volume-slider{
+  margin-left:5px
+}
+[pl-ver="aozora2010"] .ytp-volume-slider-foreground{
+  background:linear-gradient(to top,#d9d9d9 45%,#e4e4e4 55%,#f8f8f8);
+  border:1px solid #b7b7b7;
+  box-shadow:0.25px 0.5px 1px #0004
+}
+[pl-ver="aozora2010"] .ytp-volume-slider-foreground::before{
+  background:linear-gradient(to top,#ca0f0f,#ab0000,#750c0c)
+}
+[pl-ver="aozora2010"] .ytp-volume-slider-foreground::after{
+  background:linear-gradient(to top,#dfdfdf,#c4c4c4,#848484);
+  z-index:-1
+}
 
 .banner-promo-renderer{
   display:none
+}
+
+/* st 2.6 */
+/* fix stargazer feed */
+.yt-lockup.yt-lockup-tile{
+  position:relative
+}
+[modern-cards] .lohp-large-shelf-container > div{
+  display:flex
+}
+[modern-cards] .lohp-media-object-content{
+  margin-left:10px
+}
+[modern-cards] .lohp-video-link{
+  margin-top:4px
+}
+
+/*#FErecommended_for_you .feed-list{
+  display:flex
+}
+#FErecommended_for_you .channels-browse-content-grid,
+#FErecommended_for_you .shelf-item{
+  display:contents
+}*/
+#FErecommended_for_you .compact-shelf{
+  display:none
+}
+
+@media screen and (max-width: 1200px) {
+  [ly^=c] .site-center-aligned #appbar-guide-menu::before {
+    background:none
+  }
 }
 </style>
 `;
