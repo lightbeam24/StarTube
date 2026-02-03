@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.6.0.20
+// @version      2.6.0.30
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -131,7 +131,7 @@ if (window.wrappedJSObject) {
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.6.0 Beta 2";
+let currStarVer="2.6.0 Beta 3";
     let updateStarVer="2.6.0";
 let currStarChan="Beta";
     let currStarDetails="Standard Beta Release";
@@ -708,6 +708,8 @@ astroSector:`
 													<div class="astro-sector-title">
 														<h5></h5>
 													</div>
+                                                    <div class="astro-sector-settings flex">
+                                                    </div>
 `,
 astroSetting:`
 												<div class="astro-setting-middle flex-bar">
@@ -752,6 +754,16 @@ astroPage:`
 								</div>
 							</div>
 						</div>
+`,
+astroChangelogSection:`
+<div class="st-cl st-cl-title">
+                                                         <b></b>
+                                                    </div>
+                                                    <div class="st-cl-items">
+                                                    </div>
+`,
+astroChangelogItem:`
+<div class="st-cl"><span></span><div>
 `,
 astroSettings:`
 <div id="startube-settings-fence" class="st-fence">
@@ -906,188 +918,6 @@ astroSettings:`
                                                 <a id="RTD" class="st-link yt-uix-button yt-uix-button-default yt-uix-button-size-default flex-bar">
 											    	<span>Reset StarTube config</span>
 											    </a>
-                                            </div>
-                                            <div id="st-changelog">
-                                                <div class="st-cl-sect">
-                                                    <div class="st-cl">
-                                                         <b>StarTube 2.6.0 Beta 2 Changelog:</b>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Added 2010-2011 player style</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Added option to choose to use <a href="/feed/recommended_for_you">https://www.youtube.com/feed/recommended_for_you</a> in place of <a href="/feed/what_to_watch/recommended">https://www.youtube.com/feed/what_to_watch/recommended</a>, as some people experience issues with the latter.</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Added Hype item to guide on 2016 and later</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Removed the embed player option, as it is no longer supported by V3</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-This changelog can now be expanded and collapsed</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Minor code optimizations</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed 2008-2009 search bars and 2008 search button using the wrong font on macOS</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed related videos title height on Polymer and Amsterdam layouts</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed featured playlists not showing up on channels3</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed lohp video being too big</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed rounded player setting applying in fullscreen</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed Mid 2016 having large size related videos, making it the same as Late 2016</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed 2012 guide having white bars on it on low resolutions</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Other fixes</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                    <div class="st-cl">
-                                                         <b>StarTube 2.6.0 Beta 1 Changelog:</b>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Added actual 2024 layout option</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Added Ambient Mode</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Playlists are now way more accurate in the Polymer layouts</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-The footer on the Polymer layouts is now on the guide</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Added the hype page, accessible at <a href="/feed/hype_leaderboard">https://www.youtube.com/feed/hype_leaderboard</a></span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-The warning banner that StarTube gives on regular YouTube has been redsigned</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Other fixes and improvements</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                    <div class="st-cl">
-                                                         <b>StarTube 2.5.3 Changelog:</b>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed comment spacing in Hitchhiker layouts (caused by comment thread update)</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                    <div class="st-cl">
-                                                         <b>StarTube 2.5.2.2 Changelog:</b>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed Pale Moon support</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                    <div class="st-cl">
-                                                         <b>StarTube 2.5.2.1 Changelog:</b>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed Watch7 icon issue, where icons would be gone in base V3 if you disabled StarTube</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                    <div class="st-cl">
-                                                         <b>StarTube 2.5.2 Changelog:</b>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Improved 2012 dark mode</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed some icons not showing up for UK users by hosting the images on GitHub</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                    <div class="st-cl">
-                                                         <b>StarTube 2.5.1 Changelog:</b>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed channel playlists page on channels3</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed trending column not showing up on 2012</span>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed videos watched now not showing up on 2008</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                    <div class="st-cl">
-                                                         <b>StarTube 2.5.0 Beta 2 Patch 1 Changelog:</b>
-                                                    </div>
-                                                    <div class="st-cl">
-                                                         <span>-Fixed miniplayer position</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                <div class="st-cl">
-                                                    <b>StarTube 2.5.0 Beta 2 Changelog:</b>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-Added support for latest V3 version</span>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-Other fixes</span>
-                                                </div>
-                                                </div>
-                                                <div class="st-cl-sect">
-                                                <div class="st-cl">
-                                                    <b>StarTube 2.5.0 Beta 1 Changelog:</b>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-The changelog is now shown in the config window itself</span>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-Added the 2012 player style</span>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-Improved the 2008 layout</span>
-                                                    <div class="st-sub-cl">
-                                                        <span>-Added the "Videos being watched right now" section on the homepage</span>
-                                                    </div>
-                                                    <div class="st-sub-cl">
-                                                        <span>-Added Watch4A (2008 watch layout)</span>
-                                                    </div>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-Improved the 2009 layouts</span>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-Added Super Scaled UI Option</span>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-Fixed modern players settings button position glitch when watching 1440p or 4K videos in fullscreen</span>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-The Early 2013 layout now works a little better with dark mode</span>
-                                                </div>
-                                                <div class="st-cl">
-                                                    <span>-Other fixes</span>
-                                                </div>
-                                                </div>
-                                                <button id="st-cl-expander" class="stx-trigger" stx-target="#st-changelog" stx-trigger-type="attrib-tog" stx-attrib="expanded">
-                                                    <div id="st-cl-expand" style="TEXT"><span class="yt-uix-button-content"><span class="run">Show more</span></span></div>
-                                                    <div id="st-cl-collapse" style="TEXT"><span class="yt-uix-button-content"><span class="run">Show less</span></span></div>
-                                                </button>
                                             </div>
 										</div>
 										<!--div id="startube-save-files" class="astro-section">
@@ -3392,6 +3222,143 @@ pages:[
 	},
 	sections:[
         {section:{
+            id:"STCHANGELOG",
+            specialTypeId:"changelog",
+            changelog:[
+                {sector:{
+                    beta:true,
+                    version:"2.6.0 Beta 3",
+                    items:[
+                        {item:{
+                            text:'-Related tabs videos tab now shows a "Now playing" overlay on the current video'
+                        }},
+                        {item:{
+                            text:'-Fixed search filters not showing properly on various layouts (caused by a YouTube update)'
+                        }},
+                        {item:{
+                            text:'-This changelog has been reworked under the hood'
+                        }},
+                        {item:{
+                            text:'-Other fixes'
+                        }}
+                    ]
+                }},
+                {sector:{
+                    beta:true,
+                    version:"2.6.0 Beta 2",
+                    items:[
+                        {item:{
+                            text:'-Added 2010-2011 player style'
+                        }},
+                        {item:{
+                            text:'-Added option to choose to use <a href="/feed/recommended_for_you">https://www.youtube.com/feed/recommended_for_you</a> in place of <a href="/feed/what_to_watch/recommended">https://www.youtube.com/feed/what_to_watch/recommended</a>, as some people experience issues with the latter.'
+                        }},
+                        {item:{
+                            text:'-Added Hype item to guide on 2016 and later'
+                        }},
+                        {item:{
+                            text:'-Removed the embed player option, as it is no longer supported by V3'
+                        }},
+                        {item:{
+                            text:'-This changelog can now be expanded and collapsed'
+                        }},
+                        {item:{
+                            text:'-Minor code optimizations'
+                        }},
+                        {item:{
+                            text:'-Fixed 2008-2009 search bars and 2008 search button using the wrong font on macOS'
+                        }},
+                        {item:{
+                            text:'-Fixed related videos title height on Polymer and Amsterdam layouts'
+                        }},
+                        {item:{
+                            text:'-Fixed featured playlists not showing up on channels3'
+                        }},
+                        {item:{
+                            text:'-Fixed lohp video being too big'
+                        }},
+                        {item:{
+                            text:'-Fixed rounded player setting applying in fullscreen'
+                        }},
+                        {item:{
+                            text:'-Fixed Mid 2016 having large size related videos, making it the same as Late 2016'
+                        }},
+                        {item:{
+                            text:'-Fixed 2012 guide having white bars on it on low resolutions'
+                        }},
+                        {item:{
+                            text:'-Other fixes'
+                        }}
+                    ]
+                }},
+                {sector:{
+                    beta:true,
+                    version:"2.6.0 Beta 1",
+                    items:[
+                        {item:{
+                            text:'-Added actual 2024 layout option'
+                        }},
+                        {item:{
+                            text:'-Added Ambient Mode'
+                        }},
+                        {item:{
+                            text:'-Playlists are now way more accurate in the Polymer layouts'
+                        }},
+                        {item:{
+                            text:'-The footer on the Polymer layouts is now on the guide'
+                        }},
+                        {item:{
+                            text:'-Fixed lohp video being too big'
+                        }},
+                        {item:{
+                            text:`-Added the hype page, accessible at <a href="/feed/hype_leaderboard">https://www.youtube.com/feed/hype_leaderboard</a>`
+                        }},
+                        {item:{
+                            text:'-The warning banner that StarTube gives on regular YouTube has been redsigned'
+                        }},
+                        {item:{
+                            text:'-Other fixes and improvements'
+                        }}
+                    ]
+                }},
+                {sector:{
+                    version:"2.5.3",
+                    items:[
+                        {item:{
+                            text:'-Fixed comment spacing in Hitchhiker layouts (caused by comment thread update)'
+                        }}
+                    ]
+                }},
+                {sector:{
+                    version:"2.5.2.2",
+                    items:[
+                        {item:{
+                            text:'-Fixed Pale Moon support'
+                        }}
+                    ]
+                }},
+                {sector:{
+                    version:"2.5.2.1",
+                    items:[
+                        {item:{
+                            text:'-Fixed Watch7 icon issue, where icons would be gone in base V3 if you disabled StarTube'
+                        }}
+                    ]
+                }},
+                {sector:{
+                    version:"2.5.2",
+                    items:[
+                        {item:{
+                            text:'-Improved 2012 dark mode'
+                        }},
+                        {item:{
+                            text:'-Fixed some icons not showing up for UK users by hosting the images on GitHub'
+                        }}
+                    ]
+                }}
+            ]
+        }},
+        {section:{
 			id:"cfgWinDen",
 			title:{
 				text:"Config Window UI Density"
@@ -4335,7 +4302,7 @@ pages:[
 					value:"flexwatchMini"
 				}},
                 {opt:{
-					name:"Flexwatch Mini Version 2 (~2015 onwards) [Same player sizes, but they happen at different resoltions]",
+					name:"Flexwatch Mini Version 2 (~2015 onwards) [Same player sizes, but they happen at different resolutions]",
 					value:"flexwatchMiniV2",
                     mText:{
                         text:"Breaks theater mode",
@@ -12458,7 +12425,7 @@ Search
 			let newElem = document.createElement("li");
 			newElem.classList = "video-list-item related-list-item context-data-item chan-name-clickable";
 			newElem.innerHTML = `
-			<a href="${href}" class="related-video yt-uix-contextlink yt-uix-sessionlink"><span class="ux-thumb-wrap contains-addto " href="${href}">    <span class="video-thumb yt-thumb yt-thumb-120"><span class="yt-thumb-default">
+			<a href="${href}" class="related-video yt-uix-contextlink yt-uix-sessionlink"><span class="ux-thumb-wrap contains-addto " href="${href}"><div class="np-overlay flex-bar"><span>Now playing</span></div>    <span class="video-thumb yt-thumb yt-thumb-120"><span class="yt-thumb-default">
 	<span class="yt-thumb-clip">
 	  <span class="yt-thumb-clip-inner">
 		<img alt="Thumbnail" src="${thumbnail}" width="120">
@@ -12475,6 +12442,9 @@ Search
 </span><span class="stat view-count">${viewCount}<span class="extra">${date}</span></span></a>
 				`;
 			container.insertBefore(newElem,container.children[number]);
+            if(id==CWD.id){
+                newElem.classList.add("now-playing");
+            }
 			STX_craftLink(newElem.querySelector("a"),"watch",id,href).then(a=>{
                 STX_warmLink(a);
             });
@@ -20012,6 +19982,9 @@ padding:5px 10px
 .astro-setting-title span{
 font-size:14px
 }
+.astro-sector-settings{
+  flex-direction:column
+}
 
 
 .astro-title-bar{
@@ -20081,7 +20054,14 @@ padding:10px 0
 .rev-multistate-handler[state="all"] > [state-id="all"],
 .rev-multistate-handler[state="locked"] > [state-id="locked"],
 .rev-multistate-handler[state="unlocked"] > [state-id="unlocked"] {
-display: none;
+opacity:0;
+height:0;
+transition:none;
+transform:perspective(0px) translate3d(0,0,0.025px);
+display:none
+}
+.multistate{
+  transition:transform 0.5s, opacity 0.75s;
 }
 #astro-micro-filter {
 position: relative;
@@ -20649,7 +20629,9 @@ filter: invert(1);
   padding:10px 10px 30px;
   border:1px solid var(--ccc);
   background:var(--f1f1f1);
-  position:relative
+  position:relative;
+  padding:10px;
+  margin:8px 10px
 }
 .st-cl b{
   font-size:16px;
@@ -20678,6 +20660,10 @@ filter: invert(1);
 }
 #st-changelog:not([expanded]) #st-cl-expander{
   top:190px;
+  top:170px
+}
+#st-changelog[expanded]{
+  padding-bottom:30px
 }
 #st-cl-expander{
   bottom:0;
@@ -20733,14 +20719,60 @@ filter: invert(1);
         newE.innerHTML=STH.astroSector;
         container.insertBefore(newE,container.children[n]);
         newE.querySelector("h5").textContent=i.sectorTitle.text;
+        let sectorSets=newE.querySelector(".astro-sector-settings");
         let settNumb=1;
         i.opts.forEach(i=>{
             if(i.opt){
-                createSetting(i.opt,newE,settNumb,theSet);
+                createSetting(i.opt,sectorSets,settNumb,theSet);
             }else{
                 createSector(i.sector,newE,settNumb,theSet);
             }
             settNumb++;
+        });
+    }
+    function createCLItem(i,container,n){
+        let newE=document.createElement("div");
+        newE.innerHTML=STH.astroChangelogItem;
+        container.insertBefore(newE,container.children[n]);
+        newE.querySelector("span").innerHTML=i.text;
+    }
+    function createCLSector(i,container,n){
+        let newE=document.createElement("div");
+        newE.classList="st-cl-sect";
+        newE.innerHTML=STH.astroChangelogSection;
+        container.insertBefore(newE,container.children[n]);
+        newE.querySelector("b").textContent="StarTube "+i.version+" Changelog";
+        let sectorSets=newE.querySelector(".st-cl-items");
+        let settNumb=1;
+        i.items.forEach(i=>{
+            if(i.item){
+                createCLItem(i.item,sectorSets,settNumb);
+            }
+            settNumb++;
+        });
+    }
+    function createSpecialSection(tab,ix,n){
+        let conta=$("[state-id='"+tab+"'] .astro-scroller-inner");
+        nE=document.createElement("div");
+        nE.id="st-changelog";
+        nE.classList="astro-section";
+        nE.innerHTML=`
+        <button id="st-cl-expander" class="stx-trigger" stx-target="#st-changelog" stx-trigger-type="attrib-tog" stx-attrib="expanded">
+                                                    <div id="st-cl-expand" style="TEXT"><span class="yt-uix-button-content"><span class="run">Show more</span></span></div>
+                                                    <div id="st-cl-collapse" style="TEXT"><span class="yt-uix-button-content"><span class="run">Show less</span></span></div>
+                                                </button>
+        `;
+        conta.insertBefore(nE,conta.children[n]);
+        let setNumb=1;
+        ix.section.changelog.forEach(i=>{
+            if(i.sector){
+                if(currStarChan=="Beta"&&i.sector.beta!==null){
+                    createCLSector(i.sector,nE,setNumb);
+                }else if(i.sector.beta==null){
+                    createCLSector(i.sector,nE,setNumb);
+                }
+            }
+            setNumb++;
         });
     }
     function createSection(tab,ix,n){
@@ -20785,7 +20817,11 @@ filter: invert(1);
         let tab=obj.tab;
         let sectNumb=0;
         obj.sections.forEach(ix=>{
-            createSection(tab,ix,sectNumb);
+            if(ix.section.specialTypeId && ix.section.specialTypeId=="changelog"){
+                createSpecialSection(tab,ix,sectNumb);
+            }else{
+                createSection(tab,ix,sectNumb);
+            }
             sectNumb++;
         });
     });
@@ -23409,6 +23445,9 @@ height:0;
 [exp-modern-guide-button] #appbar-guide-button .yt-uix-button-arrow {
 display: none;
 }
+[exp-modern-guide-button][static] #appbar-guide-button{
+left:-12px
+}
 [exp-modern-guide-button] #appbar-guide-button {
 background: none !important;
 border: none !important;
@@ -23701,6 +23740,10 @@ overscroll-behavior:contain
 [exp-true-scrollable-guide] #appbar-guide-menu{
 top:50px!important
 }
+[modern-cards]:not([ly^="hh2014alt"])[static] #appbar-guide-menu,
+[exp-true-scrollable-guide][static] #appbar-guide-menu{
+top:8px!important
+}
 [exp-true-scrollable-guide][gbar] #appbar-guide-menu{
 top:80px!important
 }
@@ -23771,8 +23814,10 @@ html[static][data-player-size="small"] .site-center-aligned #player{
 width:970px!important
 }
 html[static] .show-guide #page #content .branded-page-v2-container{
-margin-left:0;
 margin-left:230px!important
+}
+html[static][modern-cards] .show-guide #page #content .branded-page-v2-container{
+margin-left:240px!important
 }
 html[static][cosmic-bg] .show-guide #page #content .branded-page-v2-container{
 margin-left:0;
@@ -23887,7 +23932,7 @@ html:not([topbar])[static] #masthead-search-terms {
 width: 385px;
 }
 html:not([topbar])[static] #masthead-search {
-max-width: 450px !important;
+max-width: 451px !important;
 }
 html:not([topbar])[static] #yt-masthead #logo-container {
 margin-right: 0 !important;
@@ -28029,6 +28074,7 @@ max-height: 0;
 }
 [poly-styles] .filter-col {
 max-width: 187px;
+max-width:150px;
 padding-right: 28px;
 }
 [poly-styles] .filter-col-title {
@@ -31414,7 +31460,7 @@ margin-left:20px
 }
 [aozora-styles] .filter-col{
 float:left;
-width:130px;
+width:128px;
 margin:5px;
 max-width:130px
 }
@@ -38669,6 +38715,30 @@ to{opacity:1}
   [ly^=c] .site-center-aligned #appbar-guide-menu::before {
     background:none
   }
+}
+[ly^="stargazer"] #masthead-positioner #sb-wrapper{
+  z-index:4
+}
+[wl^="aw9"] .np-overlay{
+  position:absolute;
+  z-index:1;
+  background:#0008;
+  color:#fff;
+  height:100%;
+  width:100%;
+  font-weight:var(--bold);
+  text-shadow:1px 1px #000
+}
+[wl^="aw9"] .np-overlay span{
+  margin:0 auto;
+  display:block
+}
+[wl^="aw9"] .video-list-item:not(.now-playing) .np-overlay{
+  display:none!important
+}
+[wl^="aw9"] .video-time,
+[wl^="aw9"] .addto-button{
+  z-index:1
 }
 </style>
 `;
