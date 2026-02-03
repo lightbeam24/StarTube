@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube
 // @namespace    http://tampermonkey.net/
-// @version      2.6.0
+// @version      2.6.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -131,11 +131,11 @@ if (window.wrappedJSObject) {
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.6.0";
+let currStarVer="2.6.1";
     let updateStarVer="2.6.0";
 let currStarChan="Stable";
-    let currStarDetails="Standard Release";
-let STUID="st260s";
+    let currStarDetails="Minor Release";
+let STUID="st261s";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -763,7 +763,7 @@ astroChangelogSection:`
                                                     </div>
 `,
 astroChangelogItem:`
-<div class="st-cl"><span></span><div>
+<span></span>
 `,
 astroSettings:`
 <div id="startube-settings-fence" class="st-fence">
@@ -3225,6 +3225,14 @@ pages:[
             id:"STCHANGELOG",
             specialTypeId:"changelog",
             changelog:[
+                {sector:{
+                    version:"2.6.1",
+                    items:[
+                        {item:{
+                            text:"-Fixed the issue where you couldn't delete individual videos from watch history"
+                        }}
+                    ]
+                }},
                 {sector:{
                     version:"2.6.0",
                     items:[
@@ -20809,6 +20817,7 @@ filter: invert(1);
     }
     function createCLItem(i,container,n){
         let newE=document.createElement("div");
+        newE.classList="st-cl";
         newE.innerHTML=STH.astroChangelogItem;
         container.insertBefore(newE,container.children[n]);
         newE.querySelector("span").innerHTML=i.text;
@@ -38763,10 +38772,10 @@ to{opacity:1}
 }
 
 /* st 2.6 */
-/* fix stargazer feed */
+/* fix stargazer feed
 .yt-lockup.yt-lockup-tile{
   position:relative
-}
+}*/
 [modern-cards] .lohp-large-shelf-container > div{
   display:flex
 }
