@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.6.0.30
+// @version      2.6.1
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -131,11 +131,11 @@ if (window.wrappedJSObject) {
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.6.0 Beta 3";
+let currStarVer="2.6.1 Beta";
     let updateStarVer="2.6.0";
 let currStarChan="Beta";
-    let currStarDetails="Standard Beta Release";
-let STUID="st260b1";
+    let currStarDetails="Minor Release (aligned with stable channel)";
+let STUID="st261b";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -763,7 +763,7 @@ astroChangelogSection:`
                                                     </div>
 `,
 astroChangelogItem:`
-<div class="st-cl"><span></span><div>
+<span></span>
 `,
 astroSettings:`
 <div id="startube-settings-fence" class="st-fence">
@@ -3225,6 +3225,91 @@ pages:[
             id:"STCHANGELOG",
             specialTypeId:"changelog",
             changelog:[
+                {sector:{
+                    version:"2.6.1",
+                    items:[
+                        {item:{
+                            text:"-Fixed the issue where you couldn't delete individual videos from watch history"
+                        }}
+                    ]
+                }},
+                {sector:{
+                    version:"2.6.0",
+                    items:[
+                        {item:{
+                            text:'-Related tabs videos tab now shows a "Now playing" overlay on the current video'
+                        }},
+                        {item:{
+                            text:'-Added actual 2024 layout option'
+                        }},
+                        {item:{
+                            text:'-Added 2010-2011 player style'
+                        }},
+                        {item:{
+                            text:'-Added Ambient Mode'
+                        }},
+                        {item:{
+                            text:'-Playlists are now way more accurate in the Polymer layouts'
+                        }},
+                        {item:{
+                            text:'-Added option to choose to use <a href="/feed/recommended_for_you">https://www.youtube.com/feed/recommended_for_you</a> in place of <a href="/feed/what_to_watch/recommended">https://www.youtube.com/feed/what_to_watch/recommended</a>, as some people experience issues with the latter.'
+                        }},
+                        {item:{
+                            text:`-Added the hype page, accessible at <a href="/feed/hype_leaderboard">https://www.youtube.com/feed/hype_leaderboard</a>`
+                        }},
+                        {item:{
+                            text:'-The footer on the Polymer layouts is now on the guide'
+                        }},
+                        {item:{
+                            text:'-Added Hype item to guide on 2016 and later'
+                        }},
+                        {item:{
+                            text:'-Removed the embed player option, as it is no longer supported by V3'
+                        }},
+                        {item:{
+                            text:'-Fixed search filters not showing properly on various layouts (caused by a YouTube update)'
+                        }},
+                        {item:{
+                            text:'-This changelog has been reworked under the hood'
+                        }},
+                        {item:{
+                            text:'-This changelog can now be expanded and collapsed'
+                        }},
+                        {item:{
+                            text:'-Minor code optimizations'
+                        }},
+                        {item:{
+                            text:'-Fixed 2008-2009 search bars and 2008 search button using the wrong font on macOS'
+                        }},
+                        {item:{
+                            text:'-Fixed related videos title height on Polymer and Amsterdam layouts'
+                        }},
+                        {item:{
+                            text:'-Fixed featured playlists not showing up on channels3'
+                        }},
+                        {item:{
+                            text:'-Fixed lohp video being too big'
+                        }},
+                        {item:{
+                            text:'-Fixed rounded player setting applying in fullscreen'
+                        }},
+                        {item:{
+                            text:'-Fixed Mid 2016 having large size related videos, making it the same as Late 2016'
+                        }},
+                        {item:{
+                            text:'-Fixed 2012 guide having white bars on it on low resolutions'
+                        }},
+                        {item:{
+                            text:'-Fixed lohp video being too big'
+                        }},
+                        {item:{
+                            text:'-The warning banner that StarTube gives on regular YouTube has been redsigned'
+                        }},
+                        {item:{
+                            text:'-Other fixes and improvements'
+                        }}
+                    ]
+                }},
                 {sector:{
                     beta:true,
                     version:"2.6.0 Beta 3",
@@ -20732,6 +20817,7 @@ filter: invert(1);
     }
     function createCLItem(i,container,n){
         let newE=document.createElement("div");
+        newE.classList="st-cl";
         newE.innerHTML=STH.astroChangelogItem;
         container.insertBefore(newE,container.children[n]);
         newE.querySelector("span").innerHTML=i.text;
@@ -38686,10 +38772,10 @@ to{opacity:1}
 }
 
 /* st 2.6 */
-/* fix stargazer feed */
+/* fix stargazer feed
 .yt-lockup.yt-lockup-tile{
   position:relative
-}
+}*/
 [modern-cards] .lohp-large-shelf-container > div{
   display:flex
 }
