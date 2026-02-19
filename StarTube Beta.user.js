@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.6.1
+// @version      2.6.2
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -131,11 +131,11 @@ if (window.wrappedJSObject) {
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.6.1 Beta";
+let currStarVer="2.6.2 Beta";
     let updateStarVer="2.6.0";
 let currStarChan="Beta";
     let currStarDetails="Minor Release (aligned with stable channel)";
-let STUID="st261b";
+let STUID="st262b";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -3225,6 +3225,20 @@ pages:[
             id:"STCHANGELOG",
             specialTypeId:"changelog",
             changelog:[
+                {sector:{
+                    version:"2.6.2",
+                    items:[
+                        {item:{
+                            text:"-Fixed not being able to use channel videos sort on channels3"
+                        }},
+                        {item:{
+                            text:"-Fixed not being able to use channel videos sort on related tabs videos tab"
+                        }},
+                        {item:{
+                            text:"-Fixed 'now playing' overlay on related tabs videos tab when not using alt-watch9"
+                        }}
+                    ]
+                }},
                 {sector:{
                     version:"2.6.1",
                     items:[
@@ -7156,7 +7170,14 @@ function getChannelVideosList(){
 				let richGrid = result.contents.twoColumnBrowseResultsRenderer.tabs[1].tabRenderer.content.richGridRenderer;
 				if(richGrid.header){
 					$("body").setAttribute("channel-sort","true");
-					if(richGrid.header.feedFilterChipBarRenderer){
+					if(richGrid.header.chipBarViewModel){
+						let chip = richGrid.header.chipBarViewModel.chips;
+						CWD.newestToken = chip[0].chipViewModel.tapCommand.innertubeCommand.continuationCommand.token;
+						CWD.popularToken = chip[1].chipViewModel.tapCommand.innertubeCommand.continuationCommand.token;
+						CWD.oldestToken = chip[2].chipViewModel.tapCommand.innertubeCommand.continuationCommand.token;
+					}
+                    /* legacy */
+					else if(richGrid.header.feedFilterChipBarRenderer){
 						let chip = richGrid.header.feedFilterChipBarRenderer.contents;
 						CWD.newestToken = chip[0].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
 						CWD.popularToken = chip[1].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
@@ -13193,9 +13214,16 @@ ${date}
             let chipBar1;
             let chipBar2;
             if(rgi){
-                chipBar0=rgi.header.feedFilterChipBarRenderer.contents[0].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
-                chipBar1=rgi.header.feedFilterChipBarRenderer.contents[1].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
-                chipBar2=rgi.header.feedFilterChipBarRenderer.contents[2].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                if(rgi.header.chipBarViewModel){
+                    chipBar0=rgi.header.chipBarViewModel.chips[0].chipViewModel.tapCommand.innertubeCommand.continuationCommand.token;
+                    chipBar1=rgi.header.chipBarViewModel.chips[1].chipViewModel.tapCommand.innertubeCommand.continuationCommand.token;
+                    chipBar2=rgi.header.chipBarViewModel.chips[2].chipViewModel.tapCommand.innertubeCommand.continuationCommand.token;
+                }
+                else if(rgi.header.feedFilterChipBarRenderer){
+                    chipBar0=rgi.header.feedFilterChipBarRenderer.contents[0].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                    chipBar1=rgi.header.feedFilterChipBarRenderer.contents[1].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                    chipBar2=rgi.header.feedFilterChipBarRenderer.contents[2].chipCloudChipRenderer.navigationEndpoint.continuationCommand.token;
+                }
             }
 			if(!window.location.href.includes("view=0")){
 			}else{
@@ -38805,7 +38833,7 @@ to{opacity:1}
 [ly^="stargazer"] #masthead-positioner #sb-wrapper{
   z-index:4
 }
-[wl^="aw9"] .np-overlay{
+#st-videos-panel .np-overlay{
   position:absolute;
   z-index:1;
   background:#0008;
@@ -38815,15 +38843,15 @@ to{opacity:1}
   font-weight:var(--bold);
   text-shadow:1px 1px #000
 }
-[wl^="aw9"] .np-overlay span{
+#st-videos-panel .np-overlay span{
   margin:0 auto;
   display:block
 }
-[wl^="aw9"] .video-list-item:not(.now-playing) .np-overlay{
+#st-videos-panel .video-list-item:not(.now-playing) .np-overlay{
   display:none!important
 }
-[wl^="aw9"] .video-time,
-[wl^="aw9"] .addto-button{
+#st-videos-panel .video-time,
+#st-videos-panel .addto-button{
   z-index:1
 }
 </style>
