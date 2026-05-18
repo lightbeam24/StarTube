@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube
 // @namespace    http://tampermonkey.net/
-// @version      2.6.2
+// @version      2.6.3
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -131,11 +131,11 @@ if (window.wrappedJSObject) {
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.6.2";
+let currStarVer="2.6.3";
     let updateStarVer="2.6.0";
 let currStarChan="Stable";
     let currStarDetails="Minor Release";
-let STUID="st262s";
+let STUID="st263s";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -3225,6 +3225,14 @@ pages:[
             id:"STCHANGELOG",
             specialTypeId:"changelog",
             changelog:[
+                {sector:{
+                    version:"2.6.3",
+                    items:[
+                        {item:{
+                            text:"-Fixed not being able to use the channel videos tab on channels3"
+                        }}
+                    ]
+                }},
                 {sector:{
                     version:"2.6.2",
                     items:[
@@ -11905,7 +11913,11 @@ Search
 		if(page == "videos"){
 			gdp.currChan.content.forEach(i => {
 				if(i.richItemRenderer){
-					i = i.richItemRenderer.content.videoRenderer;
+                    if(i.richItemRenderer.content.gridVideoRenderer){
+                        i = i.richItemRenderer.content.gridVideoRenderer;
+                    }else{
+                        i = i.richItemRenderer.content.videoRenderer;
+                    }
 					let i2 = i.contextItemData;
 					let href;
 					let viewCount;
