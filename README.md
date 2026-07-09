@@ -85,3 +85,15 @@ The rest of these screenshots show just some of what StarTube can do.
 V3 - https://github.com/vorapis-yt/v3
 
 Logo made by UnderscoreAngel. [GitHub page](https://github.com/UnderscoreAngel)
+
+This repository hosts various HTML archives and recreations from YouTube. These primarily target rare logged in goodies.
+
+The content hosted in this repository are useful for anyone who wishes to recreate the old YouTube layout, including "revival site" developers and custom frontend developers.
+
+Due to the volatility of archives hosted elsewhere, all archives hosted outside should be mirrored in this repo (only Available in 2019-2024 layout)
+
+Page | Logged in? | Type | Additional details | Year
+:---|:---:|:---:|---|---:
+
+[Creator Studio:Status] (https://www.youtube.com/features?nv=1) |
+Yes | Archive | | 2019
