@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StarTube Beta
 // @namespace    http://tampermonkey.net/
-// @version      2.6.3
+// @version      2.7.0.10
 // @description  More layouts and customization options for V3
 // @author       lightbeam24
 // @match        *://*.youtube.com/*
@@ -121,7 +121,7 @@ window.addEventListener("keydown", function(){
 	}
 });
 }
-GM_registerMenuCommand("Open StarTube settings",showHideSettings);
+GM_registerMenuCommand("StarTube Config Window (Alt + Shift + C)",showHideSettings);
 GM_registerMenuCommand("Reset StarTube settings",resetSettings);
 GM_registerMenuCommand("Load page without V3",loadWithoutV3);
 if (window.wrappedJSObject) {
@@ -131,11 +131,10 @@ if (window.wrappedJSObject) {
 'use strict';
     let isPopstate=false;
     var SRS = "";
-let currStarVer="2.6.3 Beta";
-    let updateStarVer="2.6.0";
+let currStarVer="2.7.0 Beta 1";
+let updateStarVer="2.7.0";
 let currStarChan="Beta";
-    let currStarDetails="Minor Release (aligned with stable channel)";
-let STUID="st263b";
+let STUID="st270b1";
 let STDELAY=300;
 let updateLink="https://github.com/lightbeam24/StarTube/raw/refs/heads/main/StarTube%20Beta.user.js";
 let starTubeConfigCreated = localStorage.getItem("starTubeConfigCreated");
@@ -215,7 +214,7 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 						"context": {
 							"client": {
 								"clientName": "TVHTML5",
-								"clientVersion": "2.20241113.07.00",
+								"clientVersion": "2.20260507.01.00",
 								"hl": "en",
 								"gl": "US"
 							}
@@ -249,7 +248,7 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 						"context": {
 							"client": {
 								"clientName": "WEB",
-								"clientVersion": "2.20241113.07.00",
+								"clientVersion": "2.20260507.01.00",
 								"hl": "en",
 								"gl": "US"
 							}
@@ -283,7 +282,7 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 						"context": {
 							"client": {
 								"clientName": "WEB",
-								"clientVersion": "2.20241113.07.00",
+								"clientVersion": "2.20260507.01.00",
 								"hl": "en",
 								"gl": "US"
 							}
@@ -317,7 +316,7 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 						"context": {
 							"client": {
 								"clientName": "WEB",
-								"clientVersion": "2.20241113.07.00",
+								"clientVersion": "2.20260507.01.00",
 								"hl": "en",
 								"gl": "US"
 							}
@@ -352,7 +351,7 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 						"context": {
 							"client": {
 								"clientName": "WEB",
-								"clientVersion": "2.20241113.07.00",
+								"clientVersion": "2.20260507.01.00",
 								"hl": "en",
 								"gl": "US"
 							}
@@ -387,7 +386,7 @@ function EXFetch(condition, type, endpoint, avar, id, modifier, modContent, modi
 						"context": {
 							"client": {
 								"clientName": "WEB",
-								"clientVersion": "2.20241113.07.00",
+								"clientVersion": "2.20260507.01.00",
 								"hl": "en",
 								"gl": "US"
 							}
@@ -704,6 +703,56 @@ SVG_TOG:`
 `,
 }
 var STH={
+densorWin:`
+<div class="st-fence">
+</div>
+<div class="densor-win-obj" state="welcome">
+    <div class="densor-win-inner">
+        <div class="densor-tb flex-bar">
+        </div>
+        <div class="densor-cont">
+            <div class="densor-screen" screen="welcome">
+                <div class="densor-big-text">
+                    <span>Here's how to access StarTube's settings (the new way)</span>
+                </div>
+                <div class="densor-med-text">
+                    <span>Welcome to the StarTube first run experience. As of version 2.7.0, the methods of accessing the StarTube Config Window have changed. Review them below.</span>
+                </div>
+                <div class="densor-trigs flex">
+                    <div id="gesture-densor" class="densor-trig">
+                        <div class="densor-trig-top">
+                            <span>Mouse Gesture</span>
+                        </div>
+                        <div class="densor-trig-middle">
+                            <span>Move your mouse near the bottom of the screen to open the StarTube Config Window.</span>
+                        </div>
+                        <div class="densor-trig-bottom">
+                            <button class="densor-tut-btn">See how</button>
+                        </div>
+                    </div>
+                    <div id="shortcut-densor" class="densor-trig">
+                        <div class="densor-trig-top">
+                            <span>Keyboard Shortcut</span>
+                        </div>
+                        <div class="densor-trig-middle">
+                            <h1><b>Alt + Shift + C</b></h1>
+                            <h3>(<b>or Option + Shift + C</b> on macOS)</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="densor-med-text">
+                    <span>You can still use the userscript manager's menu to open the StarTube Config Window.</span>
+                </div>
+            </div>
+            <div class="densor-screen" screen="hover">
+                <div class="densor-big-text">
+                    <span>Move your mouse to the bottom of the screen.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+`,
 astroSector:`
 													<div class="astro-sector-title">
 														<h5></h5>
@@ -772,7 +821,7 @@ astroSettings:`
 		<div id="startube-settings-window-inner">
 			<div id="startube-settings-topbar" class="astro-topbar flex-bar">
 				<div class="astro-topbar-left">
-					<span>StarTube Settings</span>
+					<span>StarTube Config Window</span>
 					<span class="astro-subtitle">Version ${currStarVer}</span>
 				</div>
 				<div class="astro-topbar-right flex-bar">
@@ -804,6 +853,7 @@ astroSettings:`
 						<div id="st-astro-config" class="astro-sidebar-item flex-bar" p="config">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>StarTube</span>
+                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div class="astro-sidebar-text">
@@ -812,14 +862,12 @@ astroSettings:`
 						<div id="st-astro-layout" class="astro-sidebar-item flex-bar active" p="layout">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Layout</span>
-                                <span class="st-sb-new"></span>
 							</div>
 						</div>
 						<div id="st-astro-misc" class="astro-sidebar-item flex-bar" p="misc">
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Misc</span>
 							</div>
-                            <span class="st-sb-new"></span>
 						</div>
 						<div id="st-astro-topbar" class="astro-sidebar-item flex-bar" p="topbar">
 							<div class="astro-sidebar-item-inner flex-bar">
@@ -835,7 +883,6 @@ astroSettings:`
 							<div class="astro-sidebar-item-inner flex-bar">
 								<span>Player</span>
 							</div>
-                            <span class="st-sb-new"></span>
 						</div>
 						<div id="st-astro-watch" class="astro-sidebar-item flex-bar" p="watch">
 							<div class="astro-sidebar-item-inner flex-bar">
@@ -903,9 +950,6 @@ astroSettings:`
                                                 </div>
                                                 <div class="st-infopoint">
                                                     <b>Release Channel: </b><span>${currStarChan}</span>
-                                                </div>
-                                                <div class="st-infopoint">
-                                                    <b>Release Type: </b><span>${currStarDetails}</span>
                                                 </div>
                                             </div>
                                             <div id="st-links" class="flex-bar">
@@ -2211,6 +2255,17 @@ var STS = localStorage.getItem(theSets);
 if (STS !== null) {
     SRS = STS.radioSettings;
 }
+    window.addEventListener('keydown', (event) => {
+        if (event.altKey && event.shiftKey) {
+            if (event.code === 'KeyC') {
+                $("html").setAttribute("densor-closed","true");
+                $("html").removeAttribute("densor-tut");
+                STS.show2point7=false;
+                applySettings(0);
+                showHideSettings();
+            }
+        }
+    });
 function STX_checkClick(e){
     if(e.target){
         if(e.target.classList.contains("stx-trigger")){
@@ -2396,7 +2451,7 @@ var defaultConfigs = {
 
 	"STPresetsAlsoSetV3Settings": true,
 
-	"show2point6": true,
+	"show2point7": true,
 
 	"expHideYoodles": false,
 	"expFixedXIcon": true,
@@ -2416,6 +2471,11 @@ var defaultConfigs = {
         },
         showNew:{
             name:"showNew",
+            tValue:"on",
+            visValue:"on"
+        },
+        densorHover:{
+            name:"densorHover",
             tValue:"on",
             visValue:"on"
         },
@@ -2593,8 +2653,7 @@ var defaultConfigs = {
 	},
 	"importantInfo":{
 		startubeVersion:currStarVer,
-		startubeChannel:currStarChan,
-        startubeDetails:currStarDetails
+		startubeChannel:currStarChan
 	}
 };
 if(STS == null){
@@ -2645,8 +2704,8 @@ function applyNewSettings(){
 	if(STS.configNoCast == null){
 		STS.configNoCast = true;
 	}
-	if(STS.show2point6 == null){
-		STS.show2point6 = true;
+	if(STS.show2point7 == null){
+		STS.show2point7 = true;
 	}
     if(STS.radioSettings.newStructure2==null){
        if(STS.newConfig==false){
@@ -2661,6 +2720,12 @@ function applyNewSettings(){
                    tValue:STS.radioSettings.showNew,
                    visValue:STS.radioSettings.showNew
                },
+               densorHover:{
+                   name:"densorHover",
+                   tValue:STS.radioSettings.densorHover,
+                   visValue:STS.radioSettings.densorHover
+               },
+
                layoutMode:{
                    name:"layoutMode",
                    tValue:STS.radioSettings.layoutMode,
@@ -2905,6 +2970,13 @@ function applyNewSettings(){
             visValue:"off"
         }
     }
+    if(STS.radioSettings.densorHover==null){
+        STS.radioSettings.densorHover={
+            name:"densorHover",
+            tValue:"on",
+            visValue:"on"
+        }
+    }
     if(STS.radioSettings.playerVersion.tValue=="embed"){
         STS.radioSettings.playerVersion={
             name:"playerVersion",
@@ -2967,9 +3039,9 @@ let ScFa={
 		name:"expAdaptiveLayout2024HH",
 		desc:"(For the adaptive layout) Use 2024 Hitchhiker for videos uploaded in 2024 and 2025."
 	},
-	"show2point6":{
-		name:"show2point6",
-		desc:"Show the 2.6.0 update card."
+	"show2point7":{
+		name:"show2point7",
+		desc:"Show the 2.7.0 update card."
 	},
 	"polymerWarningBanner":{
 		name:"polymerWarningBanner",
@@ -3225,6 +3297,33 @@ pages:[
             id:"STCHANGELOG",
             specialTypeId:"changelog",
             changelog:[
+                {sector:{
+                    beta:true,
+                    version:"2.7.0 Beta 1",
+                    items:[
+                        {item:{
+                            text:"-Fixed channel videos not working on Watch5, Alt-Watch9, and Related Tabs"
+                        }},
+                        {item:{
+                            text:"-Fixed channels3 home page not working"
+                        }},
+                        {item:{
+                            text:"-Introduced the StarTube first run experience"
+                        }},
+                        {item:{
+                            text:"-Added the ability to use a keyboard shortcut to access the StarTube Config Window (Windows/Linux: Alt + Shift + C, macOS: Option + Shift + C)"
+                        }},
+                        {item:{
+                            text:"-Added the ability to hover near the bottom of the screen for a few seconds to access the StarTube Config Window (and the option to disable this)"
+                        }},
+                        {item:{
+                            text:"-Some minor dark mode fixes, including the mid 2009 and 2011 logos"
+                        }},
+                        {item:{
+                            text:"-Other stuff I forgot :P"
+                        }}
+                    ]
+                }},
                 {sector:{
                     version:"2.6.3",
                     items:[
@@ -3485,6 +3584,26 @@ pages:[
 			]
 		}},
         {section:{
+			id:"densorHover",
+            new:true,
+			title:{
+				text:"Config Window Hover Trigger"
+			},
+			desc:{
+				text:"Hover near the bottom of the screen to open this config window."
+			},
+			opts:[
+				{opt:{
+					name:"On",
+					value:"on"
+				}},
+				{opt:{
+					name:"Off",
+					value:"off"
+				}}
+			]
+		}},
+        {section:{
 			id:"showNew",
             new:true,
 			title:{
@@ -3563,8 +3682,7 @@ pages:[
                     opts:[
                         {opt:{
                             name:"2024",
-                            value:"amst2024_1",
-                            new:true
+                            value:"amst2024_1"
                         }},
                         {opt:{
                             name:"2024 (Custom ver)",
@@ -3743,7 +3861,12 @@ pages:[
                         {opt:{
                             name:"2011",
                             value:"aozora2011_2"
-                        }}
+                        }}/*,
+                        {opt:{
+                            new:true,
+                            name:"2010",
+                            value:"aozora2010_1"
+                        }}*/
                     ]
                 }},
                 {sector:{
@@ -3771,6 +3894,7 @@ pages:[
                     },
                     opts:[
                         {opt:{
+                            new:true,
                             name:"2007",
                             value:"cloudgazer2007_1"
                         }}
@@ -3904,7 +4028,6 @@ pages:[
 		}},
         {section:{
 			id:"altFeed",
-            new:true,
 			title:{
 				text:"Alternate recommended feed page"
 			},
@@ -4335,8 +4458,7 @@ pages:[
 				}},
                 {opt:{
 					name:"2010-2011",
-					value:"aozora2010",
-                    new:true
+					value:"aozora2010"
 				}},
                 {opt:{
 					name:"Flash7",
@@ -4459,7 +4581,6 @@ pages:[
 		}},
         {section:{
 			id:"ambientMode",
-            new:true,
 			title:{
 				text:"Ambient Mode"
 			},
@@ -5985,9 +6106,9 @@ function STStargazer2008Settings(){
     SRS.guideSubsAutoExpand.tValue="off";
     SRS.subsGrid.tValue="grid";
     SRS.rndPlayer.tValue="off";
-        SRS.ambientMode.tValue="off";
+    SRS.ambientMode.tValue="off";
     SRS.playerVersion.tValue="aozora2010";
-    SRS.watchLayout.tValue="watch4a";
+    SRS.watchLayout.tValue="watch3";
     SRS.relatedTabs.tValue="off";
     SRS.relatedSize.tValue="smaller";
     SRS.compactDate.tValue="off";
@@ -7005,7 +7126,7 @@ function fillVideosDD(){
 			}
 		}
 		i.page.forEach(i2 => {
-			createRenderer(i2, "superCompactVideo", currNumb, "", pageVid, currPage);
+			createRenderer(i2.richItemRenderer.content.lockupViewModel, "superCompactVideo", currNumb, "", pageVid, currPage);
 			if($(".st-video-dd-trigger[disabled]")){
 				$(".st-video-dd-trigger").removeAttribute("disabled");
 				$(".st-video-dd-trigger .run").textContent = CWD.videoCount;
@@ -7058,7 +7179,11 @@ function fillVideoList(list, renderer, purpose, prevNumb){
 		if(purpose == "continuation" && currNumb < prevNumb){
 		}else{
 			if(i.richItemRenderer){
-				createRenderer(i.richItemRenderer.content.videoRenderer, renderer, currNumb, "");
+                if(i.richItemRenderer.content.lockupViewModel){
+                    createRenderer(i.richItemRenderer.content.lockupViewModel, renderer, currNumb, "");
+                }else if(i.richItemRenderer.content.videoRenderer){
+                    createRenderer(i.richItemRenderer.content.videoRenderer, renderer, currNumb, "");
+                }
 			}else if(i.continuationItemRenderer){
 				createLoadMore(i.continuationItemRenderer.continuationEndpoint.continuationCommand.token, list, renderer, currNumb);
 			}
@@ -9206,7 +9331,8 @@ width: 360px !important;
             SRS.watchLayout.tValue=="watch5a"||
             SRS.watchLayout.tValue=="watch4c"||
             SRS.watchLayout.tValue=="watch4b"||
-            SRS.watchLayout.tValue=="watch4a"
+            SRS.watchLayout.tValue=="watch4a"||
+            SRS.watchLayout.tValue=="watch3"
         ){
             titleOnTop=true;
         }
@@ -9342,6 +9468,64 @@ width: 360px !important;
             setTimeout(changeTitleOnTopHeight,1000);
         }
         if(SRS.watchLayout.tValue=="watch5c"||SRS.watchLayout.tValue=="watch5d"){
+            $("#st-above-owner-row-holder").innerHTML=STH.aboveOwnerRow;
+            $("#st-above-videos-row-holder").innerHTML=STH.aboveVideosRow;
+            $("#st-actions-info-row-holder").innerHTML=STH.actionsInfoRow;
+            $("#st-panels-row-holder").innerHTML=STH.panelsRow;
+            $("#st-desc-row-holder").innerHTML=STH.descRow;
+            setTimeout(changeTitleOnTopHeight,1000);
+            document.querySelectorAll("#videos-dd-pagination button").forEach(i=>{
+                i.addEventListener("click",function(){
+                    let page=i.getAttribute("page");
+                    let maxPages=$("#watch5-videos-dd").getAttribute("max-pages");
+                    $("#watch5-videos-dd").setAttribute("page",page);
+                    $("#videos-dd-pagination .yt-uix-button-toggled").classList.remove("yt-uix-button-toggled");
+                    i.classList.add("yt-uix-button-toggled");
+                    if(page==maxPages){
+                        $("#videos-dd-next").setAttribute("disabled","");
+                    }else if($("#videos-dd-next[disabled]")){
+                        $("#videos-dd-next").removeAttribute("disabled");
+                    }
+                    if(page==1){
+                        $("#videos-dd-prev").setAttribute("disabled","");
+                    }else if($("#videos-dd-prev[disabled]")){
+                        $("#videos-dd-prev").removeAttribute("disabled");
+                    }
+                });
+            });
+            $("#videos-dd-next").addEventListener("click",function(){
+                if($("#videos-dd-next[disabled]")==null){
+                    let page=$("#watch5-videos-dd").getAttribute("page");
+                    let maxPages=$("#watch5-videos-dd").getAttribute("max-pages");
+                    page++;
+                    $("#watch5-videos-dd").setAttribute("page",page);
+                    if(page==maxPages){
+                        $("#videos-dd-next").setAttribute("disabled","");
+                    }
+                    if($("#videos-dd-prev[disabled]")){
+                        $("#videos-dd-prev").removeAttribute("disabled");
+                    }
+                    $("#videos-dd-pagination .yt-uix-button-toggled").classList.remove("yt-uix-button-toggled");
+                    $("#videos-dd-pagination [page='"+page+"']").classList.add("yt-uix-button-toggled");
+                }
+            });
+            $("#videos-dd-prev").addEventListener("click",function(){
+                if($("#videos-dd-prev[disabled]")==null){
+                    let page = $("#watch5-videos-dd").getAttribute("page");
+                    page--;
+                    $("#watch5-videos-dd").setAttribute("page",page);
+                    if($("#videos-dd-next[disabled]")){
+                        $("#videos-dd-next").removeAttribute("disabled");
+                    }
+                    if(page==1){
+                        $("#videos-dd-prev").setAttribute("disabled","");
+                    }
+                    $("#videos-dd-pagination .yt-uix-button-toggled").classList.remove("yt-uix-button-toggled");
+                    $("#videos-dd-pagination [page='"+page+"']").classList.add("yt-uix-button-toggled");
+                }
+            });
+        }
+        if(SRS.watchLayout.tValue=="watch5a"){
             $("#st-above-owner-row-holder").innerHTML=STH.aboveOwnerRow;
             $("#st-above-videos-row-holder").innerHTML=STH.aboveVideosRow;
             $("#st-actions-info-row-holder").innerHTML=STH.actionsInfoRow;
@@ -12321,7 +12505,7 @@ Search
 			let newNumber = 0;
 			Bdata.forEach(i => {
 				if(i.richItemRenderer){
-					createRenderer(i.richItemRenderer.content.videoRenderer, "bigListVideo", newNumber, Bdata.length);
+					createRenderer(i.richItemRenderer.content.lockupViewModel, "bigListVideo", newNumber, Bdata.length);
 				}
 				newNumber++;
 			});
@@ -12382,86 +12566,83 @@ Search
 			number = 0;
 		}
 		let i = Bdata;
-		if(renderer == "superCompactVideo"){
-			let pageVid = extra;
+        if(renderer == "superCompactVideo"){
+			let id=i.contentId;
+			let href="/watch?v="+id;
+			let date;
+            let meta=i.metadata.lockupMetadataViewModel;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1]){
+                date=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1].text.content;
+            }else{
+                date="Upcoming"
+            }
+			let viewCount;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0]){
+                viewCount=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0].text.content;
+            }else{
+                viewCount="No views";
+            }
+			let title=meta.title.content;
+			let time=i.contentImage.thumbnailViewModel.overlays[0].thumbnailBottomOverlayViewModel.badges[0].thumbnailBadgeViewModel.text;
+            let length1=i.contentImage.thumbnailViewModel.image.sources.length;
+			let thumbnail=i.contentImage.thumbnailViewModel.image.sources[length1 - 1].url;
+            let container = $("#videos-dd-content");
+            let pageVid = extra;
 			let currPage = extra2;
-			let container = $("#videos-dd-content");
 			let newElem = document.createElement("a");
-			newElem.classList = "super-compact-video sc-video";
-			newElem.setAttribute("page",currPage);
+            newElem.href=href;
+			newElem.classList = "st-super-compact-video sc-video";
+            newElem.setAttribute("page",currPage);
 			newElem.setAttribute("page-video",pageVid);
 			newElem.innerHTML = `
 		<div class="sc-video-inner">
 			<div class="sc-video-thumbnail">
-				<img></img>
+				<img src="${thumbnail}"></img>
 				<div class="sc-video-time">
-					<span></span>
+					<span>${time}</span>
 				</div>
 			</div>
 			<div class="sc-video-metadata">
 				<div class="sc-video-title">
-					<span></span>
+					<span>${title}</span>
 				</div>
 				<div class="sc-video-info">
 					<div class="sc-video-view-count">
-						<span></span>
+						<span>${viewCount}</span>
 					</div>
 					<div class="sc-video-date">
-						<span></span>
+						<span>${date}</span>
 					</div>
 				</div>
 			</div>
 		</div>
 		`;
 			container.insertBefore(newElem,container.children[number]);
-			let video = i.richItemRenderer.content.videoRenderer;
-			let title = video.title.runs[0].text;
-			let time = video.lengthText.simpleText;
-			let date;
-            if(video.publishedTimeText){
-                date=video.publishedTimeText.simpleText;
-            }else{
-                date="Upcoming"
-            }
-            let views;
-            if(video.viewCountText){
-                views=video.viewCountText.simpleText;
-            }else{
-                views="No views";
-            }
-			let thumbl = video.thumbnail.thumbnails.length;
-			let thumb = video.thumbnail.thumbnails[thumbl - 1].url;
-			let nav = video.navigationEndpoint;
-			let href = "/watch?v=" + video.videoId;
-            STX_craftLink(newElem,"watch",video.videoId,href).then(a=>{
+			STX_craftLink(newElem,"watch",id,href).then(a=>{
                 STX_warmLink(a);
             });
-			newElem.querySelector(".sc-video-title span").textContent = title;
-			newElem.querySelector(".sc-video-title").title = title;
-			newElem.querySelector(".sc-video-time span").textContent = time;
-			newElem.querySelector(".sc-video-view-count span").textContent = views;
-			newElem.querySelector(".sc-video-date span").textContent = date;
-			newElem.querySelector(".sc-video-thumbnail img").src = thumb;
 		}
 		if(renderer == "altWatch9SCVid"){
-			let id = i.navigationEndpoint.watchEndpoint.videoId;
-			let href = "/watch?v=" + id;
+			let id=i.contentId;
+			let href="/watch?v="+id;
 			let date;
-            if(i.publishedTimeText){
-                date=i.publishedTimeText.simpleText;
+            let meta=i.metadata.lockupMetadataViewModel;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1]){
+                date=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1].text.content;
             }else{
                 date="Upcoming"
             }
 			let viewCount;
-            if(i.viewCountText){
-                viewCount=i.viewCountText.simpleText;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0]){
+                viewCount=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0].text.content;
             }else{
                 viewCount="No views";
             }
 			let container = $(".st-scroller-inner");
-			let title = i.title.runs[0].text;
-			let time = i.lengthText.simpleText;
-			let thumbnail = i.thumbnail.thumbnails[2].url;
+			let title=meta.title.content;
+			let time=i.contentImage.thumbnailViewModel.overlays[0].thumbnailBottomOverlayViewModel.badges[0].thumbnailBadgeViewModel.text;
+            let length1=i.contentImage.thumbnailViewModel.image.sources.length;
+			let thumbnail=i.contentImage.thumbnailViewModel.image.sources[length1 - 1].url;
 			let newElem = document.createElement("a");
             newElem.href=href;
 			newElem.classList = "st-super-compact-video";
@@ -12522,24 +12703,26 @@ Search
             });
 		}
 		if(renderer == "videosTabCompactVideo"){
-			let id = i.navigationEndpoint.watchEndpoint.videoId;
-			let href = "/watch?v=" + id;
+			let id=i.contentId;
+			let href="/watch?v="+id;
 			let date;
-            if(i.publishedTimeText){
-                date=i.publishedTimeText.simpleText;
+            let meta=i.metadata.lockupMetadataViewModel;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1]){
+                date=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1].text.content;
             }else{
                 date="Upcoming"
             }
 			let viewCount;
-            if(i.viewCountText){
-                viewCount=i.viewCountText.simpleText;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0]){
+                viewCount=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0].text.content;
             }else{
                 viewCount="No views";
             }
 			let container = $("#watch-channel-videos");
-			let title = i.title.runs[0].text;
-			let time = i.lengthText.simpleText;
-			let thumbnail = i.thumbnail.thumbnails[2].url;
+			let title=meta.title.content;
+			let time=i.contentImage.thumbnailViewModel.overlays[0].thumbnailBottomOverlayViewModel.badges[0].thumbnailBadgeViewModel.text;
+            let length1=i.contentImage.thumbnailViewModel.image.sources.length;
+			let thumbnail=i.contentImage.thumbnailViewModel.image.sources[length1 - 1].url;
 			let newElem = document.createElement("li");
 			newElem.classList = "video-list-item related-list-item context-data-item chan-name-clickable";
 			newElem.innerHTML = `
@@ -12568,24 +12751,26 @@ Search
             });
 		}
         if(renderer=="videosPanelCompactVideo"){
-			let id = i.navigationEndpoint.watchEndpoint.videoId;
-			let href = "/watch?v=" + id;
+			let id=i.contentId;
+			let href="/watch?v="+id;
 			let date;
-            if(i.publishedTimeText){
-                date=i.publishedTimeText.simpleText;
+            let meta=i.metadata.lockupMetadataViewModel;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1]){
+                date=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1].text.content;
             }else{
                 date="Upcoming"
             }
 			let viewCount;
-            if(i.viewCountText){
-                viewCount=i.viewCountText.simpleText;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0]){
+                viewCount=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0].text.content;
             }else{
                 viewCount="No views";
             }
 			let container = $("#videos-panel [js-destination]");
-			let title = i.title.runs[0].text;
-			let time = i.lengthText.simpleText;
-			let thumbnail = i.thumbnail.thumbnails[2].url;
+			let title=meta.title.content;
+			let time=i.contentImage.thumbnailViewModel.overlays[0].thumbnailBottomOverlayViewModel.badges[0].thumbnailBadgeViewModel.text;
+            let length1=i.contentImage.thumbnailViewModel.image.sources.length;
+			let thumbnail=i.contentImage.thumbnailViewModel.image.sources[length1 - 1].url;
 			let newElem = document.createElement("li");
 			newElem.classList = "panel-video video-list-item related-list-item context-data-item";
 			newElem.innerHTML = `
@@ -12926,23 +13111,25 @@ Search
 			STX_warmLink(newElem.querySelector("a"));
 		}
 		if(renderer == "bigListVideo"){
-			let desc = "";
-			let id = i.navigationEndpoint.watchEndpoint.videoId;
-			if(i.descriptionSnippet){
-				desc = i.descriptionSnippet.runs[0].text;
-			}
-            let date;
-            if(i.publishedTimeText){
-                date=i.publishedTimeText.simpleText;
+            let id=i.contentId;
+			let href="/watch?v="+id;
+			let date;
+            let meta=i.metadata.lockupMetadataViewModel;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1]){
+                date=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1].text.content;
             }else{
                 date="Upcoming"
             }
 			let viewCount;
-            if(i.viewCountText){
-                viewCount=i.viewCountText.simpleText;
+            if(meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0]){
+                viewCount=meta.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0].text.content;
             }else{
                 viewCount="No views";
             }
+			let title=meta.title.content;
+			let time=i.contentImage.thumbnailViewModel.overlays[0].thumbnailBottomOverlayViewModel.badges[0].thumbnailBadgeViewModel.text;
+            let length1=i.contentImage.thumbnailViewModel.image.sources.length;
+			let thumbnail=i.contentImage.thumbnailViewModel.image.sources[length1 - 1].url;
 			let container = $(".c3-featured-list-items");
 			let newElem = document.createElement("div");
 			newElem.classList = "c3-featured-list-item";
@@ -12950,11 +13137,11 @@ Search
 	   <li class="blogger-video">
 	  <span class="video tile">
 <a href="/watch?v=${id}" class="tile-link-block stx-link" stx-ep="watch" stx-id="${id}">
-  <span class="video-thumb ux-thumb ux-thumb-288 "><span class="clip"><img src="${Bdata.thumbnail.thumbnails[3].url}" alt="Thumbnail
-"></span><span class="video-time">${i.lengthText.simpleText}</span></span>
+  <span class="video-thumb ux-thumb ux-thumb-288 "><span class="clip"><img src="${thumbnail}" alt="Thumbnail
+"></span><span class="video-time">${time}</span></span>
   <span class="video-item-content">
 	  <span class="video-overview">
-<span class="title video-title">${i.title.runs[0].text}</span>
+<span class="title video-title">${title}</span>
 </span>
 <span class="video-details">
 <span class="video-owner">${gdp.currChan.header.name}</span>
@@ -12964,7 +13151,7 @@ ${viewCount}
   <span class="video-date">
 ${date}
   </span>
-  <span class="video-item-description">${desc}</span>
+  <span class="video-item-description"></span>
 </span>
 
   </span>
@@ -12974,7 +13161,7 @@ ${date}
   </li>
 		`;
 			container.insertBefore(newElem,container.children[number]);
-			newElem.querySelector(".video-overview").setAttribute("title",i.title.runs[0].text);
+			newElem.querySelector(".video-overview").setAttribute("title",title);
 			STX_warmLink(newElem.querySelector("a"));
 			if(number == 0){
 				if(length == 31){
@@ -16487,7 +16674,11 @@ border-width: 12px;
                             if(rndr.contextItemData.authorAvatar){
                                 pfp = rndr.contextItemData.authorAvatar;
                                 data = rndr.contextItemData.authorNavigationEndpoint;
-                                url = rndr.contextItemData.authorNavigationEndpoint.browseEndpoint.canonicalBaseUrl;
+                                if(rndr.contextItemData.authorNavigationEndpoint.browseEndpoint){
+                                    url = rndr.contextItemData.authorNavigationEndpoint.browseEndpoint.canonicalBaseUrl;
+                                }else{
+                                    url = rndr.contextItemData.authorNavigationEndpoint.watchEndpoint.canonicalBaseUrl;
+                                }
                             }else{
                                 allowContinue=false;
                             }
@@ -17720,6 +17911,50 @@ background-position: -100px center;
 .upload-menu-open #stargazer-upload-dropdown{
 background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 }
+[cirrus-sub] .oz_frame oz_widget_holder .yt-uix-button-subscribe-branded,
+[cirrus-sub] .oz_frame oz_widget_holder .yt-uix-button-subscribed-branded,
+.st-cirrus-sub .yt-uix-button-subscribe-branded,
+.st-cirrus-sub .yt-uix-button-subscribed-branded,
+[cirrus-sub] #page:not(.watch) .yt-uix-button-subscribe-branded,
+[cirrus-sub] #page:not(.watch) .yt-uix-button-subscribed-branded{
+border-radius:3px !important;
+height:23px !important;
+display:inline-flex !important;
+align-items:center !important;
+padding:0 8px !important;
+color:#039 !important;
+font-size:12px !important;
+border:1px solid #D70 !important;
+background:linear-gradient(to top,#df7f0f,#ff9900) !important;
+}
+[cirrus-sub] .oz_frame .yt-uix-button-subscribe-branded .yt-uix-button-content span,
+[cirrus-sub] .oz_frame .yt-uix-button-subscribed-branded .yt-uix-button-content span,
+.st-cirrus-sub .yt-uix-button-subscribe-branded .yt-uix-button-content span,
+.st-cirrus-sub .yt-uix-button-subscribed-branded .yt-uix-button-content span,
+[cirrus-sub] #page:not(.watch) .yt-uix-button-subscribe-branded .yt-uix-button-content span,
+[cirrus-sub] #page:not(.watch) .yt-uix-button-subscribed-branded .yt-uix-button-content span{
+color:#fff !important;
+font-weight:var(--bold) !important;
+text-shadow:none !important
+}
+[cirrus-sub] .oz_frame .yt-uix-button-subscribe-branded:hover,
+[cirrus-sub] .oz_frame .yt-uix-button-subscribed-branded:hover,
+.st-cirrus-sub .yt-uix-button-subscribe-branded:hover,
+.st-cirrus-sub .yt-uix-button-subscribed-branded:hover,
+[cirrus-sub] #page:not(.watch) .yt-uix-button-subscribe-branded:hover,
+[cirrus-sub] #page:not(.watch) .yt-uix-button-subscribed-branded:hover{
+border:1px solid #D70 !important;
+background:linear-gradient(to top,#df7f0f,#ff9900) !important;
+box-shadow:none!important
+}
+[cirrus-sub] .oz_frame .yt-uix-button-subscribe-branded:hover span span,
+[cirrus-sub] .oz_frame .yt-uix-button-subscribed-branded:hover span span,
+.st-cirrus-sub .yt-uix-button-subscribe-branded:hover span span,
+.st-cirrus-sub .yt-uix-button-subscribed-branded:hover span span,
+[cirrus-sub] #page:not(.watch) .yt-uix-button-subscribe-branded:hover span span,
+[cirrus-sub] #page:not(.watch) .yt-uix-button-subscribed-branded:hover span span{
+color:#000!important
+}
 				</style>
 				<div id="stargazer-header-inner">
 					<div id="stargazer-tabbed-header" class="st-sth">
@@ -17771,6 +18006,8 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 									<a class="stargazer-button stargazer-yellow-button" href="/upload">
 										<span>Upload</span>
 									</a>
+								</div>
+                                <div class="cloudgazer-powered">
 								</div>
 							</div>
 						</div>
@@ -18084,23 +18321,124 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
         applySettings();
         window.location.reload();
     }
+    function showDensorWindow(){
+        let conta=$("body .v3");
+        let nE=document.createElement("div");
+        nE.id="st-densor";
+        nE.classList.add("flex-bar");
+        nE.innerHTML=STH.densorWin;
+        conta.append(nE);
+        nE.querySelector(".st-fence").addEventListener("click",function(){
+            $("html").setAttribute("densor-closed","true");
+            STS.show2point7=false;
+            applySettings(0);
+        });
+        nE.querySelector(".densor-tut-btn").addEventListener("click",function(){
+            $(".densor-win-obj").setAttribute("state","hover");
+            $("html").setAttribute("densor-tut","");
+        });
+    }
+    function setDefaultLayout(){
+        STS.newConfig=false;
+        executeRadios("layoutSelect", "hh2024", true);
+        SRS.layoutSelect.visValue="hh2024";
+        SRS.layoutSelect.value="hh2024";
+        executeRadios("playerSizerules", SRS.playerSizerules, true);
+        applySettings();
+        if($(".cardified-page.site-center-aligned")==null){
+            setTimeout(function(){
+                window.location.reload();
+            }, 100);
+        }
+    }
+    function createDensorTrigger(){
+        let conta=$("body");
+        let nE=document.createElement("div");
+        nE.id="st-densor-trig";
+        nE.classList.add("flex-bar");
+        nE.innerHTML=`
+        <span>Keep hovering to open StarTube Settings (or press Alt + Shift + C)</span>
+        `;
+        conta.append(nE);
+        function showOverlay() {
+            if($("#startube-settings-window-entity.hid")!=null){
+                $("#startube-settings-window-entity").classList.remove("hid");
+            }
+            $("html").setAttribute("densor-trig","inactive");
+            STS.show2point7=false;
+            applySettings(0);
+            $("html").setAttribute("densor-closed","true");
+            $("html").removeAttribute("densor-tut");
+        }
+        function phase5(){
+            $("html").setAttribute("densor-trig","active3");
+            setTimeout(function(){
+                if(nE.matches(':hover')){
+                    showOverlay();
+                }else{
+                    $("html").setAttribute("densor-trig","inactive");
+                }
+            },250);
+        }
+        function phase4(){
+            $("html").setAttribute("densor-trig","active2");
+            setTimeout(function(){
+                if(nE.matches(':hover')){
+                    phase5();
+                }else{
+                    $("html").setAttribute("densor-trig","inactive");
+                }
+            },250);
+        }
+        function phase3(){
+            $("html").setAttribute("densor-trig","active1");
+            setTimeout(function(){
+                if(nE.matches(':hover')){
+                    phase4();
+                }else{
+                    $("html").setAttribute("densor-trig","inactive");
+                }
+            },250);
+        }
+        function phase2(){
+            $("html").setAttribute("densor-trig","active0");
+            setTimeout(function(){
+                if(nE.matches(':hover')){
+                    phase3();
+                }else{
+                    $("html").setAttribute("densor-trig","inactive");
+                }
+            },250);
+        }
+        nE.addEventListener('mouseenter', function (e) {
+            setTimeout(function(){
+                if(nE.matches(':hover')){
+                    phase2();
+                }
+            }, 250);
+        });
+        nE.addEventListener('mouseleave', function (e) {
+            $("html").setAttribute("densor-trig","inactive");
+        });
+    }
 	function everyLoad(x){
-		if(STS.newConfig == true){
+        if(SRS.densorHover.tValue=="on"&&$("#st-densor-trig")==null){
+            createDensorTrigger();
+        }
+        if(STS.newConfig == true){
 			var elm = "#page";
 			waitForElement10(elm).then(function(elm){
 				if(canGo != false){
-					STS.newConfig=false;
-					executeRadios("layoutSelect", "hh2024", true);
-					SRS.layoutSelect.visValue="hh2024";
-                    SRS.layoutSelect.value="hh2024";
-					executeRadios("playerSizerules", SRS.playerSizerules, true);
-					applySettings();
-                    if($(".cardified-page.site-center-aligned")==null){
-                        setTimeout(function(){
-                            window.location.reload();
-                        }, 100);
-                    }
+                    setDefaultLayout();
 				}
+			});
+		}
+        if(STS.show2point7 != false){
+			var elm = "#page";
+			waitForElement10(elm).then(function(elm){
+				if(canGo != false&&$("#st-densor")==null){
+                    showDensorWindow();
+                }
 			});
 		}
 		everyLoadNeo(x);
@@ -18962,6 +19300,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 case "stargazer2009_3":
                     layoutFactor=200000;
                     break;
+                case "aozora2010_1":
+                    layoutFactor=210000;
+                    break;
                 case "aozora2011_2":
                     layoutFactor=250000;
                     break;
@@ -19080,6 +19421,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                     break;
             }
             switch (SRS.watchLayout.tValue){
+                case "watch3":
+                    $(".spitfire-body-container").setAttribute("wl","w3");
+                    break;
                 case "watch4a":
                     $(".spitfire-body-container").setAttribute("wl","w4a");
                     break;
@@ -19345,11 +19689,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 html.setAttribute("stargazer-sub","");
             }
             if($("[layout^='cloudgazer2007']")){
-                html.setAttribute("stargazer-header","tabbed-cirrus");
-                stargazerHeader(0);
-                searchButtonLowercase();
-            }
-            if($("[layout^='cloudgazer2007']")){
+                html.setAttribute("cirrus-sub","");
                 html.setAttribute("stargazer-header","tabbed-cirrus");
                 stargazerHeader(0);
                 searchButtonLowercase();
@@ -19384,6 +19724,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
             }
             if($("[layout^='star']")){
                 html.setAttribute("stargazer-styles","");
+                html.setAttribute("stargazer-comments","");
                 sets.stargazerStyles=true;
             }
             if($("[layout^='aoz']")){
@@ -19394,6 +19735,9 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
                 html.setAttribute("exp-aozora-topbar-links","");
                 createAozoraTopbarLinks();
                 sets.aozoraTopbarLinks=true;
+            }
+            if($("[layout^='aozora2010_1']")){
+                html.setAttribute("aozora-split-search","");
             }
             if($("[layout^='cos']")){
                 html.setAttribute("cosmic-styles","");
@@ -19709,130 +20053,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 			});
 		});
 		refreshCheck++;
-		if(
-			$("#st-nsp") === null &&
-			STS.show2point6 == true
-		   ){
-			let container76=$('.spitfire-body-container.v3');
-let newElem76=document.createElement("div");
-newElem76.id="st-nsp";
-newElem76.innerHTML=`
-<style>
-[no-startube-popup] #st-nsp{
-display:none
-}
-#st-nsp{
-position:fixed;
-bottom:unset;
-top:56px;
-right:15px;
-display:block;
-height:387px;
-z-index:11111119130
-}
-#st-nsp .distiller-first-time-promo .arrow{
-border-top:10px solid #fff;
-border-bottom:none;
-top:unset;
-bottom:-10px;
-right:25px;
-left:unset
-}
-#st-nsp .distiller-first-time-promo .arrow-border{
-top:unset;
-bottom:-11px;
-border-top:10px solid #ccc
-}
-#st-nsp .asterisk{
-font-size:11px;
-color:#555;
-display:block;
-margin-top:8px
-}
-#st-nsp .image svg{
-width:48px;
-height:48px;
-margin-top:-11px;
-margin-left:-11px;
-display:block!important
-}
-#st-nsp .distiller-first-time-promo .image{
-background:none
-}
-#st-nsp .distiller-first-time-promo .content{
-top:0;
-left:0
-}
-#overly-obvious-close-button{
-  background:#06c;
-  color:#fff;
-  font-size:16px;
-  font-weight:bold;
-  width:100%;
-  position:absolute;
-  left:0;
-  top:0;
-  padding:8px 15px;
-  min-height:50px
-}
-#st-nsp .content{
-  padding-top:70px
-}
-#st-nsp .distiller-first-time-promo .image{
-  top:65px
-}
-</style>
-	<div class="distiller-first-time-promo show" id="dfp">
-<div class="content">
-  <!--div class="arrow arrow-border"></div>
-  <div class="arrow"></div-->
-  <button id="overly-obvious-close-button">
-    <span>Close this update popup</span>
-</button>
-  <div class="image">
-  <svg fill="#000000" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 4.588l2.833 8.719H28l-7.416 5.387 2.832 8.719L16 22.023l-7.417 5.389 2.833-8.719L4 13.307h9.167L16 4.588z" style="fill: #e63127;"/></svg>
-  </div>
-  <div class="title">What's new in StarTube 2.6.0</div>
-
-
-<div class="text">
-<div class="label">The Changelog Has Moved</div>
-<span class="run run-text">See what's new in StarTube in the "StarTube" tab of the StarTube Settings window.</span>
-<button id="close-st-nsp" class="yt-uix-button yt-uix-button-size-default start yt-uix-button-primary dismiss-button">
-<span class="yt-uix-button-content">
-<span class="run">OK</span>
-</span>
-</button>
-</div>
-</div>
-	`;
-container76.insertBefore(newElem76, container76.children[0]);
-			$("#close-st-nsp").addEventListener("click", function(){
-				$("#st-nsp").remove();
-				STS.show2point6 = false;
-				applySettings(0);
-				$("html").setAttribute("no-startube-popup","");
-				var elm = "#show2point6";
-				waitForElement10(elm).then(function(elm){
-					if(canGo != false){
-						$("#show2point6").setAttribute("checked","false");
-					}
-				});
-			});
-            $("#overly-obvious-close-button").addEventListener("click", function(){
-				$("#st-nsp").remove();
-				STS.show2point6 = false;
-				applySettings(0);
-				$("html").setAttribute("no-startube-popup","");
-				var elm = "#show2point6";
-				waitForElement10(elm).then(function(elm){
-					if(canGo != false){
-						$("#show2point6").setAttribute("checked","false");
-					}
-				});
-			});
-		}
-	}
+    }
 	function createOOBEAccessBtn(){
 		let container = document.querySelector('.jfk-oobe-page .tabs');
 	//let container = document.querySelector('#yt-masthead-content');
@@ -20811,7 +21032,7 @@ filter: invert(1);
 	</style>
     ${STH.astroSettings}
 `;
-	conta.insertBefore(nE,conta.children[1]);
+	conta.insertBefore(nE,conta.children[3]);
     function createSetting(i,container,n,theSet){
         let newE=document.createElement("div");
         newE.classList="astro-setting astro-radio-setting";
@@ -24925,8 +25146,9 @@ background: #272727 !important;
 padding: 0;
 width: 200px;
 }
-[exp-cosmic-guide-style] #guide-container {
-background: none;
+[exp-cosmic-guide-style] #appbar-guide-menu #guide-container{
+background:none!important;
+height:unset
 }
 [exp-cosmic-guide-style] .guide-view-more,
 [exp-cosmic-guide-style] .guide-channel {
@@ -29081,9 +29303,9 @@ text-decoration: none;
 .startube-reply .load-more-link {
 display: none;
 }
-[exp-legacy-comments] .distiller_yt-thread .comment .action_bar .heart,
-[exp-legacy-comments] .distiller_yt-thread .comment .action_bar .count,
-[exp-legacy-comments] .distiller_yt-thread .comment .action_bar .count_active {
+[exp-legacy-comments]/*:not([stargazer-comments])*/ .distiller_yt-thread .comment .action_bar .heart,
+[exp-legacy-comments]/*:not([stargazer-comments])*/ .distiller_yt-thread .comment .action_bar .count,
+[exp-legacy-comments]/*:not([stargazer-comments])*/ .distiller_yt-thread .comment .action_bar .count_active {
 display: none !important;
 }
 .startube-comment-data {
@@ -30939,7 +31161,8 @@ background-size:30px 30px
 .aozora-button,
 html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button,
 [aozora-styles] #page:not(.watch) .yt-uix-button-subscribe-branded,
-[aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded{
+[aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded,
+[aozora-split-search] body .v3 #yt-masthead #search-btn{
 padding:0 6px!important;
 height:25px!important;
 border:1px solid #ccc!important;
@@ -30983,7 +31206,8 @@ font-weight:normal!important;
 .aozora-button:hover,
 [aozora-styles] #page:not(.watch) .yt-uix-button-subscribe-branded:hover,
 [aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded:hover,
-html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button:hover{
+html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button:hover,
+[aozora-split-search] body .v3 #yt-masthead #search-btn:hover{
 box-shadow:rgb(153,153,153) 0px 0px 3px 0px;
 border-color:#999!important;
 background-image:linear-gradient(rgb(255,255,255) 0%, rgb(235,235,235) 100%)!important
@@ -31001,7 +31225,8 @@ background-image:linear-gradient(rgb(255,255,255) 0%, rgb(235,235,235) 100%)!imp
 .aozora-button.active,
 [aozora-styles] #page:not(.watch) .yt-uix-button-subscribe-branded:active,
 [aozora-styles] #page:not(.watch) .yt-uix-button-subscribed-branded:active,
-html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button:active{
+html:not([cosmic-buttons]) [wl^="w5"] .st-ltod .yt-uix-button:active,
+[aozora-split-search] body .v3 #yt-masthead #search-btn:active{
 background-image:linear-gradient(rgb(204,204,204) 0%, rgb(255,255,255) 100%)!important;
 border-color:#999
 }
@@ -31102,6 +31327,11 @@ margin-right:auto
 [aozora-header] #aozora-topbar-links{
 margin-top:15px
 }
+[aozora-split-search] #aozora-topbar-links {
+  float: none;
+  position: absolute;
+  left: 476px;
+}
 [topbar="cosmic"] #aozora-topbar-links{
 margin-top:12px;
 margin-left:8px
@@ -31147,6 +31377,15 @@ background:no-repeat url(https://s.ytimg.com/yt/imgbin/www-master-vflai4i-q.png)
 left:102px;
 top:0
 }
+body .st-sbh .stargazer-logo-container #logo,
+[aozora-header] body.dark-mode .v3 #yt-masthead #logo{
+background:no-repeat url(http://s.ytimg.com/yt/img/doodles/earth_hour_sprite-vflOT--SR.png) 0 -40px!important;
+width:87px
+}
+body .st-sbh .stargazer-logo-container #logo{
+background-position:0 -42px !important;
+height:38px
+}
 [aozora-header] body .v3 #yt-masthead #appbar-guide-button ~ #masthead-search{
 margin-left:10px;
 margin-top:10px
@@ -31155,6 +31394,9 @@ margin-top:10px
 border-color:#8c8c8c #999 #ccc #8c8c8c;
 height:25px;
 border-right:none
+}
+[aozora-split-search] body .v3 #yt-masthead #masthead-search-terms{
+border:1px solid #666
 }
 [aozora-header] body .v3 #yt-masthead #masthead-search-terms input{
 border:2px solid #fff;
@@ -31189,6 +31431,9 @@ text-indent:0;
 width:unset;
 opacity:1
 }
+[aozora-header] body.dark-mode .v3 #yt-masthead #search-btn{
+color:#fff
+}
 [aozora-header] body .v3 #yt-masthead-user{
 margin-top:7px
 }
@@ -31198,6 +31443,18 @@ max-width:none!important
 html:not([topbar])[static][aozora-header] body .v3 #yt-masthead #masthead-search-terms{
 max-width:none!important;
 width:unset
+}
+html:not([topbar])[static][aozora-header][aozora-split-search] body .v3 #yt-masthead #masthead-search-terms{
+width:292px
+}
+[aozora-split-search] .site-center-aligned #masthead-search{
+min-width:none
+}
+[aozora-split-search] #masthead-search #search-btn.search-btn-component{
+  float:none;
+  position:absolute;
+  left:297px;
+  border-radius:3px!important
 }
 [aozora-styles] #watch7-sidebar .watch-sidebar-section{
 margin-left:20px
@@ -33566,6 +33823,7 @@ background:#282828
   top:calc(-1 * var(--top-title-height,72.45px));
   width:970px
 }
+[wl^="w3"] #st-watch-above-container,
 [wl^="w4"] #st-watch-above-container{
   position:absolute;
   top:-29px;
@@ -33574,6 +33832,7 @@ background:#282828
 [playlist-watch="true"] #st-watch-above-container{
   top:calc(-1 * var(--top-title-height,0) + -422px);
 }
+[playlist-watch="true"][wl^="w3"] #st-watch-above-container,
 [playlist-watch="true"][wl^="w4"] #st-watch-above-container{
   top:-453px
 }
@@ -33660,6 +33919,7 @@ background:#282828
 .site-center-aligned [wl^="w5"] #player{
   margin-top:var(--top-title-height,72.45px);
 }
+.site-center-aligned [wl^="w3"] #player,
 .site-center-aligned [wl^="w4"] #player{
   margin-top:30px
 }
@@ -35046,15 +35306,18 @@ background:var(--tpl);
 [wl="w4c"] .st-views-before-text{
   display:none
 }
+[static] [wl^="w3"] #watch7-sidebar,
 [static] [wl^="w4"] #watch7-sidebar{
   width:310px;
   right:-20px;
   max-width:310px
 }
+[wl^="w3"] #st-side-panels-row,
 [wl^="w4"] #st-side-panels-row{
   flex-direction:column;
   margin-top:10px
 }
+[wl^="w3"] #watch7-sidebar .st-expandable-panel.st-side-panel,
 [wl^="w4"] #watch7-sidebar .st-expandable-panel.st-side-panel{
   margin-bottom:10px
 }
@@ -36286,6 +36549,7 @@ display:none
 .cardified-page .autoplay-bar .checkbox-on-off{
   right:10px
 }
+[static] [wl^="w3"] #page.watch,
 [static] [wl^="w4"] #page.watch{
   padding-top:2px
 }
@@ -38865,6 +39129,150 @@ to{opacity:1}
 #st-videos-panel .video-time,
 #st-videos-panel .addto-button{
   z-index:1
+}
+@keyframes densorFadeIn{
+0%{
+  opacity:0
+}
+80%{
+  opacity:0
+}
+100%{
+  opacity:1
+}
+}
+#st-densor{
+  position:fixed;
+  height:100%;
+  width:100%;
+  z-index:999111111199;
+  top:0;
+  left:0;
+  animation:1s densorFadeIn 1
+}
+#st-densor .st-fence{
+  background:#0008
+}
+.densor-win-obj{
+  width:1200px;
+  margin:0 auto;
+  background:#fff;
+  border:1px solid #ccc;
+  box-shadow:0 0 20px #0004;
+  position:relative;
+  z-index:2
+}
+
+  @keyframes rainbowFlow {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 50% 100%;
+    }
+  }
+#st-densor-trig{
+  height:30px;
+  width:100vw;
+  left:0;
+  bottom:0;
+  position:fixed;
+  z-index:1999999999;
+  opacity:0;
+  transition-duration:0.5s;
+  text-align:center;
+  color:#fff;
+  text-shadow:-0.5px -0.5px black;
+  font-weight:bold;
+  cursor:default
+}
+#st-densor-trig span{
+  margin:0 auto;
+  display:block
+}
+[densor-trig^="active"] #st-densor-trig{
+    background: linear-gradient(200deg,
+      red, orange, yellow, green, cyan, blue, violet, red);
+    background-size: 300% 100%;
+    animation: rainbowFlow 3s infinite;
+	opacity:0.6
+}
+
+[densor-closed] #st-densor{
+  display:none!important
+}
+[densor-tut] #st-densor,
+[densor-tut] #st-densor .st-fence{
+  height:calc(100vh - 30px)
+}
+[densor-tut] #st-densor{
+  box-shadow:0 30px #f033
+}
+[densor-tut] #st-densor-trig{
+  z-index:10011111111111
+}
+
+
+.densor-cont{
+  margin:50px auto;
+  width:1000px;
+  text-align:center
+}
+.densor-big-text{
+  font-size:28px;
+  margin-bottom:16px
+}
+.densor-med-text{
+  font-size:14px;
+  margin:8px 0
+}
+.densor-trigs{
+  width:fit-content;
+  margin:16px auto
+}
+.densor-trig{
+  margin:0 20px;
+  border:1px solid #ccc;
+  width:400px;
+  padding:18px;
+  background:#fafafa;
+  min-height:100px
+}
+.densor-trig-top{
+  font-size:24px
+}
+.densor-trig-middle{
+  margin:12px 0;
+  font-size:14px;
+  line-height:1.3
+}
+.densor-trig-middle h1{
+  font-size:40px;
+  font-weight:var(--bold);
+  margin-top:12px
+}
+.densor-trig-middle h3{
+  font-size:18px;
+  font-weight:var(--bold);
+  margin-top:8px
+}
+.densor-tut-btn{
+  font-size:14px;
+  background:#06c;
+  color:#fff;
+  padding:10px 14px;
+  margin:4px 0;
+  border-radius:2px
+}
+.densor-screen{
+  transition:0.5s ease;
+  max-height:390px
+}
+[state="hover"] [screen="welcome"],
+[state="welcome"] [screen="hover"]{
+  opacity:0;
+  max-height:0;
+  visibility:hidden;
 }
 </style>
 `;
