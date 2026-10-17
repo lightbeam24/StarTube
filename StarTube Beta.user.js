@@ -18281,13 +18281,16 @@ color:#000!important
 		}
 	}
 	function reconstructPlaylist(){
-		if(sets.modernPlaylists==true){
-			if($("#watch7-playlist-data") && $(".watch7-playlist-bar-right .watch7-playlist-bar-left") == null){
-				var move = document.querySelector(".watch7-playlist-bar-left");
-				var newHome = document.querySelector('.watch7-playlist-bar-right');
-				newHome.insertBefore(move, newHome.children[0]);
-			}
-		}
+        if(sets.modernPlaylists==true){
+            if($("#watch7-playlist-data") && $(".watch7-playlist-bar-right .watch7-playlist-bar-left") == null){
+                var moveLeft = document.querySelector(".watch7-playlist-bar-left");
+                var moveRight = document.querySelector('.watch7-playlist-bar-right');
+                var tray = document.getElementById('watch7-playlist-tray-container');
+                moveLeft.classList = "watch7-playlist-bar-left";
+                moveRight.insertBefore(moveLeft, moveRight.children[0]);
+                tray.insertBefore(moveRight, tray.children[0]);
+            }
+        }
 		if(STS.expPlaylistTimestamps == true){
 			if($(".yt-uix-scroller-scroll-unit:not(.startube-time-patched)") != null){
 				document.querySelectorAll(".yt-uix-scroller-scroll-unit:not(.startube-time-patched)").forEach(item => {
