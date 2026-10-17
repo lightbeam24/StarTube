@@ -19255,7 +19255,7 @@ color:#000!important
 		}
         let feedLink=feedHref;
         if(SRS.logoLink.tValue=="feedGrid"){
-            feedLink=feedHref+"flow=grid";
+            feedLink=feedHref+"?flow=grid";
         }
         let subsLink = "/feed/subscriptions";
         if(SRS.subsGrid.tValue=="grid"){
