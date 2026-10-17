@@ -7223,9 +7223,9 @@ let SR3H = V3_SETTINGS_CONF.PLAYER_SIZERULE3_MIN_HEIGHT;
 function getVideoSize(){
 	if(V3_SETTINGS_CONF.APPBAR_FLEXWATCH_MINI == true){
 		if(
-			SRS.playerSizerules == "noFlexwatch" ||
-			SRS.playerSizerules == "flexwatchMini" ||
-			SRS.playerSizerules == "passive"
+			SRS.playerSizerules.tValue == "noFlexwatch" ||
+			SRS.playerSizerules.tValue == "flexwatchMini" ||
+			SRS.playerSizerules.tValue == "passive"
 		){
 		}else{
 			$("html").setAttribute("custom-sizerules","");
@@ -18106,7 +18106,7 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		everyLoadNeo(x);
 		grabData();
 		checkPlaylistThumbnails();
-		if(SRS.playerSizerules == "flexwatchLarge"){
+		if(SRS.playerSizerules.tValue == "flexwatchLarge"){
 			$("html").setAttribute("flexwatch-large","");
 		}
 		if($("#page.watch")&&SRS.layoutMode.tValue=="adaptive"){
