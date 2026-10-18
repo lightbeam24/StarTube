@@ -12100,27 +12100,34 @@ Search
                     if(i.richItemRenderer.content.gridVideoRenderer){
                         i = i.richItemRenderer.content.gridVideoRenderer;
                     }else{
-                        i = i.richItemRenderer.content.videoRenderer;
+                        i = i.richItemRenderer.content.lockupViewModel;
                     }
-					let i2 = i.contextItemData;
 					let href;
 					let viewCount;
 					let publishDate;
 					let title;
-					let thumbnail = i.thumbnail.thumbnails[0].url;
+					let thumbnail;
+                    let videoTime;
 					if(api == "innertube"){
-						href = i.navigationEndpoint.commandMetadata.webCommandMetadata.url;
-						viewCount = i.viewCountText.simpleText;
-						publishDate = i.publishedTimeText.simpleText;
-						title = i.title.runs[0].text;
+                        href = '/watch?v=' + i.contentId
+						viewCount = i.metadata.lockupMetadataViewModel.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[0].text.content;
+						publishDate = i.metadata.lockupMetadataViewModel.metadata.contentMetadataViewModel.metadataRows[0].metadataParts[1].text.content;
+						title = i.metadata.lockupMetadataViewModel.title.content;
+                        thumbnail = i.contentImage.thumbnailViewModel.image.sources.slice(-1)[0].url;
+                        try{
+                            for (let j = 0; j < i.contentImage.thumbnailViewModel.overlays.length; j++) {
+                                if (i.contentImage.thumbnailViewModel.overlays[j].thumbnailBottomOverlayViewModel) {
+                                    videoTime = i.contentImage.thumbnailViewModel.overlays[j].thumbnailBottomOverlayViewModel.badges[0].thumbnailBadgeViewModel.text;
+                                }
+                            }
+                        }catch{console.error('video time innertube continuationitem broken on channel/$ID/videos')}
 					}else{
-						href = i2.href;
-						viewCount = i2.viewCount;
-						publishDate = i2.publishDate;
-						title = i2.title;
-					}
-					if(i.thumbnail.thumbnails[3]){
-						thumbnail = i.thumbnail.thumbnails[3].url;
+						href = i.contextItemData.href;
+						viewCount = i.contextItemData.viewCount;
+						publishDate = i.contextItemData.publishDate;
+						title = i.contextItemData.title;
+                        thumbnail = i.thumbnail.thumbnails.slice(-1)[0].url;
+                        videoTime = i.lengthText.simpleText;
 					}
 					let container = $("#c3-content-items");
 					let newElem = document.createElement("div");
@@ -12134,7 +12141,7 @@ Search
 	  </span>
 	</span>
   </span></span>
-<span class="video-time">${i.lengthText.simpleText}</span>
+<span class="video-time">${videoTime}</span>
 <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-default addto-button video-actions addto-watch-later-button yt-uix-button-size-small yt-uix-button-empty"><span class="yt-uix-button-content"><img src="//s.ytimg.com/yts/img/pixel-vfl3z5WfW.gif"></span></button>
 </a></div><div class="yt-lockup-content"><h3 class="yt-lockup-title">
 <a class="yt-uix-sessionlink yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 g-hovercard" dir="ltr" href="${href}"><span class="yt-ui-ellipsis-wrapper">${title}</span></a>
