@@ -18044,13 +18044,23 @@ background:linear-gradient(to top,#fffbda,#fff19e 50%,#ffeb81) !important;
 		}
 	}
 	function reconstructPlaylist(){
-		if(sets.modernPlaylists==true){
-			if($("#watch7-playlist-data") && $(".watch7-playlist-bar-right .watch7-playlist-bar-left") == null){
-				var move = document.querySelector(".watch7-playlist-bar-left");
-				var newHome = document.querySelector('.watch7-playlist-bar-right');
-				newHome.insertBefore(move, newHome.children[0]);
-			}
-		}
+        if(sets.modernPlaylists==true && $("#watch7-playlist-data")){
+            if($(".watch7-playlist-bar-right .watch7-playlist-bar-left") == null){
+                var moveLeft = document.querySelector(".watch7-playlist-bar-left");
+                var moveRight = document.querySelector('.watch7-playlist-bar-right');
+                if(moveLeft && moveRight){
+                    moveLeft.classList = "watch7-playlist-bar-left";
+                    moveRight.insertBefore(moveLeft, moveRight.children[0]);
+                }
+            }
+            if($("#watch7-playlist-tray-container .watch7-playlist-bar") == null) {
+                var bar = document.querySelector(".watch7-playlist-bar");
+                var tray = document.getElementById('watch7-playlist-tray-container');
+                if(bar && tray && bar.parentNode !== tray){
+                    tray.insertBefore(bar, tray.firstChild);
+                }
+            }
+        }
 		if(STS.expPlaylistTimestamps == true){
 			if($(".yt-uix-scroller-scroll-unit:not(.startube-time-patched)") != null){
 				document.querySelectorAll(".yt-uix-scroller-scroll-unit:not(.startube-time-patched)").forEach(item => {
