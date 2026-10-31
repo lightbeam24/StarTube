@@ -37235,7 +37235,8 @@ html [has-at]{
 }
 
 [pl-ver^="c"] .html5-player-chrome .ytp-button{
-  background-image:url(https://s.ytimg.com/yt/imgbin/player-dark-vflCDBE54.png)!important
+  background-image:url(https://s.ytimg.com/yt/imgbin/player-dark-vflCDBE54.png)!important;
+  background-size:auto!important
 }
 [pl-ver^="c"] .ytp-button-play{
   background-position:-96px -232px!important
